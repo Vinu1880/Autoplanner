@@ -27,9 +27,11 @@ import {
   Info,
   Settings,
   RotateCw,
-  Maximize2
+  Maximize2,
+  Shield
 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { useRotationPatterns } from '@/contexts/RotationPatternsContext';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -94,6 +96,14 @@ const SHIFT_COLORS = [
 ];
 
 const PlannerPage = () => {
+    const getCurrentWeek = () => {
+    const date = new Date();
+    const year = date.getFullYear();
+    const firstDayOfYear = new Date(year, 0, 1);
+    const days = Math.floor((date.getTime() - firstDayOfYear.getTime()) / (24 * 60 * 60 * 1000));
+    const weekNumber = Math.ceil((days + firstDayOfYear.getDay() + 1) / 7);
+    return `${year}-W${weekNumber.toString().padStart(2, '0')}`;
+  };
   // États
   const [selectedShifts, setSelectedShifts] = useState<string[]>([]);
   const [selectedDates, setSelectedDates] = useState<string[]>([]);
@@ -112,6 +122,7 @@ const PlannerPage = () => {
   const [calendarYear, setCalendarYear] = useState(new Date().getFullYear());
   const [randomSeed, setRandomSeed] = useState(0);
   const [expandedCalendar, setExpandedCalendar] = useState(false);
+  const { patterns: rotationPatterns } = useRotationPatterns();
 
   const ACCESS_TOKEN = 'EwB...'; // 3 premiers caractères seulement
 
@@ -141,21 +152,6 @@ const PlannerPage = () => {
   };
 
   const [settings, setSettings] = useState(loadSettings());
-
-  const loadRotationPatterns = (): RotationPattern[] => {
-    const saved = localStorage.getItem('rotationPatterns');
-    if (saved) {
-      try {
-        return JSON.parse(saved);
-      } catch (e) {
-        console.error('Erreur chargement patterns:', e);
-        return [];
-      }
-    }
-    return [];
-  };
-
-  const [rotationPatterns] = useState<RotationPattern[]>(loadRotationPatterns());
 
   // Fonction rotation améliorée
   const getRotationShiftForUserOnDate = (
@@ -1350,6 +1346,27 @@ const PlannerPage = () => {
                                   {pattern?.name || 'Pattern inconnu'}
                                 </p>
                               </div>
+                              {/* AJOUT: Badge si l'utilisateur a un pikett cette semaine */}
+                              {(() => {
+                                const week = getCurrentWeek(); // Utilisez un nom différent
+                                const savedPiketts = localStorage.getItem('piketts');
+                                const piketts = savedPiketts ? JSON.parse(savedPiketts) : [];
+                                const userPikett = piketts.find((p: any) => 
+                                  p.userId === user.id && 
+                                  p.startWeek === week && // Utilisez 'week' au lieu de 'currentWeek'
+                                  p.status === 'ACTIVE'
+                                );
+                                
+                                if (userPikett) {
+                                  return (
+                                    <Badge className="bg-red-100 text-red-700 text-xs border-0 mt-1">
+                                      <Shield className="w-3 h-3 mr-1" />
+                                      Pikett {userPikett.name}
+                                    </Badge>
+                                  );
+                                }
+                                return null;
+                              })()}
                             </div>
                             <div className="flex flex-col items-end gap-1">
                               <Badge className={`text-xs border-0 ${

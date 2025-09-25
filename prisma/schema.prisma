@@ -21,9 +21,9 @@ model User {
   workPercent   Int         @default(100)
   status        UserStatus  @default(ACTIVE)
   notes         String?
-  
-  // NOUVEAUX CHAMPS pour la rotation et disponibilité
-  rotationConfig Json?      // Stocke la configuration de rotation
+  piketts       Pikett[]
+  // CHAMPS pour la rotation et disponibilité
+  rotationConfig Json?      // Stocke la configuration de rotation directement
   availability   Json?      // Stocke les disponibilités hebdomadaires
   
   teamId        String?
@@ -36,6 +36,20 @@ model User {
   
   @@index([email])
   @@index([teamId])
+}
+
+// Ajouter un modèle pour stocker les patterns de rotation
+model RotationPattern {
+  id          String   @id @default(cuid())
+  name        String
+  description String?
+  cycleLength Int
+  weeks       Json     // Stocke les patterns de semaine
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  @@index([name])
 }
 
 model Team {
@@ -53,6 +67,27 @@ model Team {
   updatedAt   DateTime @updatedAt
   
   @@index([name])
+}
+
+model Pikett {
+  id          String   @id @default(cuid())
+  name        String
+  description String?
+  teamId      String
+  team        Team     @relation(fields: [teamId], references: [id])
+  startWeek   String   // Format: "2025-W03" (semaine ISO)
+  endWeek     String?  // Si null, pikett en cours
+  userId      String?
+  user        User?    @relation(fields: [userId], references: [id])
+  color       String   @default("#dc2626")
+  status      Status   @default(ACTIVE)
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  @@index([teamId])
+  @@index([userId])
+  @@index([startWeek])
 }
 
 model Shift {

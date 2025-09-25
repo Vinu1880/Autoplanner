@@ -3,14 +3,13 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 
-// GET - RÃ©cupÃ©rer tous les utilisateurs
+// GET - Récupérer tous les utilisateurs
 export async function GET() {
   try {
     const users = await prisma.user.findMany({
       include: {
         team: true,
         leadingTeam: true,
-        // Pas besoin d'include pour rotationConfig car c'est un champ JSON direct
       },
       orderBy: [
         { firstName: 'asc' },
@@ -18,11 +17,17 @@ export async function GET() {
       ]
     });
     
-    // Log pour debug
-    console.log('Users from DB with rotation:', users.map(u => ({
-      name: `${u.firstName} ${u.lastName}`,
-      rotationConfig: u.rotationConfig
-    })));
+    // Log détaillé pour debug
+    console.log('=== USERS FROM DATABASE ===');
+    users.forEach(user => {
+      console.log(`${user.firstName} ${user.lastName}:`, {
+        rotationConfig: user.rotationConfig,
+        rotationConfigType: typeof user.rotationConfig,
+        hasPatternId: !!(user.rotationConfig && (user.rotationConfig as any).patternId),
+        rawJSON: JSON.stringify(user.rotationConfig)
+      });
+    });
+    console.log('==============================');
     
     return NextResponse.json(users);
   } catch (error) {
@@ -34,12 +39,15 @@ export async function GET() {
   }
 }
 
-// POST - CrÃ©er un nouvel utilisateur
+// POST - Créer un nouvel utilisateur
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
     
-    // PrÃ©parer les donnÃ©es
+    console.log('=== CREATING USER ===');
+    console.log('Request body:', JSON.stringify(body, null, 2));
+    
+    // Préparer les données de base
     const userData: any = {
       firstName: body.firstName,
       lastName: body.lastName,
@@ -56,11 +64,38 @@ export async function POST(request: NextRequest) {
       userData.teamId = body.teamId;
     }
     
+    // STOCKAGE DIRECT du rotationConfig comme JSON
+    if (body.rotationConfig && body.rotationConfig.patternId) {
+      userData.rotationConfig = {
+        patternId: body.rotationConfig.patternId,
+        priority: body.rotationConfig.priority || 'medium',
+        allowedShiftTypes: body.rotationConfig.allowedShiftTypes || []
+      };
+      console.log('Storing rotationConfig as JSON:', userData.rotationConfig);
+    } else {
+      userData.rotationConfig = null;
+      console.log('No rotation config to store');
+    }
+    
+    // Ajouter availability si présent
+    if (body.availability) {
+      userData.availability = body.availability;
+    }
+    
+    console.log('Final userData to create:', JSON.stringify(userData, null, 2));
+    
     const user = await prisma.user.create({
       data: userData,
       include: {
-        team: true
+        team: true,
+        leadingTeam: true
       }
+    });
+    
+    console.log('User created successfully:', {
+      name: `${user.firstName} ${user.lastName}`,
+      rotationConfig: user.rotationConfig,
+      id: user.id
     });
     
     // Log audit
@@ -76,8 +111,13 @@ export async function POST(request: NextRequest) {
     return NextResponse.json(user, { status: 201 });
   } catch (error) {
     console.error('Error creating user:', error);
+    console.error('Stack trace:', error instanceof Error ? error.stack : 'No stack');
     return NextResponse.json(
-      { error: 'Failed to create user', details: error instanceof Error ? error.message : 'Unknown error' },
+      { 
+        error: 'Failed to create user', 
+        details: error instanceof Error ? error.message : 'Unknown error',
+        stack: process.env.NODE_ENV === 'development' ? (error instanceof Error ? error.stack : null) : undefined
+      },
       { status: 500 }
     );
   }

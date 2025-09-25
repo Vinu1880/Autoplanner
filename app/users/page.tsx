@@ -40,6 +40,7 @@ import {
   MoreHorizontal
 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { useRotationPatterns } from '@/contexts/RotationPatternsContext';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -127,12 +128,12 @@ const TEAM_COLORS = [
   '#06b6d4', '#f43f5e', '#84cc16', '#a855f7', '#14b8a6'
 ];
 
-// Patterns par dÃ©faut
+// Patterns par défaut
 const defaultPatterns: RotationPattern[] = [
   {
     id: '1',
-    name: 'Alternance Dispatch Matin/AprÃ¨s-midi',
-    description: 'Alterne entre matin et aprÃ¨s-midi chaque semaine',
+    name: 'Alternance Dispatch Matin/Après-midi',
+    description: 'Alterne entre matin et après-midi chaque semaine',
     cycleLength: 2,
     weeks: [
       {
@@ -158,7 +159,7 @@ const defaultPatterns: RotationPattern[] = [
   {
     id: '2',
     name: 'Rotation 3 Semaines Mixte',
-    description: 'Cycle de 3 semaines avec horaires variÃ©s',
+    description: 'Cycle de 3 semaines avec horaires variés',
     cycleLength: 3,
     weeks: [
       {
@@ -224,32 +225,7 @@ const UsersPage = () => {
   const [selectedTeam, setSelectedTeam] = useState<any>(null);
   const [workType, setWorkType] = useState<'full' | 'partial' | 'rotation'>('full');
   const [editWorkType, setEditWorkType] = useState<'full' | 'partial' | 'rotation'>('full');
-  
-  // Ã‰tat pour les patterns de rotation
-  const [rotationPatterns, setRotationPatterns] = useState<RotationPattern[]>(defaultPatterns);
-  
-  // Charger les patterns depuis localStorage
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const saved = localStorage.getItem('rotationPatterns');
-      if (saved) {
-        try {
-          const parsed = JSON.parse(saved);
-          setRotationPatterns(parsed);
-        } catch (e) {
-          console.error('Erreur chargement patterns:', e);
-          setRotationPatterns(defaultPatterns);
-        }
-      }
-    }
-  }, []);
-
-  // Sauvegarder les patterns dans localStorage
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      localStorage.setItem('rotationPatterns', JSON.stringify(rotationPatterns));
-    }
-  }, [rotationPatterns]);
+  const { patterns: rotationPatterns, addPattern, updatePattern, deletePattern } = useRotationPatterns();
 
   // Ajouter le style CSS
   useEffect(() => {
@@ -257,7 +233,9 @@ const UsersPage = () => {
     styleElement.textContent = rotationStyle;
     document.head.appendChild(styleElement);
     return () => {
-      document.head.removeChild(styleElement);
+      if (document.head.contains(styleElement)) {
+        document.head.removeChild(styleElement);
+      }
     };
   }, []);
 
@@ -312,6 +290,32 @@ const UsersPage = () => {
     deleteTeam,
     refetch: refetchTeams 
   } = useTeams();
+
+  // FONCTION DE VÉRIFICATION DE ROTATION - Version corrigée
+  const hasValidRotation = (user: any): boolean => {
+    console.log(`Checking rotation for ${user.firstName}:`, {
+      rotationConfig: user.rotationConfig,
+      type: typeof user.rotationConfig,
+      hasPatternId: !!(user.rotationConfig?.patternId)
+    });
+    
+    // Vérifier si l'objet rotationConfig existe et a un patternId valide
+    return !!(user.rotationConfig && 
+             typeof user.rotationConfig === 'object' && 
+             user.rotationConfig.patternId &&
+             user.rotationConfig.patternId !== '');
+  };
+
+  // FONCTION DE RÉCUPÉRATION DE LA CONFIG DE ROTATION
+  const getRotationConfig = (user: any): RotationConfig | null => {
+    if (!hasValidRotation(user)) return null;
+    
+    return {
+      patternId: user.rotationConfig.patternId,
+      priority: user.rotationConfig.priority || 'medium',
+      allowedShiftTypes: user.rotationConfig.allowedShiftTypes || []
+    };
+  };
 
   // Fonctions utilitaires
   const calculateWorkPercent = (availability: WeekAvailability | null | undefined): number => {
@@ -388,7 +392,7 @@ const UsersPage = () => {
     );
   };
 
-  // Composant AvailabilityEditor amÃ©liorÃ©
+  // Composant AvailabilityEditor
   const AvailabilityEditor = ({ 
     availability, 
     onChange, 
@@ -498,7 +502,7 @@ const UsersPage = () => {
                   }}
                 >
                   <SelectTrigger>
-                    <SelectValue placeholder="SÃ©lectionner un pattern" />
+                    <SelectValue placeholder="Sélectionner un pattern" />
                   </SelectTrigger>
                   <SelectContent>
                     {rotationPatterns.map(pattern => (
@@ -572,11 +576,11 @@ const UsersPage = () => {
       // Ajouter la configuration de rotation si applicable
       if (workType === 'rotation' && newUser.rotationConfig?.patternId) {
         userData.rotationConfig = newUser.rotationConfig;
+        console.log('Frontend: Creating user with rotation config:', userData.rotationConfig);
       } else {
         userData.rotationConfig = null;
       }
 
-      console.log('Creating user with data:', userData);
       await createUser(userData);
       
       setIsCreateUserDialogOpen(false);
@@ -593,10 +597,8 @@ const UsersPage = () => {
         rotationConfig: null
       });
       setWorkType('full');
-      
-      refetchUsers();
     } catch (error) {
-      console.error('Erreur:', error);
+      console.error('Erreur lors de la création:', error);
       alert('Erreur lors de la création');
     } finally {
       setIsSubmitting(false);
@@ -624,20 +626,18 @@ const UsersPage = () => {
       // Ajouter ou supprimer la configuration de rotation
       if (editWorkType === 'rotation' && selectedUser.rotationConfig?.patternId) {
         userData.rotationConfig = selectedUser.rotationConfig;
+        console.log('Frontend: Updating user with rotation config:', userData.rotationConfig);
       } else {
         userData.rotationConfig = null;
       }
 
-      console.log('Updating user with data:', userData);
       await updateUser(selectedUser.id, userData);
       
       setIsEditUserDialogOpen(false);
       setSelectedUser(null);
       setEditWorkType('full');
-      
-      refetchUsers();
     } catch (error) {
-      console.error('Erreur:', error);
+      console.error('Erreur lors de la modification:', error);
       alert('Erreur lors de la modification');
     } finally {
       setIsSubmitting(false);
@@ -645,7 +645,7 @@ const UsersPage = () => {
   };
 
   const handleDeleteUser = async (userId: string) => {
-    if (!confirm('ÃŠtes-vous sÃ»r de vouloir supprimer cet utilisateur ?')) return;
+    if (!confirm('Êtes-vous sûr de vouloir supprimer cet utilisateur ?')) return;
     
     try {
       await deleteUser(userId);
@@ -673,7 +673,7 @@ const UsersPage = () => {
       refetchTeams();
     } catch (error) {
       console.error('Erreur:', error);
-      alert('Erreur lors de la création de l\'Equipe');
+      alert('Erreur lors de la création de l\'équipe');
     } finally {
       setIsSubmitting(false);
     }
@@ -684,7 +684,6 @@ const UsersPage = () => {
 
     setIsSubmitting(true);
     try {
-      // CORRECTION: Si leadId est 'none' ou vide, on envoie null
       const updateData = {
         name: selectedTeam.name,
         description: selectedTeam.description || null,
@@ -692,7 +691,6 @@ const UsersPage = () => {
         leadId: (selectedTeam.leadId === 'none' || !selectedTeam.leadId) ? null : selectedTeam.leadId
       };
       
-      console.log('Updating team with data:', updateData);
       await updateTeam(selectedTeam.id, updateData);
       
       setIsEditTeamDialogOpen(false);
@@ -700,21 +698,21 @@ const UsersPage = () => {
       refetchTeams();
     } catch (error) {
       console.error('Erreur:', error);
-      alert('Erreur lors de la modification de l\'Equipe');
+      alert('Erreur lors de la modification de l\'équipe');
     } finally {
       setIsSubmitting(false);
     }
   };
 
   const handleDeleteTeam = async (teamId: string) => {
-    if (!confirm('Etes-vous sûr de vouloir supprimer cette Equipe ?')) return;
+    if (!confirm('Êtes-vous sûr de vouloir supprimer cette équipe ?')) return;
     
     try {
       await deleteTeam(teamId);
       refetchTeams();
     } catch (error) {
       console.error('Erreur:', error);
-      alert('Erreur lors de la suppression de l\'Equipe');
+      alert('Erreur lors de la suppression de l\'équipe');
     }
   };
 
@@ -747,7 +745,7 @@ const UsersPage = () => {
     return matchesSearch;
   });
 
-  // Constantes pour l'Ã©diteur de pattern
+  // Constantes pour l'éditeur de pattern
   const days: DayOfWeek[] = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
   const dayLabels = {
     monday: 'Lun',
@@ -784,8 +782,8 @@ const UsersPage = () => {
       <main className="p-6 space-y-6">
         <div className="flex flex-col md:flex-row md:items-center md:justify-between space-y-4 md:space-y-0">
           <div>
-            <h1 className="text-3xl font-bold text-slate-800">Gestion des Utilisateurs & Equipe</h1>
-            <p className="text-slate-600 mt-1">Gérez vos Equipes et configurez les rotations</p>
+            <h1 className="text-3xl font-bold text-slate-800">Gestion des Utilisateurs & Équipes</h1>
+            <p className="text-slate-600 mt-1">Gérez vos équipes et configurez les rotations</p>
           </div>
           
           <div className="flex items-center space-x-3">
@@ -799,7 +797,7 @@ const UsersPage = () => {
           </div>
         </div>
 
-        {/* Switcher Users/Teams amÃ©liorÃ© */}
+        {/* Switcher Users/Teams */}
         <div className="flex items-center space-x-4">
           <Button
             variant={viewMode === 'users' ? 'default' : 'outline'}
@@ -820,7 +818,7 @@ const UsersPage = () => {
             size="lg"
           >
             <Building2 className="w-5 h-5 mr-2" />
-            Equipes
+            Équipes
             <Badge variant="secondary" className="ml-2">
               {teams.length}
             </Badge>
@@ -849,7 +847,7 @@ const UsersPage = () => {
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="all">Toutes les Equipes</SelectItem>
+                        <SelectItem value="all">Toutes les équipes</SelectItem>
                         {teams.map((team) => (
                           <SelectItem key={team.id} value={team.id}>
                             {team.name}
@@ -875,7 +873,7 @@ const UsersPage = () => {
                       </SelectTrigger>
                       <SelectContent>
                         <SelectItem value="name">Nom</SelectItem>
-                        <SelectItem value="team">Ã‰quipe</SelectItem>
+                        <SelectItem value="team">Équipe</SelectItem>
                         <SelectItem value="status">Status</SelectItem>
                       </SelectContent>
                     </Select>
@@ -951,13 +949,13 @@ const UsersPage = () => {
                         
                         <div className="grid grid-cols-2 gap-4">
                           <div>
-                            <Label>Equipe</Label>
+                            <Label>Équipe</Label>
                             <Select 
                               value={newUser.teamId || 'none'} 
                               onValueChange={(value) => setNewUser({...newUser, teamId: value === 'none' ? '' : value})}
                             >
                               <SelectTrigger>
-                                <SelectValue placeholder="SÃ©lectionner" />
+                                <SelectValue placeholder="Sélectionner" />
                               </SelectTrigger>
                               <SelectContent>
                                 <SelectItem value="none">Aucune</SelectItem>
@@ -1012,16 +1010,16 @@ const UsersPage = () => {
                     <DialogTrigger asChild>
                       <Button className="bg-blue-600 hover:bg-blue-700">
                         <Plus className="w-4 h-4 mr-2" />
-                        Nouvelle Equipe
+                        Nouvelle Équipe
                       </Button>
                     </DialogTrigger>
                     <DialogContent>
                       <DialogHeader>
-                        <DialogTitle>Créer une Equipe</DialogTitle>
+                        <DialogTitle>Créer une équipe</DialogTitle>
                       </DialogHeader>
                       <div className="space-y-4 py-4">
                         <div>
-                          <Label>Nom de l'Equipe *</Label>
+                          <Label>Nom de l'équipe *</Label>
                           <Input
                             placeholder="ex: IT Support"
                             value={newTeam.name}
@@ -1032,14 +1030,14 @@ const UsersPage = () => {
                         <div>
                           <Label>Description</Label>
                           <Textarea
-                            placeholder="Description de l'Equipe..."
+                            placeholder="Description de l'équipe..."
                             value={newTeam.description}
                             onChange={(e) => setNewTeam({...newTeam, description: e.target.value})}
                           />
                         </div>
                         
                         <div>
-                          <Label>Couleur de l'Equipe</Label>
+                          <Label>Couleur de l'équipe</Label>
                           <div className="flex items-center space-x-2 mt-2">
                             {TEAM_COLORS.map((color) => (
                               <button
@@ -1055,13 +1053,13 @@ const UsersPage = () => {
                         </div>
                         
                         <div>
-                          <Label>Chef d'Equipe</Label>
+                          <Label>Chef d'équipe</Label>
                           <Select 
                             value={newTeam.leadId || 'none'} 
                             onValueChange={(value) => setNewTeam({...newTeam, leadId: value === 'none' ? '' : value})}
                           >
                             <SelectTrigger>
-                              <SelectValue placeholder="SÃ©lectionner" />
+                              <SelectValue placeholder="Sélectionner" />
                             </SelectTrigger>
                             <SelectContent>
                               <SelectItem value="none">Aucun</SelectItem>
@@ -1101,12 +1099,13 @@ const UsersPage = () => {
             {userViewType === 'grid' ? (
               <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4">
                 {filteredUsers.map((user) => {
-                  const hasRotation = user.rotationConfig?.patternId ? true : false;
-                  const rotationPattern = hasRotation ? rotationPatterns.find(p => p.id === user.rotationConfig.patternId) : null;
+                  const hasRotation = hasValidRotation(user);
+                  const rotationConfig = getRotationConfig(user);
+                  const rotationPattern = hasRotation && rotationConfig ? rotationPatterns.find(p => p.id === rotationConfig.patternId) : null;
                   
                   return (
                     <Card key={user.id} className="bg-white border-0 shadow-sm hover:shadow-md transition-all relative">
-                      {/* INDICATEUR DE ROTATION TRÃˆS VISIBLE */}
+                      {/* INDICATEUR DE ROTATION TRÈS VISIBLE */}
                       {hasRotation && (
                         <div className="absolute -top-2 -right-2 z-10">
                           <div className="bg-gradient-to-br from-purple-500 to-indigo-600 rounded-full p-2 shadow-lg">
@@ -1152,8 +1151,8 @@ const UsersPage = () => {
                               {rotationPattern.name}
                             </p>
                             <p className="text-xs text-purple-600 mt-1">
-                              Priorité: {user.rotationConfig.priority === 'high' ? 'Haute âš¡' : 
-                                        user.rotationConfig.priority === 'medium' ? 'Moyenne' : 'Basse'}
+                              Priorité: {rotationConfig?.priority === 'high' ? 'Haute 🔴' : 
+                                        rotationConfig?.priority === 'medium' ? 'Moyenne' : 'Basse'}
                             </p>
                           </div>
                         )}
@@ -1175,7 +1174,7 @@ const UsersPage = () => {
                             onClick={() => {
                               let userWorkType: 'full' | 'partial' | 'rotation' = 'full';
                               
-                              if (user.rotationConfig?.patternId) {
+                              if (hasValidRotation(user)) {
                                 userWorkType = 'rotation';
                               } else if (user.workPercent && user.workPercent < 100) {
                                 userWorkType = 'partial';
@@ -1195,7 +1194,7 @@ const UsersPage = () => {
                                 status: user.status || 'ACTIVE',
                                 notes: user.notes || '',
                                 availability: user.availability || fullTimeAvailability,
-                                rotationConfig: user.rotationConfig || null
+                                rotationConfig: getRotationConfig(user)
                               });
                               
                               setIsEditUserDialogOpen(true);
@@ -1228,7 +1227,7 @@ const UsersPage = () => {
                     <TableRow>
                       <TableHead>Nom</TableHead>
                       <TableHead>Email</TableHead>
-                      <TableHead>Equipe</TableHead>
+                      <TableHead>Équipe</TableHead>
                       <TableHead>Rôle</TableHead>
                       <TableHead>Travail</TableHead>
                       <TableHead>Rotation</TableHead>
@@ -1238,8 +1237,9 @@ const UsersPage = () => {
                   </TableHeader>
                   <TableBody>
                     {filteredUsers.map((user) => {
-                      const hasRotation = user.rotationConfig?.patternId ? true : false;
-                      const rotationPattern = hasRotation ? rotationPatterns.find(p => p.id === user.rotationConfig.patternId) : null;
+                      const hasRotation = hasValidRotation(user);
+                      const rotationConfig = getRotationConfig(user);
+                      const rotationPattern = hasRotation && rotationConfig ? rotationPatterns.find(p => p.id === rotationConfig.patternId) : null;
                       
                       return (
                         <TableRow key={user.id}>
@@ -1295,7 +1295,7 @@ const UsersPage = () => {
                                   onClick={() => {
                                     let userWorkType: 'full' | 'partial' | 'rotation' = 'full';
                                     
-                                    if (user.rotationConfig?.patternId) {
+                                    if (hasValidRotation(user)) {
                                       userWorkType = 'rotation';
                                     } else if (user.workPercent && user.workPercent < 100) {
                                       userWorkType = 'partial';
@@ -1315,7 +1315,7 @@ const UsersPage = () => {
                                       status: user.status || 'ACTIVE',
                                       notes: user.notes || '',
                                       availability: user.availability || fullTimeAvailability,
-                                      rotationConfig: user.rotationConfig || null
+                                      rotationConfig: getRotationConfig(user)
                                     });
                                     
                                     setIsEditUserDialogOpen(true);
@@ -1345,14 +1345,14 @@ const UsersPage = () => {
           </>
         )}
 
-        {/* Vue Ã‰quipes - AmÃ©liorÃ©e avec plus de dÃ©tails */}
+        {/* Vue Équipes */}
         {viewMode === 'teams' && (
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {filteredTeams.map((team) => {
               const teamMembers = users.filter(u => u.teamId === team.id);
               const lead = team.leadId ? users.find(u => u.id === team.leadId) : null;
               const activeMembers = teamMembers.filter(u => u.status === 'ACTIVE');
-              const rotationMembers = teamMembers.filter(u => u.rotationConfig?.patternId);
+              const rotationMembers = teamMembers.filter(u => hasValidRotation(u));
               
               return (
                 <Card key={team.id} className="bg-white border-0 shadow-sm hover:shadow-md transition-all">
@@ -1397,10 +1397,10 @@ const UsersPage = () => {
                         <Crown className="w-5 h-5 text-amber-600" />
                         <div>
                           <p className="text-sm font-medium text-slate-800">
-                            Chef d'Equipe
+                            Chef d'équipe
                           </p>
                           <p className="text-sm text-slate-600">
-                            {lead.firstName} {lead.lastName} â€¢ {lead.email}
+                            {lead.firstName} {lead.lastName} • {lead.email}
                           </p>
                         </div>
                       </div>
@@ -1409,13 +1409,13 @@ const UsersPage = () => {
                     <div>
                       <div className="flex items-center justify-between mb-3">
                         <p className="text-sm font-semibold text-slate-700">
-                          Membres de l'Equipe
+                          Membres de l'équipe
                         </p>
                       </div>
                       <div className="space-y-2 max-h-64 overflow-y-auto">
                         {teamMembers.length > 0 ? (
                           teamMembers.map((member) => {
-                            const hasRotation = member.rotationConfig?.patternId ? true : false;
+                            const hasRotation = hasValidRotation(member);
                             return (
                               <div key={member.id} className="flex items-center justify-between p-2 bg-slate-50 rounded-lg hover:bg-slate-100 transition-colors">
                                 <div className="flex items-center space-x-3">
@@ -1428,7 +1428,7 @@ const UsersPage = () => {
                                     <p className="text-sm font-medium text-slate-800">
                                       {member.firstName} {member.lastName}
                                     </p>
-                                    <p className="text-xs text-slate-600">{member.role || 'Sans rÃ´le'}</p>
+                                    <p className="text-xs text-slate-600">{member.role || 'Sans rôle'}</p>
                                   </div>
                                 </div>
                                 <div className="flex items-center gap-2">
@@ -1443,13 +1443,13 @@ const UsersPage = () => {
                           })
                         ) : (
                           <p className="text-sm text-slate-500 italic text-center py-4">
-                            Aucun membre dans cette Equipe
+                            Aucun membre dans cette équipe
                           </p>
                         )}
                       </div>
                     </div>
 
-                    {/* Statistiques de l'Ã©quipe */}
+                    {/* Statistiques de l'équipe */}
                     <div className="grid grid-cols-2 gap-3 pt-3 border-t">
                       <div className="text-center p-2 bg-blue-50 rounded">
                         <p className="text-2xl font-bold text-blue-600">
@@ -1536,13 +1536,13 @@ const UsersPage = () => {
               
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <Label>Equipe</Label>
+                  <Label>Équipe</Label>
                   <Select 
                     value={selectedUser?.teamId || 'none'} 
                     onValueChange={(value) => setSelectedUser({...selectedUser, teamId: value === 'none' ? '' : value})}
                   >
                     <SelectTrigger>
-                      <SelectValue placeholder="SÃ©lectionner" />
+                      <SelectValue placeholder="Sélectionner" />
                     </SelectTrigger>
                     <SelectContent>
                       <SelectItem value="none">Aucune</SelectItem>
@@ -1630,16 +1630,16 @@ const UsersPage = () => {
           </DialogContent>
         </Dialog>
 
-        {/* Dialog de modification d'Ã©quipe */}
+        {/* Dialog de modification d'équipe */}
         {selectedTeam && (
           <Dialog open={isEditTeamDialogOpen} onOpenChange={setIsEditTeamDialogOpen}>
             <DialogContent>
               <DialogHeader>
-                <DialogTitle>Modifier l'Equipe</DialogTitle>
+                <DialogTitle>Modifier l'équipe</DialogTitle>
               </DialogHeader>
               <div className="space-y-4 py-4">
                 <div>
-                  <Label>Nom de l'Equipe *</Label>
+                  <Label>Nom de l'équipe *</Label>
                   <Input
                     value={selectedTeam.name}
                     onChange={(e) => setSelectedTeam({...selectedTeam, name: e.target.value})}
@@ -1655,7 +1655,7 @@ const UsersPage = () => {
                 </div>
                 
                 <div>
-                  <Label>Couleur de l'Equipe</Label>
+                  <Label>Couleur de l'équipe</Label>
                   <div className="flex items-center space-x-2 mt-2">
                     {TEAM_COLORS.map((color) => (
                       <button
@@ -1671,7 +1671,7 @@ const UsersPage = () => {
                 </div>
                 
                 <div>
-                  <Label>Chef d'Equipe</Label>
+                  <Label>Chef d'équipe</Label>
                   <Select 
                     value={selectedTeam.leadId || 'none'} 
                     onValueChange={(value) => setSelectedTeam({...selectedTeam, leadId: value === 'none' ? '' : value})}
@@ -1727,7 +1727,7 @@ const UsersPage = () => {
                 <div>
                   <Label>Nom du pattern</Label>
                   <Input
-                    placeholder="ex: Alternance Matin/AprÃ¨s-midi"
+                    placeholder="ex: Alternance Matin/Après-midi"
                     value={newPattern.name}
                     onChange={(e) => setNewPattern({ ...newPattern, name: e.target.value })}
                   />
@@ -1823,10 +1823,9 @@ const UsersPage = () => {
                     }
                     const newId = Date.now().toString();
                     const patternToAdd = { ...newPattern, id: newId };
-                    const updatedPatterns = [...rotationPatterns, patternToAdd];
-                    setRotationPatterns(updatedPatterns);
+                    addPattern(patternToAdd);
                     
-                    // Si on Ã©tait en train de configurer une rotation, on met Ã  jour automatiquement
+                    // Si on était en train de configurer une rotation, on met à jour automatiquement
                     if (workType === 'rotation') {
                       setNewUser({
                         ...newUser,
