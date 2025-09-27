@@ -8,6 +8,7 @@ export interface Shift {
   description: string | null;
   startTime: string;
   endTime: string;
+  daysOfWeek?: number[];
   teamId: string;
   team: {
     id: string;

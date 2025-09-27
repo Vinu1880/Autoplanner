@@ -47,7 +47,8 @@ export async function POST(request: NextRequest) {
         status: body.status || 'ACTIVE',
         color: body.color || '#3b82f6',
         includedUserIds: body.includedUserIds || [],
-        excludedUserIds: body.excludedUserIds || []
+        excludedUserIds: body.excludedUserIds || [],
+        daysOfWeek: body.daysOfWeek || [1, 2, 3, 4, 5]
       },
       include: {
         team: true

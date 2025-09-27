@@ -137,6 +137,16 @@ exports.Prisma.UserScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.RotationPatternScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  description: 'description',
+  cycleLength: 'cycleLength',
+  weeks: 'weeks',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.TeamScalarFieldEnum = {
   id: 'id',
   name: 'name',
@@ -147,12 +157,31 @@ exports.Prisma.TeamScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.PikettScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  description: 'description',
+  startWeek: 'startWeek',
+  daysOfWeek: 'daysOfWeek',
+  endWeek: 'endWeek',
+  color: 'color',
+  status: 'status',
+  is24_7: 'is24_7',
+  teamId: 'teamId',
+  userId: 'userId',
+  includedUserIds: 'includedUserIds',
+  excludedUserIds: 'excludedUserIds',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.ShiftScalarFieldEnum = {
   id: 'id',
   name: 'name',
   description: 'description',
   startTime: 'startTime',
   endTime: 'endTime',
+  daysOfWeek: 'daysOfWeek',
   membersRequired: 'membersRequired',
   priority: 'priority',
   status: 'status',
@@ -212,6 +241,10 @@ exports.Prisma.NullableJsonNullValueInput = {
   JsonNull: Prisma.JsonNull
 };
 
+exports.Prisma.JsonNullValueInput = {
+  JsonNull: Prisma.JsonNull
+};
+
 exports.Prisma.QueryMode = {
   default: 'default',
   insensitive: 'insensitive'
@@ -232,17 +265,17 @@ exports.UserStatus = exports.$Enums.UserStatus = {
   INACTIVE: 'INACTIVE'
 };
 
+exports.Status = exports.$Enums.Status = {
+  ACTIVE: 'ACTIVE',
+  INACTIVE: 'INACTIVE',
+  ARCHIVED: 'ARCHIVED'
+};
+
 exports.Priority = exports.$Enums.Priority = {
   LOW: 'LOW',
   MEDIUM: 'MEDIUM',
   HIGH: 'HIGH',
   CRITICAL: 'CRITICAL'
-};
-
-exports.Status = exports.$Enums.Status = {
-  ACTIVE: 'ACTIVE',
-  INACTIVE: 'INACTIVE',
-  ARCHIVED: 'ARCHIVED'
 };
 
 exports.AssignmentStatus = exports.$Enums.AssignmentStatus = {
@@ -254,7 +287,9 @@ exports.AssignmentStatus = exports.$Enums.AssignmentStatus = {
 
 exports.Prisma.ModelName = {
   User: 'User',
+  RotationPattern: 'RotationPattern',
   Team: 'Team',
+  Pikett: 'Pikett',
   Shift: 'Shift',
   ShiftAssignment: 'ShiftAssignment',
   OutOfOfficeEvent: 'OutOfOfficeEvent',

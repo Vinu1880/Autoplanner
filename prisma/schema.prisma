@@ -62,6 +62,7 @@ model Team {
   lead        User?    @relation("TeamLead", fields: [leadId], references: [id])
   members     User[]   @relation("TeamMembers")
   shifts      Shift[]
+  piketts     Pikett[]
   
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
@@ -70,24 +71,35 @@ model Team {
 }
 
 model Pikett {
-  id          String   @id @default(cuid())
-  name        String
-  description String?
-  teamId      String
-  team        Team     @relation(fields: [teamId], references: [id])
-  startWeek   String   // Format: "2025-W03" (semaine ISO)
-  endWeek     String?  // Si null, pikett en cours
-  userId      String?
-  user        User?    @relation(fields: [userId], references: [id])
-  color       String   @default("#dc2626")
-  status      Status   @default(ACTIVE)
+  id              String   @id @default(cuid())
+  name            String
+  description     String?
+  startWeek       String   // Format: "2025-W03"
+  daysOfWeek     Int[]    @default([1, 2, 3, 4, 5]) // Lun=1, Mar=2, etc. Dim=0
+  endWeek         String?  // Si null, pikett permanent
+  color           String   @default("#dc2626")
+  status          Status   @default(ACTIVE)
+  is24_7          Boolean  @default(true)
   
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  // Relations
+  teamId          String
+  team            Team     @relation(fields: [teamId], references: [id])
+  
+  // Relation optionnelle avec User (pour la relation inverse)
+  userId          String?
+  user            User?    @relation(fields: [userId], references: [id])
+  
+  // Listes d'IDs pour inclusion/exclusion
+  includedUserIds String[]
+  excludedUserIds String[]
+  
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
   
   @@index([teamId])
-  @@index([userId])
+  @@index([status])
   @@index([startWeek])
+  @@index([userId])
 }
 
 model Shift {
@@ -96,6 +108,7 @@ model Shift {
   description    String?
   startTime      String   // Format HH:MM
   endTime        String   // Format HH:MM
+  daysOfWeek     Int[]    @default([1, 2, 3, 4, 5]) // Lun=1, Mar=2, etc. Dim=0
   membersRequired Int     @default(1)
   priority       Priority @default(MEDIUM)
   status         Status   @default(ACTIVE)

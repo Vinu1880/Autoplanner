@@ -1,4 +1,5 @@
 'use client';
+//app/planner/page.tsx
 
 import React, { useState, useEffect } from 'react';
 import Navigation from '@/components/Navigation';
@@ -48,6 +49,7 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { useShifts } from '@/lib/hooks/useShifts';
 import { useUsers } from '@/lib/hooks/useUsers';
 import { useTeams } from '@/lib/hooks/useTeams';
+import { usePiketts } from '@/lib/hooks/usePiketts';
 
 // Types
 interface OutlookEvent {
@@ -79,6 +81,7 @@ interface ShiftAssignment {
   }>;
   isRotationAssignment?: boolean;
   rotationPriority?: 'high' | 'medium' | 'low';
+  isPikett?: boolean;
 }
 
 interface RotationPattern {
@@ -95,21 +98,29 @@ const SHIFT_COLORS = [
   '#fb7185', '#fbbf24', '#34d399', '#60a5fa', '#a78bfa'
 ];
 
+
 const PlannerPage = () => {
+
+    const { 
+      piketts, 
+      loading: pikettsLoading 
+  } = usePiketts();
+
     const getCurrentWeek = () => {
-    const date = new Date();
-    const year = date.getFullYear();
-    const firstDayOfYear = new Date(year, 0, 1);
-    const days = Math.floor((date.getTime() - firstDayOfYear.getTime()) / (24 * 60 * 60 * 1000));
-    const weekNumber = Math.ceil((days + firstDayOfYear.getDay() + 1) / 7);
-    return `${year}-W${weekNumber.toString().padStart(2, '0')}`;
-  };
+      const date = new Date();
+      const year = date.getFullYear();
+      const firstDayOfYear = new Date(year, 0, 1);
+      const days = Math.floor((date.getTime() - firstDayOfYear.getTime()) / (24 * 60 * 60 * 1000));
+      const weekNumber = Math.ceil((days + firstDayOfYear.getDay() + 1) / 7);
+      return `${year}-W${weekNumber.toString().padStart(2, '0')}`;
+    };
+
   // États
   const [selectedShifts, setSelectedShifts] = useState<string[]>([]);
+  const [selectedPiketts, setSelectedPiketts] = useState<string[]>([]);
   const [selectedDates, setSelectedDates] = useState<string[]>([]);
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
-  const [selectedDaysOfWeek, setSelectedDaysOfWeek] = useState<number[]>([1, 2, 3, 4, 5]);
   const [isProcessingShifts, setIsProcessingShifts] = useState(false);
   const [outOfOfficeEvents, setOutOfOfficeEvents] = useState<OutlookEvent[]>([]);
   const [shiftAssignments, setShiftAssignments] = useState<ShiftAssignment[]>([]);
@@ -150,6 +161,25 @@ const PlannerPage = () => {
       enableRotations: true
     };
   };
+
+  // Récupération des piketts actifs
+  const [activePiketts, setActivePiketts] = useState<any[]>([]);
+
+  useEffect(() => {
+    const savedPiketts = localStorage.getItem('piketts');
+    if (savedPiketts) {
+      const piketts = JSON.parse(savedPiketts);
+      // Filtrer les piketts actifs pour la période sélectionnée
+      const filtered = piketts.filter((p: any) => {
+        if (p.status !== 'ACTIVE') return false;
+        // Vérifier si le pikett est dans la période
+        const pikettWeek = p.startWeek;
+        // Logique pour vérifier la période
+        return true; // À affiner selon vos besoins
+      });
+      setActivePiketts(filtered);
+    }
+  }, [startDate, endDate]);
 
   const [settings, setSettings] = useState(loadSettings());
 
@@ -370,16 +400,13 @@ const PlannerPage = () => {
     }
   };
 
-  const generateDateRange = (start: string, end: string, daysOfWeek: number[]): string[] => {
+  const generateDateRange = (start: string, end: string): string[] => {
     const dates: string[] = [];
     const startDateObj = new Date(start);
     const endDateObj = new Date(end);
     
     for (let d = new Date(startDateObj); d <= endDateObj; d.setDate(d.getDate() + 1)) {
-      const dayOfWeek = d.getDay();
-      if (daysOfWeek.includes(dayOfWeek)) {
-        dates.push(d.toISOString().split('T')[0]);
-      }
+      dates.push(d.toISOString().split('T')[0]);
     }
     
     return dates;
@@ -438,36 +465,250 @@ const PlannerPage = () => {
     );
   };
 
-  const processShiftAssignments = async () => {
-    if (selectedShifts.length === 0 || !startDate || !endDate || selectedDaysOfWeek.length === 0) {
-      alert('Veuillez sélectionner au moins un shift et des dates');
+const processShiftAssignments = async () => {
+  // Validation : au moins un shift OU un pikett doit être sélectionné
+  if (selectedShifts.length === 0 && selectedPiketts.length === 0) {
+    alert('Veuillez sélectionner au moins un shift ou un pikett');
+    return;
+  }
+  
+  if (!startDate || !endDate) {
+    alert('Veuillez sélectionner les dates et jours de la semaine');
+    return;
+  }
+
+  setIsProcessingShifts(true);
+  
+  try {
+    console.log('=== DÉBUT DU PROCESSUS D\'ASSIGNATION ===');
+    console.log(`Shifts sélectionnés: ${selectedShifts.length}`);
+    console.log(`Piketts sélectionnés: ${selectedPiketts.length}`);
+    console.log(`Période: ${startDate} à ${endDate}`);
+    console.log(`Random Seed actuel: ${randomSeed}`);
+    
+    let currentUsers = availableUsers.length > 0 ? availableUsers : await fetchUsersFromCalendars();
+    
+    if (currentUsers.length === 0) {
+      alert('Aucun utilisateur trouvé');
+      setIsProcessingShifts(false);
       return;
     }
-
-    setIsProcessingShifts(true);
     
-    try {
-      console.log('=== DÉBUT DU PROCESSUS D\'ASSIGNATION ===');
-      console.log(`Shifts sélectionnés: ${selectedShifts.length}`);
-      console.log(`Période: ${startDate} à ${endDate}`);
-      console.log(`Random Seed actuel: ${randomSeed}`);
+    const oofEvents = settings.checkCalendars ? await fetchOutOfOfficeForPeriod() : [];
+    setOutOfOfficeEvents(oofEvents);
+    
+    const dates = generateDateRange(startDate, endDate,);
+    setSelectedDates(dates);
+    
+    const assignments: ShiftAssignment[] = [];
+    const userShiftsTracking: { [userId: string]: { [shiftId: string]: number } } = {};
+    
+    // PARTIE 1: Traiter les PIKETTS sélectionnés
+    if (selectedPiketts.length > 0) {
+      console.log('\n=== TRAITEMENT DES PIKETTS ===');
       
-      let currentUsers = availableUsers.length > 0 ? availableUsers : await fetchUsersFromCalendars();
-      
-      if (currentUsers.length === 0) {
-        alert('Aucun utilisateur trouvé');
-        setIsProcessingShifts(false);
-        return;
+      for (const pikettId of selectedPiketts) {
+        const pikett = piketts.find(p => p.id === pikettId);
+        if (!pikett) continue;
+        
+        console.log(`Traitement du pikett: ${pikett.name}`);
+        
+        // Obtenir les utilisateurs éligibles pour ce pikett
+        const eligibleUsers = [
+          ...currentUsers.filter(u => 
+            u.teamId === pikett.teamId && 
+            u.status === 'ACTIVE' && 
+            !(pikett.excludedUserIds || []).includes(u.id)
+          ),
+          ...currentUsers.filter(u => 
+            (pikett.includedUserIds || []).includes(u.id) && 
+            u.status === 'ACTIVE'
+          )
+        ];
+        
+        console.log(`  ${eligibleUsers.length} utilisateurs éligibles pour le pikett`);
+        
+        if (eligibleUsers.length === 0) {
+          console.log('  ⚠ Aucun utilisateur éligible pour ce pikett');
+          continue;
+        }
+        
+        // Organiser les dates par semaine ISO
+        const weekGroups = new Map<string, string[]>();
+        
+        for (const date of dates) {
+          const dateObj = new Date(date);
+          const tempDate = new Date(dateObj.valueOf());
+          const dayNum = tempDate.getUTCDay() || 7;
+          tempDate.setUTCDate(tempDate.getUTCDate() + 4 - dayNum);
+          const yearStart = new Date(Date.UTC(tempDate.getUTCFullYear(), 0, 1));
+          const weekNo = Math.ceil((((tempDate.getTime() - yearStart.getTime()) / 86400000) + 1) / 7);
+          const weekKey = `${tempDate.getUTCFullYear()}-W${weekNo.toString().padStart(2, '0')}`;
+          
+          if (!weekGroups.has(weekKey)) {
+            weekGroups.set(weekKey, []);
+          }
+          weekGroups.get(weekKey)!.push(date);
+        }
+        
+        console.log(`  Nombre de semaines à couvrir: ${weekGroups.size}`);
+        
+        const sortedWeeks = Array.from(weekGroups.entries()).sort((a, b) => a[0].localeCompare(b[0]));
+        const shuffledUsers = shuffleArray(eligibleUsers, randomSeed, `pikett-${pikettId}`);
+        
+        // Tracker pour éviter les assignations consécutives
+        let lastAssignedUserId: string | null = null;
+        let userRotationIndex = 0;
+        
+        // ASSIGNATION PAR SEMAINE AVEC ROTATION ET VÉRIFICATION OOF
+        for (const [weekKey, weekDates] of sortedWeeks) {
+          console.log(`\n  Traitement semaine ${weekKey}:`);
+          
+          let assignedUserForWeek = null;
+          let attempts = 0;
+          const maxAttempts = shuffledUsers.length;
+          
+          // Chercher un utilisateur disponible pour cette semaine
+          while (!assignedUserForWeek && attempts < maxAttempts) {
+            const candidateUser = shuffledUsers[userRotationIndex % shuffledUsers.length];
+            
+            // Vérifier que ce n'est pas la même personne que la semaine précédente
+            if (lastAssignedUserId && candidateUser.id === lastAssignedUserId && shuffledUsers.length > 1) {
+              console.log(`    ${candidateUser.firstName} a déjà fait la semaine précédente, on passe au suivant`);
+              userRotationIndex++;
+              attempts++;
+              continue;
+            }
+            
+            // Vérifier la disponibilité pour cette semaine
+            if (settings.checkCalendars) {
+              let unavailableDaysCount = 0;
+              for (const date of weekDates) {
+                const availability = isUserAvailable(candidateUser, date, oofEvents);
+                if (!availability.available) {
+                  unavailableDaysCount++;
+                }
+              }
+              
+              // Si l'utilisateur est absent plus de 2 jours dans la semaine, passer au suivant
+              if (unavailableDaysCount > 2) {
+                console.log(`    ${candidateUser.firstName} est OOF ${unavailableDaysCount}/${weekDates.length} jours, on passe au suivant`);
+                userRotationIndex++;
+                attempts++;
+                continue;
+              }
+            }
+            
+            // Cet utilisateur est OK pour cette semaine
+            assignedUserForWeek = candidateUser;
+            lastAssignedUserId = candidateUser.id;
+            console.log(`    ✓ Assigné: ${assignedUserForWeek.firstName} ${assignedUserForWeek.lastName}`);
+          }
+          
+          // Si aucun utilisateur disponible trouvé, forcer l'assignation du prochain dans la rotation
+          if (!assignedUserForWeek && shuffledUsers.length > 0) {
+            assignedUserForWeek = shuffledUsers[userRotationIndex % shuffledUsers.length];
+            lastAssignedUserId = assignedUserForWeek.id;
+            console.log(`    ⚠ Assignation forcée: ${assignedUserForWeek.firstName} ${assignedUserForWeek.lastName}`);
+          }
+          
+          // Créer les assignations pour chaque jour de la semaine
+            for (const date of weekDates) {
+              // Vérifier si ce jour est configuré pour le pikett
+              const dateObj = new Date(date);
+              const dayOfWeek = dateObj.getDay();
+              if (pikett.daysOfWeek && !pikett.daysOfWeek.includes(dayOfWeek)) {
+                continue; // Passer au jour suivant si ce jour n'est pas configuré
+              }
+            if (!assignedUserForWeek) {
+              // Aucun utilisateur disponible
+              assignments.push({
+                date,
+                shiftId: pikettId,
+                shift: {
+                  ...pikett,
+                  name: `🚨 PIKETT: ${pikett.name}`,
+                  startTime: '00:00',
+                  endTime: '23:59'
+                },
+                assignedUsers: [],
+                availableUsers: [],
+                unavailableUsers: eligibleUsers.map(u => ({
+                  user: u,
+                  reason: 'Aucun utilisateur disponible',
+                  conflictEvents: []
+                })),
+                isPikett: true,
+                isRotationAssignment: false,
+                rotationPriority: 'high'
+              });
+            } else {
+              // Vérifier la disponibilité pour ce jour spécifique
+              let dayAvailable = true;
+              let dayConflicts: OutlookEvent[] = [];
+              
+              if (settings.checkCalendars) {
+                const availability = isUserAvailable(assignedUserForWeek, date, oofEvents);
+                dayAvailable = availability.available;
+                dayConflicts = availability.conflictEvents;
+              }
+              
+              assignments.push({
+                date,
+                shiftId: pikettId,
+                shift: {
+                  ...pikett,
+                  name: `🚨 PIKETT: ${pikett.name}`,
+                  startTime: '00:00',
+                  endTime: '23:59'
+                },
+                assignedUsers: dayAvailable ? [assignedUserForWeek] : [],
+                availableUsers: shuffledUsers.filter(u => u.id !== assignedUserForWeek.id),
+                unavailableUsers: [
+                  ...(!dayAvailable ? [{
+                    user: assignedUserForWeek,
+                    reason: `Out of Office`,
+                    conflictEvents: dayConflicts
+                  }] : []),
+                  ...shuffledUsers
+                    .filter(u => u.id !== assignedUserForWeek.id)
+                    .map(u => ({
+                      user: u,
+                      reason: 'Rotation hebdomadaire',
+                      conflictEvents: []
+                    }))
+                ],
+                isPikett: true,
+                isRotationAssignment: false,
+                rotationPriority: 'high'
+              });
+            }
+          }
+          
+          // Passer au prochain utilisateur pour la semaine suivante
+          userRotationIndex++;
+        }
+        
+        // Résumé de la rotation
+        console.log('\n  === RÉSUMÉ ROTATION PIKETT ===');
+        for (const [weekKey, weekDates] of sortedWeeks) {
+          const weekAssignments = assignments.filter(a => 
+            a.isPikett && 
+            a.shiftId === pikettId && 
+            weekDates.includes(a.date)
+          );
+          const assignedUser = weekAssignments.find(a => a.assignedUsers.length > 0)?.assignedUsers[0];
+          if (assignedUser) {
+            const daysPresent = weekAssignments.filter(a => a.assignedUsers.length > 0).length;
+            console.log(`  ${weekKey}: ${assignedUser.firstName} ${assignedUser.lastName} (${daysPresent}/${weekDates.length} jours)`);
+          }
+        }
       }
-      
-      console.log(`Utilisateurs disponibles: ${currentUsers.length}`);
-      
-      const oofEvents = settings.checkCalendars ? await fetchOutOfOfficeForPeriod() : [];
-      setOutOfOfficeEvents(oofEvents);
-      
-      const dates = generateDateRange(startDate, endDate, selectedDaysOfWeek);
-      setSelectedDates(dates);
-      console.log(`Dates à traiter: ${dates.length}`);
+    }
+    
+   // PARTIE 2: Traiter les SHIFTS normaux
+    if (selectedShifts.length > 0) {
+      console.log('\n=== TRAITEMENT DES SHIFTS ===');
       
       const rotationUsers = currentUsers.filter(u => u.rotationConfig?.patternId);
       console.log(`${rotationUsers.length} utilisateur(s) avec rotation configurée`);
@@ -483,14 +724,11 @@ const PlannerPage = () => {
         });
       }
       
-      const assignments: ShiftAssignment[] = [];
-      const userShiftsTracking: { [userId: string]: { [shiftId: string]: number } } = {};
-      
       for (const date of dates) {
         const dailyAssignments: { [userId: string]: string[] } = {};
         console.log(`\n=== Traitement du ${date} ===`);
         
-        // PARTIE 1: Traiter les rotations si activées
+        // PARTIE 2.1: Traiter les rotations si activées
         if (settings.enableRotations) {
           for (const rotationUser of rotationUsers) {
             const { shiftType, priority } = getRotationShiftForUserOnDate(
@@ -519,7 +757,6 @@ const PlannerPage = () => {
               if (!shift) return false;
               
               const shiftNameLower = shift.name.toLowerCase();
-              console.log(`Comparing shift "${shift.name}" with rotation type "${shiftType}"`);
               
               if (shiftType === 'morning' && 
                   (shiftNameLower.includes('morning') || 
@@ -531,6 +768,16 @@ const PlannerPage = () => {
                   (shiftNameLower.includes('afternoon') || 
                    shiftNameLower.includes('après') ||
                    shiftNameLower.includes('pm'))) {
+                return true;
+              }
+              if (shiftType === 'evening' && 
+                  (shiftNameLower.includes('evening') || 
+                   shiftNameLower.includes('soir'))) {
+                return true;
+              }
+              if (shiftType === 'night' && 
+                  (shiftNameLower.includes('night') || 
+                   shiftNameLower.includes('nuit'))) {
                 return true;
               }
               
@@ -586,10 +833,17 @@ const PlannerPage = () => {
           }
         }
         
-        // PARTIE 2: Traiter les shifts non assignés par rotation
+        // PARTIE 2.2: Traiter les shifts non assignés par rotation
         for (const shiftId of shiftsToProcess) {
           const shift = shifts.find(s => s.id === shiftId);
           if (!shift) continue;
+          
+          // Vérifier si ce jour est configuré pour le shift
+          const dateObj = new Date(date);
+          const dayOfWeek = dateObj.getDay();
+          if (shift.daysOfWeek && !shift.daysOfWeek.includes(dayOfWeek)) {
+            continue; // Passer au jour suivant si ce jour n'est pas configuré
+          }
           
           const alreadyAssigned = assignments.some(a => 
             a.date === date && a.shiftId === shiftId && a.isRotationAssignment
@@ -601,8 +855,6 @@ const PlannerPage = () => {
           }
           
           console.log(`  ${shift.name}: Recherche d'un utilisateur disponible`);
-          console.log(`    Nom du shift pour debug: "${shift.name}"`);
-          console.log(`    ID du shift: ${shift.id}`);
           
           const eligibleUsers = getEligibleUsersForShift(shift);
           console.log(`    ${eligibleUsers.length} utilisateurs éligibles`);
@@ -611,15 +863,23 @@ const PlannerPage = () => {
           const unavailableUsers: Array<{user: any; reason: string; conflictEvents: OutlookEvent[]}> = [];
           
           for (const user of eligibleUsers) {
-            if (dailyAssignments[user.id]) {
+            // MODIFICATION ICI : Vérifier seulement les shifts NON-PIKETT
+            const hasNormalShiftToday = assignments.some(a => 
+              a.date === date && 
+              !a.isPikett && // Ignorer les piketts
+              a.assignedUsers.some(u => u.id === user.id)
+            );
+            
+            if (hasNormalShiftToday) {
               unavailableUsers.push({
                 user,
-                reason: 'Déjà assigné aujourd\'hui',
+                reason: 'Déjà assigné à un shift aujourd\'hui',
                 conflictEvents: []
               });
               continue;
             }
             
+            // Le reste du code reste identique...
             if (settings.checkCalendars) {
               const availability = isUserAvailable(user, date, oofEvents);
               if (!availability.available) {
@@ -633,7 +893,23 @@ const PlannerPage = () => {
             }
             
             if (settings.avoidConsecutiveShifts) {
-              if (hasConsecutiveShift(user.id, date, assignments)) {
+              // Modifier aussi ici pour ignorer les piketts dans la vérification
+              const hasConsecutiveNormalShift = assignments.some(a => {
+                if (a.isPikett) return false; // Ignorer les piketts
+                const currentDate = new Date(date);
+                const prevDate = new Date(currentDate);
+                prevDate.setDate(prevDate.getDate() - 1);
+                const nextDate = new Date(currentDate);
+                nextDate.setDate(nextDate.getDate() + 1);
+                
+                const prevDateStr = prevDate.toISOString().split('T')[0];
+                const nextDateStr = nextDate.toISOString().split('T')[0];
+                
+                return (a.date === prevDateStr || a.date === nextDateStr) &&
+                      a.assignedUsers.some(u => u.id === user.id);
+              });
+              
+              if (hasConsecutiveNormalShift) {
                 unavailableUsers.push({
                   user,
                   reason: 'Shift consécutif',
@@ -650,22 +926,16 @@ const PlannerPage = () => {
           
           let assignedUsers: any[] = [];
           if (availableForThisDate.length > 0) {
-            // MÉLANGE AMÉLIORÉ: Utilise le seed global + shiftId + date
             const seedString = `${shiftId}-${date}`;
             let candidateUsers = shuffleArray(availableForThisDate, randomSeed, seedString);
-            console.log(`    Mélange avec seed: ${randomSeed} et string: "${seedString}"`);
-            console.log(`    Ordre après mélange: ${candidateUsers.map(u => u.firstName).join(', ')}`);
             
             if (settings.balanceShifts) {
               candidateUsers.sort((a, b) => {
                 const aCount = (userShiftsTracking[a.id]?.[shiftId] || 0);
                 const bCount = (userShiftsTracking[b.id]?.[shiftId] || 0);
                 if (aCount !== bCount) return aCount - bCount;
-                
-                // Si égalité, maintenir l'ordre aléatoire
                 return 0;
               });
-              console.log(`    Ordre après équilibrage: ${candidateUsers.map(u => u.firstName).join(', ')}`);
             }
             
             const selectedUser = candidateUsers[0];
@@ -683,7 +953,6 @@ const PlannerPage = () => {
             assignedUsers = [selectedUser];
             
             console.log(`    → Assigné à: ${selectedUser.displayName || selectedUser.firstName}`);
-            console.log(`    Compteur pour cet utilisateur: ${userShiftsTracking[selectedUser.id][shiftId]}`);
           } else {
             console.log(`    ⚠ Aucune personne disponible`);
           }
@@ -694,28 +963,30 @@ const PlannerPage = () => {
             shift,
             assignedUsers,
             availableUsers: availableForThisDate,
-            unavailableUsers
+            unavailableUsers,
+            isRotationAssignment: false
           });
         }
       }
-      
-      console.log('\n=== PROCESSUS TERMINÉ ===');
-      console.log(`Total assignations créées: ${assignments.length}`);
-      console.log(`Assignations avec rotation: ${assignments.filter(a => a.isRotationAssignment).length}`);
-      console.log(`Assignations manuelles: ${assignments.filter(a => !a.isRotationAssignment).length}`);
-      console.log(`Shifts non pourvus: ${assignments.filter(a => a.assignedUsers.length === 0).length}`);
-      
-      // Incrémenter le seed pour la prochaine fois
-      setRandomSeed(prev => prev + 1);
-      setShiftAssignments(assignments);
-      
-    } catch (error) {
-      console.error('Erreur:', error);
-      alert('Erreur lors du traitement');
-    } finally {
-      setIsProcessingShifts(false);
     }
-  };
+    
+    console.log('\n=== PROCESSUS TERMINÉ ===');
+    console.log(`Total assignations créées: ${assignments.length}`);
+    console.log(`Piketts assignés: ${assignments.filter(a => a.isPikett).length}`);
+    console.log(`Shifts normaux: ${assignments.filter(a => !a.isPikett).length}`);
+    console.log(`Shifts avec rotation: ${assignments.filter(a => a.isRotationAssignment && !a.isPikett).length}`);
+    console.log(`Shifts non pourvus: ${assignments.filter(a => a.assignedUsers.length === 0).length}`);
+    
+    setRandomSeed(prev => prev + 1);
+    setShiftAssignments(assignments);
+    
+  } catch (error) {
+    console.error('Erreur:', error);
+    alert('Erreur lors du traitement');
+  } finally {
+    setIsProcessingShifts(false);
+  }
+};
 
   const sendShiftInvitations = async () => {
     const assignmentsWithUsers = shiftAssignments.filter(a => a.assignedUsers.length > 0);
@@ -832,80 +1103,94 @@ const PlannerPage = () => {
     return shiftAssignments.filter(a => a.date === dateStr);
   };
 
-  const CalendarDay = ({ day }: { day: number | null }) => {
-    if (!day) return <div className={expandedCalendar ? "h-32" : "h-24"}></div>;
-    
-    const assignments = getAssignmentsForDate(day);
-    const isToday = new Date().getDate() === day && 
-                    new Date().getMonth() === calendarMonth && 
-                    new Date().getFullYear() === calendarYear;
-    
-    const maxVisible = expandedCalendar ? assignments.length : 3;
-    const visibleAssignments = assignments.slice(0, maxVisible);
-    const hiddenCount = assignments.length - maxVisible;
-    
-    return (
-      <div
-        className={`${expandedCalendar ? 'h-32' : 'h-24'} border rounded-lg p-1.5 cursor-pointer transition-all overflow-hidden
-          ${isToday ? 'border-blue-500 bg-blue-50' : 'border-slate-200'}
-          ${assignments.length > 0 ? 'hover:shadow-md' : 'hover:bg-slate-50'}`}
-        onClick={() => {
-          if (assignments.length > 0) {
-            setSelectedDayAssignments(assignments);
-            setIsDetailDialogOpen(true);
-          }
-        }}
-      >
-        <div className="text-xs font-medium text-slate-700 mb-1 flex items-center justify-between">
-          <span>{day}</span>
-          {assignments.length > 0 && (
-            <Badge variant="outline" className="text-xs h-4 px-1">
-              {assignments.length}
-            </Badge>
-          )}
-        </div>
-        
-        <div className="space-y-0.5">
-          {visibleAssignments.map((assignment, idx) => {
-            const shiftIndex = selectedShifts.findIndex(id => id === assignment.shiftId);
-            const color = SHIFT_COLORS[shiftIndex % SHIFT_COLORS.length];
-            
-            return (
-              <div 
-                key={`${assignment.shiftId}-${idx}`} 
-                className="rounded px-1 py-0.5 text-xs truncate"
-                style={{ 
-                  backgroundColor: `${color}15`,
-                  borderLeft: `2px solid ${color}`
-                }}
-              >
-                <div className="flex items-center gap-0.5">
-                  {assignment.isRotationAssignment && (
-                    <RotateCw className="w-3 h-3 flex-shrink-0" style={{ color }} />
-                  )}
-                  <span style={{ color }} className="font-medium text-xs truncate">
-                    {assignment.shift?.name || 'Shift'}
-                  </span>
-                  {assignment.assignedUsers.length > 0 ? (
-                    <span className="text-slate-700 truncate text-xs">
-                      : {assignment.assignedUsers[0].firstName?.substring(0, expandedCalendar ? 10 : 6)}
-                    </span>
-                  ) : (
-                    <span className="text-orange-600 text-xs">: ⚠</span>
-                  )}
-                </div>
-              </div>
-            );
-          })}
-          {hiddenCount > 0 && (
-            <div className="text-xs text-slate-500 text-center font-medium">
-              +{hiddenCount} autre{hiddenCount > 1 ? 's' : ''}
-            </div>
-          )}
-        </div>
+const CalendarDay = ({ day }: { day: number | null }) => {
+  if (!day) return <div className={expandedCalendar ? "h-32" : "h-24"}></div>;
+  
+  const assignments = getAssignmentsForDate(day);
+  const isToday = new Date().getDate() === day && 
+                  new Date().getMonth() === calendarMonth && 
+                  new Date().getFullYear() === calendarYear;
+  
+  const maxVisible = expandedCalendar ? assignments.length : 3;
+  const visibleAssignments = assignments.slice(0, maxVisible);
+  const hiddenCount = assignments.length - maxVisible;
+  
+  return (
+    <div
+      className={`${expandedCalendar ? 'h-32' : 'h-24'} border rounded-lg p-1.5 cursor-pointer transition-all overflow-hidden
+        ${isToday ? 'border-blue-500 bg-blue-50' : 'border-slate-200'}
+        ${assignments.length > 0 ? 'hover:shadow-md' : 'hover:bg-slate-50'}`}
+      onClick={() => {
+        if (assignments.length > 0) {
+          setSelectedDayAssignments(assignments);
+          setIsDetailDialogOpen(true);
+        }
+      }}
+    >
+      <div className="text-xs font-medium text-slate-700 mb-1 flex items-center justify-between">
+        <span>{day}</span>
+        {assignments.length > 0 && (
+          <Badge variant="outline" className="text-xs h-4 px-1">
+            {assignments.length}
+          </Badge>
+        )}
       </div>
-    );
-  };
+      
+      <div className="space-y-0.5">
+        {visibleAssignments.map((assignment, idx) => {
+          // MODIFICATION ICI : Gestion améliorée des couleurs pour piketts
+          let color = '#dc2626'; // Rouge par défaut pour les piketts
+          
+          if (!assignment.isPikett) {
+            // Pour les shifts normaux, utiliser l'index dans selectedShifts
+            const shiftIndex = selectedShifts.findIndex(id => id === assignment.shiftId);
+            color = shiftIndex >= 0 ? SHIFT_COLORS[shiftIndex % SHIFT_COLORS.length] : '#6b7280';
+          }
+          
+          return (
+            <div 
+              key={`${assignment.shiftId}-${idx}`} 
+              className="rounded px-1 py-0.5 text-xs truncate relative"
+              style={{ 
+                backgroundColor: assignment.isPikett ? '#dc262615' : `${color}15`,
+                borderLeft: `2px solid ${color}`
+              }}
+            >
+              <div className="flex items-center gap-0.5">
+                {assignment.isPikett && (
+                  <Shield className="w-3 h-3 flex-shrink-0 text-red-600" />
+                )}
+                {assignment.isRotationAssignment && !assignment.isPikett && (
+                  <RotateCw className="w-3 h-3 flex-shrink-0" style={{ color }} />
+                )}
+                <span 
+                  style={{ color }} 
+                  className="font-medium text-xs truncate"
+                >
+                  {assignment.isPikett 
+                    ? 'PIKETT' 
+                    : (assignment.shift?.name || 'Shift')}
+                </span>
+                {assignment.assignedUsers.length > 0 ? (
+                  <span className="text-slate-700 truncate text-xs">
+                    : {assignment.assignedUsers[0].firstName?.substring(0, expandedCalendar ? 10 : 6)}
+                  </span>
+                ) : (
+                  <span className="text-orange-600 text-xs">: ⚠</span>
+                )}
+              </div>
+            </div>
+          );
+        })}
+        {hiddenCount > 0 && (
+          <div className="text-xs text-slate-500 text-center font-medium">
+            +{hiddenCount} autre{hiddenCount > 1 ? 's' : ''}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
 
   useEffect(() => {
     console.log('Page planner chargée');
@@ -1049,47 +1334,33 @@ const PlannerPage = () => {
                 </div>
 
                 <div className="space-y-4">
-                  <h3 className="font-medium text-slate-800">Jours de la semaine</h3>
-                  <div className="grid grid-cols-7 gap-1">
-                    {[
-                      { value: 1, label: 'L' },
-                      { value: 2, label: 'M' },
-                      { value: 3, label: 'M' },
-                      { value: 4, label: 'J' },
-                      { value: 5, label: 'V' },
-                      { value: 6, label: 'S' },
-                      { value: 0, label: 'D' }
-                    ].map((day) => (
-                      <div key={day.value}>
-                        <input
-                          type="checkbox"
-                          id={`day-${day.value}`}
-                          checked={selectedDaysOfWeek.includes(day.value)}
-                          onChange={(e) => {
-                            if (e.target.checked) {
-                              setSelectedDaysOfWeek([...selectedDaysOfWeek, day.value]);
-                            } else {
-                              setSelectedDaysOfWeek(selectedDaysOfWeek.filter(d => d !== day.value));
-                            }
-                          }}
-                          className="sr-only"
-                        />
-                        <label 
-                          htmlFor={`day-${day.value}`}
-                          className={`flex items-center justify-center p-2 rounded cursor-pointer border-2 text-xs
-                            ${selectedDaysOfWeek.includes(day.value)
-                              ? 'bg-blue-500 text-white border-blue-500'
-                              : 'bg-slate-100 text-slate-600 border-slate-200'}`}
-                        >
-                          {day.label}
-                        </label>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
+                {/* Section Shifts */}
                 <div className="space-y-2">
-                  <Label>Shifts à planifier</Label>
+                  <div className="flex items-center justify-between mb-2">
+                    <Label>Shifts à planifier</Label>
+                    <div className="flex gap-2">
+                      <Button
+                        type="button"
+                        size="sm"
+                        variant="outline"
+                        onClick={() => {
+                          const activeShifts = shifts.filter((s: any) => s.status === 'ACTIVE');
+                          setSelectedShifts(activeShifts.map((s: any) => s.id));
+                        }}
+                      >
+                        Tout sélectionner
+                      </Button>
+                      <Button
+                        type="button"
+                        size="sm"
+                        variant="outline"
+                        onClick={() => setSelectedShifts([])}
+                      >
+                        Tout désélectionner
+                      </Button>
+                    </div>
+                  </div>
+                  
                   <ScrollArea className="h-48 border rounded-lg p-2">
                     <div className="space-y-2">
                       {shifts.filter((s: any) => s.status === 'ACTIVE').map((shift: any) => {
@@ -1130,12 +1401,80 @@ const PlannerPage = () => {
                   </ScrollArea>
                 </div>
 
+                {/* Section Piketts */}
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between mb-2">
+                    <Label className="flex items-center gap-2">
+                      <Shield className="w-4 h-4 text-red-600" />
+                      Piketts à planifier
+                    </Label>
+                    <div className="flex gap-2">
+                      <Button
+                        type="button"
+                        size="sm"
+                        variant="outline"
+                        onClick={() => {
+                          const activePiketts = piketts.filter((p: any) => p.status === 'ACTIVE');
+                          setSelectedPiketts(activePiketts.map((p: any) => p.id));
+                        }}
+                      >
+                        Tout sélectionner
+                      </Button>
+                      <Button
+                        type="button"
+                        size="sm"
+                        variant="outline"
+                        onClick={() => setSelectedPiketts([])}
+                      >
+                        Tout désélectionner
+                      </Button>
+                    </div>
+                  </div>
+                  
+                  <ScrollArea className="h-32 border rounded-lg p-2 bg-red-50/30">
+                    <div className="space-y-2">
+                      {piketts.filter((p: any) => p.status === 'ACTIVE').map((pikett: any) => {
+                        const isSelected = selectedPiketts.includes(pikett.id);
+                        
+                        return (
+                          <label
+                            key={pikett.id}
+                            className={`flex items-center space-x-2 p-1.5 rounded cursor-pointer text-xs
+                              ${isSelected ? 'bg-red-100' : 'hover:bg-red-50'}`}
+                          >
+                            <Checkbox
+                              checked={isSelected}
+                              onCheckedChange={(checked) => {
+                                if (checked) {
+                                  setSelectedPiketts([...selectedPiketts, pikett.id]);
+                                } else {
+                                  setSelectedPiketts(selectedPiketts.filter((id: string) => id !== pikett.id));
+                                }
+                              }}
+                            />
+                            <div className="flex-1">
+                              <div className="flex items-center gap-1">
+                                <Shield className="w-3 h-3 text-red-600" />
+                                <span className="font-medium text-red-900">{pikett.name}</span>
+                              </div>
+                              <span className="text-xs text-red-700">
+                                {pikett.team?.name} • 24/7
+                              </span>
+                            </div>
+                          </label>
+                        );
+                      })}
+                    </div>
+                  </ScrollArea>
+                </div>
+              </div>
+
                 <div className="space-y-3 pt-4 border-t">
                   <Button 
                     onClick={processShiftAssignments}
-                    disabled={isProcessingShifts || selectedShifts.length === 0 || !startDate || !endDate}
+                    disabled={isProcessingShifts || (selectedShifts.length === 0 && selectedPiketts.length === 0) || !startDate || !endDate}
                     className="w-full bg-blue-600 hover:bg-blue-700"
-                  >
+>
                     {isProcessingShifts ? (
                       <>
                         <Loader2 className="w-4 h-4 animate-spin mr-2" />

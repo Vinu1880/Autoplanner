@@ -12,18 +12,18 @@ datasource db {
 }
 
 model User {
-  id          String     @id @default(cuid())
-  email       String     @unique
-  firstName   String
-  lastName    String
-  phone       String?
-  role        String?
-  workPercent Int        @default(100)
-  status      UserStatus @default(ACTIVE)
-  notes       String?
-
-  // NOUVEAUX CHAMPS pour la rotation et disponibilité
-  rotationConfig Json? // Stocke la configuration de rotation
+  id             String     @id @default(cuid())
+  email          String     @unique
+  firstName      String
+  lastName       String
+  phone          String?
+  role           String?
+  workPercent    Int        @default(100)
+  status         UserStatus @default(ACTIVE)
+  notes          String?
+  piketts        Pikett[]
+  // CHAMPS pour la rotation et disponibilité
+  rotationConfig Json? // Stocke la configuration de rotation directement
   availability   Json? // Stocke les disponibilités hebdomadaires
 
   teamId      String?
@@ -38,21 +38,67 @@ model User {
   @@index([teamId])
 }
 
+// Ajouter un modèle pour stocker les patterns de rotation
+model RotationPattern {
+  id          String  @id @default(cuid())
+  name        String
+  description String?
+  cycleLength Int
+  weeks       Json // Stocke les patterns de semaine
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([name])
+}
+
 model Team {
   id          String  @id @default(cuid())
   name        String
   description String?
   color       String  @default("#3b82f6")
 
-  leadId  String? @unique
-  lead    User?   @relation("TeamLead", fields: [leadId], references: [id])
-  members User[]  @relation("TeamMembers")
+  leadId  String?  @unique
+  lead    User?    @relation("TeamLead", fields: [leadId], references: [id])
+  members User[]   @relation("TeamMembers")
   shifts  Shift[]
+  piketts Pikett[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   @@index([name])
+}
+
+model Pikett {
+  id          String  @id @default(cuid())
+  name        String
+  description String?
+  startWeek   String // Format: "2025-W03"
+  endWeek     String? // Si null, pikett permanent
+  color       String  @default("#dc2626")
+  status      Status  @default(ACTIVE)
+  is24_7      Boolean @default(true)
+
+  // Relations
+  teamId String
+  team   Team   @relation(fields: [teamId], references: [id])
+
+  // Relation optionnelle avec User (pour la relation inverse)
+  userId String?
+  user   User?   @relation(fields: [userId], references: [id])
+
+  // Listes d'IDs pour inclusion/exclusion
+  includedUserIds String[]
+  excludedUserIds String[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([teamId])
+  @@index([status])
+  @@index([startWeek])
+  @@index([userId])
 }
 
 model Shift {

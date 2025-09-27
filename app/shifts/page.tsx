@@ -1,5 +1,7 @@
 'use client';
 
+//app/shifts/page.tsx
+
 import React, { useState, useEffect } from 'react';
 import Navigation from '@/components/Navigation';
 import { 
@@ -24,7 +26,8 @@ import {
   UserMinus,
   X,
   CalendarDays,
-  Shield
+  Shield,
+  Info
 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -44,6 +47,7 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { useShifts } from '@/lib/hooks/useShifts';
 import { useTeams } from '@/lib/hooks/useTeams';
 import { useUsers } from '@/lib/hooks/useUsers';
+import { usePiketts } from '@/lib/hooks/usePiketts';
 
 const ShiftsPage = () => {
   const [viewType, setViewType] = useState<'shifts' | 'piketts'>('shifts');
@@ -57,10 +61,17 @@ const ShiftsPage = () => {
   const [selectedShift, setSelectedShift] = useState<any>(null);
   const [selectedPikett, setSelectedPikett] = useState<any>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  
-  // États pour les piketts
-  const [piketts, setPiketts] = useState<any[]>([]);
-  const [currentWeek, setCurrentWeek] = useState('');
+
+  // Utilisation du hook pour les piketts
+  const {
+    piketts,
+    loading: pikettsLoading,
+    error: pikettsError,
+    createPikett,
+    updatePikett: updatePikettHook,
+    deletePikett: deletePikettHook,
+    refetch: refetchPiketts
+  } = usePiketts();
 
   // Utilisation des hooks pour les vraies données
   const { 
@@ -85,50 +96,6 @@ const ShiftsPage = () => {
     error: usersError 
   } = useUsers();
 
-  // Fonction pour obtenir la semaine actuelle
-  const getCurrentWeek = () => {
-    const date = new Date();
-    const year = date.getFullYear();
-    const firstDayOfYear = new Date(year, 0, 1);
-    const days = Math.floor((date.getTime() - firstDayOfYear.getTime()) / (24 * 60 * 60 * 1000));
-    const weekNumber = Math.ceil((days + firstDayOfYear.getDay() + 1) / 7);
-    return `${year}-W${weekNumber.toString().padStart(2, '0')}`;
-  };
-
-  // Fonction pour obtenir les dates d'une semaine
-  const getWeekDates = (weekString: string) => {
-    const [year, week] = weekString.split('-W');
-    const firstDayOfYear = new Date(parseInt(year), 0, 1);
-    const daysOffset = (parseInt(week) - 1) * 7;
-    const startDate = new Date(firstDayOfYear.getTime() + daysOffset * 24 * 60 * 60 * 1000);
-    
-    // Ajuster au lundi de la semaine
-    const day = startDate.getDay();
-    const diff = startDate.getDate() - day + (day === 0 ? -6 : 1);
-    startDate.setDate(diff);
-    
-    const endDate = new Date(startDate);
-    endDate.setDate(startDate.getDate() + 6);
-    
-    return { startDate, endDate };
-  };
-
-  useEffect(() => {
-    setCurrentWeek(getCurrentWeek());
-    // Charger les piketts depuis localStorage
-    const savedPiketts = localStorage.getItem('piketts');
-    if (savedPiketts) {
-      setPiketts(JSON.parse(savedPiketts));
-    }
-  }, []);
-
-  // Sauvegarder les piketts dans localStorage
-  useEffect(() => {
-    if (piketts.length > 0) {
-      localStorage.setItem('piketts', JSON.stringify(piketts));
-    }
-  }, [piketts]);
-
   const [newShift, setNewShift] = useState<any>({
     name: '',
     description: '',
@@ -137,7 +104,8 @@ const ShiftsPage = () => {
     teamId: '',
     includedUserIds: [] as string[],
     excludedUserIds: [] as string[],
-    color: '#3b82f6'
+    color: '#3b82f6',
+    daysOfWeek: [1, 2, 3, 4, 5]
   });
 
   const [newPikett, setNewPikett] = useState({
@@ -145,11 +113,12 @@ const ShiftsPage = () => {
     name: '',
     description: '',
     teamId: '',
-    startWeek: currentWeek,
-    endWeek: '',
-    userId: '',
+    includedUserIds: [] as string[],
+    excludedUserIds: [] as string[],
     color: '#dc2626',
-    status: 'ACTIVE'
+    status: 'ACTIVE',
+    is24_7: true,
+    daysOfWeek: [1, 2, 3, 4, 5]
   });
 
   const getStatusBadge = (status: string) => {
@@ -174,7 +143,8 @@ const ShiftsPage = () => {
       await createShift({
         ...newShift,
         membersRequired: 1,
-        priority: 'MEDIUM' as 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL'
+        priority: 'MEDIUM' as 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL',
+        daysOfWeek: newShift.daysOfWeek
       });
       
       setIsCreateDialogOpen(false);
@@ -196,46 +166,84 @@ const ShiftsPage = () => {
     }
   };
 
-  const handleCreatePikett = () => {
-    if (!newPikett.name || !newPikett.teamId || !newPikett.startWeek || !newPikett.userId) {
-      alert('Veuillez remplir tous les champs obligatoires');
+  const handleCreatePikett = async () => {
+    if (!newPikett.name || !newPikett.teamId) {
+      alert('Veuillez remplir le nom et sélectionner une équipe');
       return;
     }
 
-    const pikett = {
-      ...newPikett,
-      id: Date.now().toString()
-    };
-
-    setPiketts([...piketts, pikett]);
-    setIsCreatePikettDialogOpen(false);
-    setNewPikett({
-      id: '',
-      name: '',
-      description: '',
-      teamId: '',
-      startWeek: currentWeek,
-      endWeek: '',
-      userId: '',
-      color: '#dc2626',
-      status: 'ACTIVE'
-    });
+    setIsSubmitting(true);
+    try {
+      await createPikett({
+        name: newPikett.name,
+        description: newPikett.description,
+        teamId: newPikett.teamId,
+        includedUserIds: newPikett.includedUserIds,
+        excludedUserIds: newPikett.excludedUserIds,
+        color: newPikett.color,
+        status: newPikett.status,
+        is24_7: newPikett.is24_7,
+        startWeek: '',
+        daysOfWeek: newPikett.daysOfWeek
+      });
+      
+      setIsCreatePikettDialogOpen(false);
+      setNewPikett({
+        id: '',
+        name: '',
+        description: '',
+        teamId: '',
+        includedUserIds: [],
+        excludedUserIds: [],
+        color: '#dc2626',
+        status: 'ACTIVE',
+        is24_7: true,
+        daysOfWeek: [0, 1, 2, 3, 4, 5, 6]
+      });
+    } catch (error) {
+      console.error('Erreur lors de la création du pikett:', error);
+      alert('Erreur lors de la création du pikett');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
-  const handleEditPikett = () => {
+  const handleEditPikett = async () => {
     if (!selectedPikett) return;
 
-    setPiketts(piketts.map(p => 
-      p.id === selectedPikett.id ? selectedPikett : p
-    ));
-    
-    setIsEditPikettDialogOpen(false);
-    setSelectedPikett(null);
+    setIsSubmitting(true);
+    try {
+      await updatePikettHook(selectedPikett.id, {
+        name: selectedPikett.name,
+        description: selectedPikett.description,
+        teamId: selectedPikett.teamId,
+        includedUserIds: selectedPikett.includedUserIds,
+        excludedUserIds: selectedPikett.excludedUserIds,
+        color: selectedPikett.color,
+        status: selectedPikett.status,
+        is24_7: selectedPikett.is24_7,
+        daysOfWeek: selectedPikett.daysOfWeek
+      });
+      
+      setIsEditPikettDialogOpen(false);
+      setSelectedPikett(null);
+    } catch (error) {
+      console.error('Erreur lors de la modification du pikett:', error);
+      alert('Erreur lors de la modification du pikett');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
-  const handleDeletePikett = (id: string) => {
+  const handleDeletePikett = async (id: string) => {
     if (!confirm('Êtes-vous sûr de vouloir supprimer ce pikett ?')) return;
-    setPiketts(piketts.filter(p => p.id !== id));
+    
+    try {
+      await deletePikettHook(id);
+    } catch (error) {
+      console.error('Erreur lors de la suppression du pikett:', error);
+      alert('Erreur lors de la suppression du pikett');
+    }
   };
 
   const handleEditShift = async () => {
@@ -252,7 +260,9 @@ const ShiftsPage = () => {
         membersRequired: 1,
         priority: 'MEDIUM',
         status: selectedShift.status,
-        color: selectedShift.color
+        color: selectedShift.color,
+        daysOfWeek: selectedShift.daysOfWeek
+        // Retirez includedUserIds et excludedUserIds
       });
       
       setIsEditDialogOpen(false);
@@ -331,6 +341,64 @@ const ShiftsPage = () => {
     if (duration < 0) duration += 24 * 60;
     
     return Math.round(duration / 60 * 10) / 10;
+  };
+
+  // Composant pour sélectionner les jours de la semaine
+  const DaysOfWeekSelector = ({ 
+    selectedDays, 
+    onChange 
+  }: { 
+    selectedDays: number[], 
+    onChange: (days: number[]) => void 
+  }) => {
+    const days = [
+      { value: 1, label: 'Lun' },
+      { value: 2, label: 'Mar' },
+      { value: 3, label: 'Mer' },
+      { value: 4, label: 'Jeu' },
+      { value: 5, label: 'Ven' },
+      { value: 6, label: 'Sam' },
+      { value: 0, label: 'Dim' }
+    ];
+
+    const handleDayToggle = (dayValue: number) => {
+      if (selectedDays.includes(dayValue)) {
+        onChange(selectedDays.filter(d => d !== dayValue));
+      } else {
+        onChange([...selectedDays, dayValue].sort());
+      }
+    };
+
+    return (
+      <div className="space-y-2">
+        <Label>Jours de la semaine</Label>
+        <div className="grid grid-cols-7 gap-1">
+          {days.map((day) => (
+            <div key={day.value}>
+              <input
+                type="checkbox"
+                id={`day-shift-${day.value}`}
+                checked={selectedDays.includes(day.value)}
+                onChange={() => handleDayToggle(day.value)}
+                className="sr-only"
+              />
+              <label 
+                htmlFor={`day-shift-${day.value}`}
+                className={`flex items-center justify-center p-2 rounded cursor-pointer border-2 text-xs
+                  ${selectedDays.includes(day.value)
+                    ? 'bg-blue-500 text-white border-blue-500'
+                    : 'bg-slate-100 text-slate-600 border-slate-200'}`}
+              >
+                {day.label}
+              </label>
+            </div>
+          ))}
+        </div>
+        <p className="text-xs text-slate-500">
+          Sélectionnez les jours où ce shift peut être assigné
+        </p>
+      </div>
+    );
   };
 
   // Composant pour gérer les membres du shift
@@ -551,7 +619,8 @@ const ShiftsPage = () => {
               setSelectedShift({
                 ...shift,
                 includedUserIds: shift.includedUserIds || [],
-                excludedUserIds: shift.excludedUserIds || []
+                excludedUserIds: shift.excludedUserIds || [],
+                daysOfWeek: shift.daysOfWeek || [1, 2, 3, 4, 5]
               });
               setIsEditDialogOpen(true);
             }}
@@ -591,8 +660,12 @@ const ShiftsPage = () => {
 
   const PikettCard = ({ pikett }: { pikett: any }) => {
     const team = teams.find(t => t.id === pikett.teamId);
-    const user = users.find(u => u.id === pikett.userId);
-    const { startDate, endDate } = getWeekDates(pikett.startWeek);
+    
+    // Obtenir les utilisateurs éligibles
+    const eligibleUsers = [
+      ...users.filter(u => u.teamId === pikett.teamId && u.status === 'ACTIVE' && !pikett.excludedUserIds?.includes(u.id)),
+      ...users.filter(u => pikett.includedUserIds?.includes(u.id) && u.status === 'ACTIVE')
+    ];
     
     return (
       <Card className="bg-white border-0 shadow-sm hover:shadow-md transition-all duration-300">
@@ -610,7 +683,14 @@ const ShiftsPage = () => {
                 <p className="text-sm text-slate-600 mt-1">{pikett.description}</p>
               </div>
             </div>
-            <Shield className="w-5 h-5 text-red-600" />
+            <div className="flex items-center gap-2">
+              <Shield className="w-5 h-5 text-red-600" />
+              {pikett.is24_7 && (
+                <Badge className="bg-red-100 text-red-800 border-0 text-xs">
+                  24/7
+                </Badge>
+              )}
+            </div>
           </div>
         </CardHeader>
         
@@ -620,11 +700,10 @@ const ShiftsPage = () => {
               <CalendarDays className="w-4 h-4 text-slate-500" />
               <div>
                 <p className="text-sm font-medium text-slate-800">
-                  Semaine {pikett.startWeek.split('-W')[1]}
+                  Pikett continu
                 </p>
                 <p className="text-xs text-slate-500">
-                  {startDate.toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit' })} - 
-                  {endDate.toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit' })}
+                  Configuré dans le planner
                 </p>
               </div>
             </div>
@@ -636,28 +715,31 @@ const ShiftsPage = () => {
                   {team?.name}
                 </p>
                 <p className="text-xs text-slate-500">
-                  Équipe assignée
+                  {eligibleUsers.length} personne(s)
                 </p>
               </div>
             </div>
           </div>
 
-          {user && (
-            <div className="flex items-center justify-between p-3 bg-red-50 rounded-lg">
-              <div className="flex items-center space-x-3">
-                <Avatar className="w-10 h-10">
-                  <AvatarFallback className="text-sm bg-gradient-to-br from-red-500 to-red-600 text-white">
-                    {user.firstName[0]}{user.lastName[0]}
-                  </AvatarFallback>
-                </Avatar>
-                <div>
-                  <p className="font-medium text-slate-800">{user.firstName} {user.lastName}</p>
-                  <p className="text-xs text-slate-600">{user.email}</p>
-                </div>
+          {/* Liste des utilisateurs assignés */}
+          {eligibleUsers.length > 0 && (
+            <div className="p-3 bg-red-50 rounded-lg">
+              <p className="text-xs font-medium text-red-800 mb-2">Personnel éligible :</p>
+              <div className="space-y-1">
+                {eligibleUsers.slice(0, 3).map(user => (
+                  <div key={user.id} className="flex items-center space-x-2">
+                    <Avatar className="w-6 h-6">
+                      <AvatarFallback className="text-xs bg-gradient-to-br from-red-500 to-red-600 text-white">
+                        {user.firstName[0]}{user.lastName[0]}
+                      </AvatarFallback>
+                    </Avatar>
+                    <span className="text-xs text-slate-700">{user.firstName} {user.lastName}</span>
+                  </div>
+                ))}
+                {eligibleUsers.length > 3 && (
+                  <p className="text-xs text-slate-500 italic">+{eligibleUsers.length - 3} autres</p>
+                )}
               </div>
-              <Badge className="bg-red-100 text-red-800 border-0">
-                De pikett
-              </Badge>
             </div>
           )}
 
@@ -668,7 +750,8 @@ const ShiftsPage = () => {
           <Alert className="border-orange-200 bg-orange-50">
             <AlertCircle className="h-4 w-4 text-orange-600" />
             <AlertDescription className="text-orange-800 text-xs">
-              Pikett actif pour toute la semaine. L'utilisateur peut recevoir des shifts en plus.
+              Service d'astreinte {pikett.is24_7 ? '24h/24 7j/7' : 'selon planning'}. 
+              Les dates et rotations sont gérées dans le planificateur.
             </AlertDescription>
           </Alert>
 
@@ -740,30 +823,36 @@ const ShiftsPage = () => {
             <p className="text-slate-600 mt-1">
               {viewType === 'shifts' 
                 ? 'Créez, modifiez et organisez vos shifts d\'équipe'
-                : 'Gérez les astreintes hebdomadaires (piketts)'}
+                : 'Gérez les astreintes (piketts)'}
             </p>
           </div>
           
           <div className="flex items-center space-x-3">
             {/* Toggle Shifts/Piketts */}
-            <div className="flex items-center border rounded-lg">
+            <div className="flex items-center space-x-4">
               <Button
-                variant={viewType === 'shifts' ? 'default' : 'ghost'}
-                size="sm"
+                variant={viewType === 'shifts' ? 'default' : 'outline'}
                 onClick={() => setViewType('shifts')}
-                className="rounded-r-none"
+                className={viewType === 'shifts' ? 'bg-blue-600 hover:bg-blue-700' : ''}
+                size="lg"
               >
-                <Clock className="w-4 h-4 mr-2" />
+                <Clock className="w-5 h-5 mr-2" />
                 Shifts
+                <Badge variant="secondary" className="ml-2">
+                  {shifts.length}
+                </Badge>
               </Button>
               <Button
-                variant={viewType === 'piketts' ? 'default' : 'ghost'}
-                size="sm"
+                variant={viewType === 'piketts' ? 'default' : 'outline'}
                 onClick={() => setViewType('piketts')}
-                className="rounded-l-none"
+                className={viewType === 'piketts' ? 'bg-red-600 hover:bg-red-700' : ''}
+                size="lg"
               >
-                <Shield className="w-4 h-4 mr-2" />
+                <Shield className="w-5 h-5 mr-2" />
                 Piketts
+                <Badge variant="secondary" className="ml-2">
+                  {piketts.length}
+                </Badge>
               </Button>
             </div>
 
@@ -786,7 +875,7 @@ const ShiftsPage = () => {
                 </DialogTrigger>
                 <DialogContent className="sm:max-w-2xl">
                   <DialogHeader>
-                    <DialogTitle>Créer un pikett hebdomadaire</DialogTitle>
+                    <DialogTitle>Créer un pikett</DialogTitle>
                   </DialogHeader>
                   <div className="space-y-4 py-4">
                     <div>
@@ -807,64 +896,54 @@ const ShiftsPage = () => {
                       />
                     </div>
                     
-                    <div className="grid grid-cols-2 gap-4">
-                      <div>
-                        <Label>Équipe *</Label>
-                        <Select 
-                          value={newPikett.teamId} 
-                          onValueChange={(value) => setNewPikett({...newPikett, teamId: value, userId: ''})}
-                        >
-                          <SelectTrigger>
-                            <SelectValue placeholder="Sélectionner" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            {teams.map((team) => (
-                              <SelectItem key={team.id} value={team.id}>
-                                {team.name}
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                      </div>
-                      
-                      <div>
-                        <Label>Semaine de début *</Label>
-                        <Input
-                          type="week"
-                          value={newPikett.startWeek}
-                          onChange={(e) => setNewPikett({...newPikett, startWeek: e.target.value})}
-                        />
-                      </div>
+                    <div>
+                      <Label>Équipe *</Label>
+                      <Select 
+                        value={newPikett.teamId} 
+                        onValueChange={(value) => setNewPikett({...newPikett, teamId: value})}
+                      >
+                        <SelectTrigger>
+                          <SelectValue placeholder="Sélectionner une équipe" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {teams.map((team) => (
+                            <SelectItem key={team.id} value={team.id}>
+                              {team.name}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
                     </div>
+
+                    <DaysOfWeekSelector
+                      selectedDays={newPikett.daysOfWeek}
+                      onChange={(days) => setNewPikett({...newPikett, daysOfWeek: days})}
+                    />
                     
                     {newPikett.teamId && (
-                      <div>
-                        <Label>Personne assignée *</Label>
-                        <Select 
-                          value={newPikett.userId} 
-                          onValueChange={(value) => setNewPikett({...newPikett, userId: value})}
-                        >
-                          <SelectTrigger>
-                            <SelectValue placeholder="Sélectionner" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            {users
-                              .filter(u => u.teamId === newPikett.teamId && u.status === 'ACTIVE')
-                              .map((user) => (
-                                <SelectItem key={user.id} value={user.id}>
-                                  {user.firstName} {user.lastName}
-                                </SelectItem>
-                              ))}
-                          </SelectContent>
-                        </Select>
-                      </div>
+                      <>
+                        <MembersSelector
+                          selectedUserIds={newPikett.includedUserIds}
+                          excludedUserIds={newPikett.excludedUserIds}
+                          onIncludeChange={(ids) => setNewPikett({...newPikett, includedUserIds: ids})}
+                          onExcludeChange={(ids) => setNewPikett({...newPikett, excludedUserIds: ids})}
+                          teamId={newPikett.teamId}
+                        />
+                        
+                        <Alert className="border-blue-200 bg-blue-50">
+                          <Info className="h-4 w-4 text-blue-600" />
+                          <AlertDescription className="text-blue-800 text-sm">
+                            Par défaut, tous les membres de l'équipe sont éligibles pour le pikett. 
+                            Vous pouvez personnaliser en excluant certains membres ou en ajoutant des membres d'autres équipes.
+                          </AlertDescription>
+                        </Alert>
+                      </>
                     )}
                     
                     <Alert className="border-orange-200 bg-orange-50">
                       <AlertCircle className="h-4 w-4 text-orange-600" />
                       <AlertDescription className="text-orange-800">
-                        Le pikett s'applique pour toute la semaine sélectionnée. 
-                        La personne assignée peut aussi recevoir des shifts normaux durant cette période.
+                        Le pikett sera configuré dans le planificateur. Les dates et la rotation seront définies lors de la planification des shifts.
                       </AlertDescription>
                     </Alert>
                     
@@ -875,8 +954,13 @@ const ShiftsPage = () => {
                       <Button 
                         onClick={handleCreatePikett}
                         className="bg-red-600 hover:bg-red-700"
+                        disabled={isSubmitting}
                       >
-                        Créer le Pikett
+                        {isSubmitting ? (
+                          <><Loader2 className="w-4 h-4 mr-2 animate-spin" /> Création...</>
+                        ) : (
+                          'Créer le Pikett'
+                        )}
                       </Button>
                     </div>
                   </div>
@@ -950,6 +1034,11 @@ const ShiftsPage = () => {
                         </Select>
                       </div>
 
+                      <DaysOfWeekSelector
+                        selectedDays={newShift.daysOfWeek}
+                        onChange={(days) => setNewShift({...newShift, daysOfWeek: days})}
+                      />
+
                       {newShift.teamId && (
                         <MembersSelector
                           selectedUserIds={newShift.includedUserIds}
@@ -1008,12 +1097,114 @@ const ShiftsPage = () => {
                   />
                 </div>
                 
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
+                <div>
+                  <Label>Équipe</Label>
+                  <Select 
+                    value={selectedPikett.teamId} 
+                    onValueChange={(value) => setSelectedPikett({...selectedPikett, teamId: value})}
+                  >
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {teams.map((team) => (
+                        <SelectItem key={team.id} value={team.id}>
+                          {team.name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <DaysOfWeekSelector
+                  selectedDays={selectedPikett?.daysOfWeek || [0, 1, 2, 3, 4, 5, 6]}
+                  onChange={(days) => setSelectedPikett({...selectedPikett, daysOfWeek: days})}
+                />
+                
+                <div>
+                  <Label>Personnes éligibles</Label>
+                  <MembersSelector
+                    selectedUserIds={selectedPikett?.includedUserIds || []}
+                    excludedUserIds={selectedPikett?.excludedUserIds || []}
+                    onIncludeChange={(ids) => setSelectedPikett({...selectedPikett, includedUserIds: ids})}
+                    onExcludeChange={(ids) => setSelectedPikett({...selectedPikett, excludedUserIds: ids})}
+                    teamId={selectedPikett?.teamId || ''}
+                  />
+                </div>
+                
+                <div className="flex justify-end space-x-3">
+                  <Button variant="outline" onClick={() => setIsEditPikettDialogOpen(false)}>
+                    Annuler
+                  </Button>
+                  <Button 
+                    onClick={handleEditPikett}
+                    className="bg-red-600 hover:bg-red-700"
+                    disabled={isSubmitting}
+                  >
+                    {isSubmitting ? (
+                      <><Loader2 className="w-4 h-4 mr-2 animate-spin" /> Enregistrement...</>
+                    ) : (
+                      <>
+                        <Save className="w-4 h-4 mr-2" />
+                        Enregistrer
+                      </>
+                    )}
+                  </Button>
+                </div>
+              </div>
+            </DialogContent>
+          </Dialog>
+        )}
+
+        {/* Dialog de modification de shift */}
+        {selectedShift && (
+          <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
+            <DialogContent className="sm:max-w-2xl max-h-[90vh] overflow-y-auto">
+              <DialogHeader>
+                <DialogTitle>Modifier le shift</DialogTitle>
+              </DialogHeader>
+              <div className="space-y-6 py-4">
+                <div className="space-y-4">
+                  <div className="space-y-2">
+                    <Label>Nom du shift</Label>
+                    <Input
+                      value={selectedShift.name}
+                      onChange={(e) => setSelectedShift({...selectedShift, name: e.target.value})}
+                    />
+                  </div>
+                  
+                  <div className="space-y-2">
+                    <Label>Description</Label>
+                    <Textarea
+                      value={selectedShift.description || ''}
+                      onChange={(e) => setSelectedShift({...selectedShift, description: e.target.value})}
+                    />
+                  </div>
+                  
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <Label>Heure de début</Label>
+                      <Input
+                        type="time"
+                        value={selectedShift.startTime}
+                        onChange={(e) => setSelectedShift({...selectedShift, startTime: e.target.value})}
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label>Heure de fin</Label>
+                      <Input
+                        type="time"
+                        value={selectedShift.endTime}
+                        onChange={(e) => setSelectedShift({...selectedShift, endTime: e.target.value})}
+                      />
+                    </div>
+                  </div>
+                  
+                  <div className="space-y-2">
                     <Label>Équipe</Label>
                     <Select 
-                      value={selectedPikett.teamId} 
-                      onValueChange={(value) => setSelectedPikett({...selectedPikett, teamId: value})}
+                      value={selectedShift.teamId} 
+                      onValueChange={(value) => setSelectedShift({...selectedShift, teamId: value})}
                     >
                       <SelectTrigger>
                         <SelectValue />
@@ -1027,59 +1218,63 @@ const ShiftsPage = () => {
                       </SelectContent>
                     </Select>
                   </div>
-                  
-                  <div>
-                    <Label>Semaine</Label>
-                    <Input
-                      type="week"
-                      value={selectedPikett.startWeek}
-                      onChange={(e) => setSelectedPikett({...selectedPikett, startWeek: e.target.value})}
+
+                  <DaysOfWeekSelector
+                    selectedDays={selectedShift.daysOfWeek || [1, 2, 3, 4, 5]}
+                    onChange={(days) => setSelectedShift({...selectedShift, daysOfWeek: days})}
+                  />
+
+                  {selectedShift.teamId && (
+                    <MembersSelector
+                      selectedUserIds={selectedShift.includedUserIds || []}
+                      excludedUserIds={selectedShift.excludedUserIds || []}
+                      onIncludeChange={(ids) => setSelectedShift({...selectedShift, includedUserIds: ids})}
+                      onExcludeChange={(ids) => setSelectedShift({...selectedShift, excludedUserIds: ids})}
+                      teamId={selectedShift.teamId}
                     />
+                  )}
+                  
+                  <div className="space-y-2">
+                    <Label>Status</Label>
+                    <Select 
+                      value={selectedShift.status} 
+                      onValueChange={(value) => setSelectedShift({...selectedShift, status: value})}
+                    >
+                      <SelectTrigger>
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="ACTIVE">Actif</SelectItem>
+                        <SelectItem value="INACTIVE">Inactif</SelectItem>
+                      </SelectContent>
+                    </Select>
                   </div>
                 </div>
                 
-                <div>
-                  <Label>Personne assignée</Label>
-                  <Select 
-                    value={selectedPikett.userId} 
-                    onValueChange={(value) => setSelectedPikett({...selectedPikett, userId: value})}
-                  >
-                    <SelectTrigger>
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {users
-                        .filter(u => u.teamId === selectedPikett.teamId && u.status === 'ACTIVE')
-                        .map((user) => (
-                          <SelectItem key={user.id} value={user.id}>
-                            {user.firstName} {user.lastName}
-                          </SelectItem>
-                        ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-                
                 <div className="flex justify-end space-x-3">
-                  <Button variant="outline" onClick={() => setIsEditPikettDialogOpen(false)}>
+                  <Button variant="outline" onClick={() => {
+                    setIsEditDialogOpen(false);
+                    setSelectedShift(null);
+                  }}>
                     Annuler
                   </Button>
                   <Button 
-                    onClick={handleEditPikett}
-                    className="bg-red-600 hover:bg-red-700"
+                    onClick={handleEditShift}
+                    disabled={isSubmitting}
+                    className="bg-blue-600 hover:bg-blue-700"
                   >
-                    <Save className="w-4 h-4 mr-2" />
-                    Enregistrer
+                    {isSubmitting ? (
+                      <><Loader2 className="w-4 h-4 mr-2 animate-spin" /> Enregistrement...</>
+                    ) : (
+                      <>
+                        <Save className="w-4 h-4 mr-2" />
+                        Enregistrer
+                      </>
+                    )}
                   </Button>
                 </div>
               </div>
             </DialogContent>
-          </Dialog>
-        )}
-
-        {/* Dialog de modification de shift existant */}
-        {selectedShift && (
-          <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
-            {/* ... contenu existant ... */}
           </Dialog>
         )}
 
@@ -1186,7 +1381,7 @@ const ShiftsPage = () => {
                   Aucun pikett configuré
                 </h3>
                 <p className="text-slate-600 mb-6 max-w-md">
-                  Configurez les astreintes hebdomadaires pour vos équipes.
+                  Configurez les astreintes pour vos équipes.
                 </p>
                 <Button 
                   onClick={() => setIsCreatePikettDialogOpen(true)}

@@ -1,7 +1,7 @@
 // lib/prisma.ts
 // Singleton pattern pour éviter les connexions multiples en développement
 
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient } from '../generated/prisma';
 
 declare global {
   var prisma: PrismaClient | undefined;

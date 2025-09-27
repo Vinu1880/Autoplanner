@@ -19,10 +19,20 @@ export type PrismaPromise<T> = $Public.PrismaPromise<T>
  */
 export type User = $Result.DefaultSelection<Prisma.$UserPayload>
 /**
+ * Model RotationPattern
+ * 
+ */
+export type RotationPattern = $Result.DefaultSelection<Prisma.$RotationPatternPayload>
+/**
  * Model Team
  * 
  */
 export type Team = $Result.DefaultSelection<Prisma.$TeamPayload>
+/**
+ * Model Pikett
+ * 
+ */
+export type Pikett = $Result.DefaultSelection<Prisma.$PikettPayload>
 /**
  * Model Shift
  * 
@@ -231,6 +241,16 @@ export class PrismaClient<
   get user(): Prisma.UserDelegate<ExtArgs, ClientOptions>;
 
   /**
+   * `prisma.rotationPattern`: Exposes CRUD operations for the **RotationPattern** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more RotationPatterns
+    * const rotationPatterns = await prisma.rotationPattern.findMany()
+    * ```
+    */
+  get rotationPattern(): Prisma.RotationPatternDelegate<ExtArgs, ClientOptions>;
+
+  /**
    * `prisma.team`: Exposes CRUD operations for the **Team** model.
     * Example usage:
     * ```ts
@@ -239,6 +259,16 @@ export class PrismaClient<
     * ```
     */
   get team(): Prisma.TeamDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.pikett`: Exposes CRUD operations for the **Pikett** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Piketts
+    * const piketts = await prisma.pikett.findMany()
+    * ```
+    */
+  get pikett(): Prisma.PikettDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.shift`: Exposes CRUD operations for the **Shift** model.
@@ -720,7 +750,9 @@ export namespace Prisma {
 
   export const ModelName: {
     User: 'User',
+    RotationPattern: 'RotationPattern',
     Team: 'Team',
+    Pikett: 'Pikett',
     Shift: 'Shift',
     ShiftAssignment: 'ShiftAssignment',
     OutOfOfficeEvent: 'OutOfOfficeEvent',
@@ -743,7 +775,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user" | "team" | "shift" | "shiftAssignment" | "outOfOfficeEvent" | "auditLog"
+      modelProps: "user" | "rotationPattern" | "team" | "pikett" | "shift" | "shiftAssignment" | "outOfOfficeEvent" | "auditLog"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -821,6 +853,80 @@ export namespace Prisma {
           }
         }
       }
+      RotationPattern: {
+        payload: Prisma.$RotationPatternPayload<ExtArgs>
+        fields: Prisma.RotationPatternFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.RotationPatternFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RotationPatternPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.RotationPatternFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RotationPatternPayload>
+          }
+          findFirst: {
+            args: Prisma.RotationPatternFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RotationPatternPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.RotationPatternFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RotationPatternPayload>
+          }
+          findMany: {
+            args: Prisma.RotationPatternFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RotationPatternPayload>[]
+          }
+          create: {
+            args: Prisma.RotationPatternCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RotationPatternPayload>
+          }
+          createMany: {
+            args: Prisma.RotationPatternCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.RotationPatternCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RotationPatternPayload>[]
+          }
+          delete: {
+            args: Prisma.RotationPatternDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RotationPatternPayload>
+          }
+          update: {
+            args: Prisma.RotationPatternUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RotationPatternPayload>
+          }
+          deleteMany: {
+            args: Prisma.RotationPatternDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.RotationPatternUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.RotationPatternUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RotationPatternPayload>[]
+          }
+          upsert: {
+            args: Prisma.RotationPatternUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RotationPatternPayload>
+          }
+          aggregate: {
+            args: Prisma.RotationPatternAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateRotationPattern>
+          }
+          groupBy: {
+            args: Prisma.RotationPatternGroupByArgs<ExtArgs>
+            result: $Utils.Optional<RotationPatternGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.RotationPatternCountArgs<ExtArgs>
+            result: $Utils.Optional<RotationPatternCountAggregateOutputType> | number
+          }
+        }
+      }
       Team: {
         payload: Prisma.$TeamPayload<ExtArgs>
         fields: Prisma.TeamFieldRefs
@@ -892,6 +998,80 @@ export namespace Prisma {
           count: {
             args: Prisma.TeamCountArgs<ExtArgs>
             result: $Utils.Optional<TeamCountAggregateOutputType> | number
+          }
+        }
+      }
+      Pikett: {
+        payload: Prisma.$PikettPayload<ExtArgs>
+        fields: Prisma.PikettFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.PikettFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PikettPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.PikettFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PikettPayload>
+          }
+          findFirst: {
+            args: Prisma.PikettFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PikettPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.PikettFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PikettPayload>
+          }
+          findMany: {
+            args: Prisma.PikettFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PikettPayload>[]
+          }
+          create: {
+            args: Prisma.PikettCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PikettPayload>
+          }
+          createMany: {
+            args: Prisma.PikettCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.PikettCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PikettPayload>[]
+          }
+          delete: {
+            args: Prisma.PikettDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PikettPayload>
+          }
+          update: {
+            args: Prisma.PikettUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PikettPayload>
+          }
+          deleteMany: {
+            args: Prisma.PikettDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.PikettUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.PikettUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PikettPayload>[]
+          }
+          upsert: {
+            args: Prisma.PikettUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PikettPayload>
+          }
+          aggregate: {
+            args: Prisma.PikettAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregatePikett>
+          }
+          groupBy: {
+            args: Prisma.PikettGroupByArgs<ExtArgs>
+            result: $Utils.Optional<PikettGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.PikettCountArgs<ExtArgs>
+            result: $Utils.Optional<PikettCountAggregateOutputType> | number
           }
         }
       }
@@ -1288,7 +1468,9 @@ export namespace Prisma {
   }
   export type GlobalOmitConfig = {
     user?: UserOmit
+    rotationPattern?: RotationPatternOmit
     team?: TeamOmit
+    pikett?: PikettOmit
     shift?: ShiftOmit
     shiftAssignment?: ShiftAssignmentOmit
     outOfOfficeEvent?: OutOfOfficeEventOmit
@@ -1373,10 +1555,12 @@ export namespace Prisma {
    */
 
   export type UserCountOutputType = {
+    piketts: number
     assignments: number
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    piketts?: boolean | UserCountOutputTypeCountPikettsArgs
     assignments?: boolean | UserCountOutputTypeCountAssignmentsArgs
   }
 
@@ -1394,6 +1578,13 @@ export namespace Prisma {
   /**
    * UserCountOutputType without action
    */
+  export type UserCountOutputTypeCountPikettsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PikettWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
   export type UserCountOutputTypeCountAssignmentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: ShiftAssignmentWhereInput
   }
@@ -1406,11 +1597,13 @@ export namespace Prisma {
   export type TeamCountOutputType = {
     members: number
     shifts: number
+    piketts: number
   }
 
   export type TeamCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     members?: boolean | TeamCountOutputTypeCountMembersArgs
     shifts?: boolean | TeamCountOutputTypeCountShiftsArgs
+    piketts?: boolean | TeamCountOutputTypeCountPikettsArgs
   }
 
   // Custom InputTypes
@@ -1436,6 +1629,13 @@ export namespace Prisma {
    */
   export type TeamCountOutputTypeCountShiftsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: ShiftWhereInput
+  }
+
+  /**
+   * TeamCountOutputType without action
+   */
+  export type TeamCountOutputTypeCountPikettsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PikettWhereInput
   }
 
 
@@ -1736,6 +1936,7 @@ export namespace Prisma {
     teamId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    piketts?: boolean | User$pikettsArgs<ExtArgs>
     team?: boolean | User$teamArgs<ExtArgs>
     leadingTeam?: boolean | User$leadingTeamArgs<ExtArgs>
     assignments?: boolean | User$assignmentsArgs<ExtArgs>
@@ -1797,6 +1998,7 @@ export namespace Prisma {
 
   export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "email" | "firstName" | "lastName" | "phone" | "role" | "workPercent" | "status" | "notes" | "rotationConfig" | "availability" | "teamId" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
   export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    piketts?: boolean | User$pikettsArgs<ExtArgs>
     team?: boolean | User$teamArgs<ExtArgs>
     leadingTeam?: boolean | User$leadingTeamArgs<ExtArgs>
     assignments?: boolean | User$assignmentsArgs<ExtArgs>
@@ -1812,6 +2014,7 @@ export namespace Prisma {
   export type $UserPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "User"
     objects: {
+      piketts: Prisma.$PikettPayload<ExtArgs>[]
       team: Prisma.$TeamPayload<ExtArgs> | null
       leadingTeam: Prisma.$TeamPayload<ExtArgs> | null
       assignments: Prisma.$ShiftAssignmentPayload<ExtArgs>[]
@@ -2225,6 +2428,7 @@ export namespace Prisma {
    */
   export interface Prisma__UserClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
+    piketts<T extends User$pikettsArgs<ExtArgs> = {}>(args?: Subset<T, User$pikettsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PikettPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     team<T extends User$teamArgs<ExtArgs> = {}>(args?: Subset<T, User$teamArgs<ExtArgs>>): Prisma__TeamClient<$Result.GetResult<Prisma.$TeamPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     leadingTeam<T extends User$leadingTeamArgs<ExtArgs> = {}>(args?: Subset<T, User$leadingTeamArgs<ExtArgs>>): Prisma__TeamClient<$Result.GetResult<Prisma.$TeamPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     assignments<T extends User$assignmentsArgs<ExtArgs> = {}>(args?: Subset<T, User$assignmentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ShiftAssignmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -2667,6 +2871,30 @@ export namespace Prisma {
   }
 
   /**
+   * User.piketts
+   */
+  export type User$pikettsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Pikett
+     */
+    select?: PikettSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Pikett
+     */
+    omit?: PikettOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PikettInclude<ExtArgs> | null
+    where?: PikettWhereInput
+    orderBy?: PikettOrderByWithRelationInput | PikettOrderByWithRelationInput[]
+    cursor?: PikettWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: PikettScalarFieldEnum | PikettScalarFieldEnum[]
+  }
+
+  /**
    * User.team
    */
   export type User$teamArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -2744,6 +2972,1057 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: UserInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model RotationPattern
+   */
+
+  export type AggregateRotationPattern = {
+    _count: RotationPatternCountAggregateOutputType | null
+    _avg: RotationPatternAvgAggregateOutputType | null
+    _sum: RotationPatternSumAggregateOutputType | null
+    _min: RotationPatternMinAggregateOutputType | null
+    _max: RotationPatternMaxAggregateOutputType | null
+  }
+
+  export type RotationPatternAvgAggregateOutputType = {
+    cycleLength: number | null
+  }
+
+  export type RotationPatternSumAggregateOutputType = {
+    cycleLength: number | null
+  }
+
+  export type RotationPatternMinAggregateOutputType = {
+    id: string | null
+    name: string | null
+    description: string | null
+    cycleLength: number | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type RotationPatternMaxAggregateOutputType = {
+    id: string | null
+    name: string | null
+    description: string | null
+    cycleLength: number | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type RotationPatternCountAggregateOutputType = {
+    id: number
+    name: number
+    description: number
+    cycleLength: number
+    weeks: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type RotationPatternAvgAggregateInputType = {
+    cycleLength?: true
+  }
+
+  export type RotationPatternSumAggregateInputType = {
+    cycleLength?: true
+  }
+
+  export type RotationPatternMinAggregateInputType = {
+    id?: true
+    name?: true
+    description?: true
+    cycleLength?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type RotationPatternMaxAggregateInputType = {
+    id?: true
+    name?: true
+    description?: true
+    cycleLength?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type RotationPatternCountAggregateInputType = {
+    id?: true
+    name?: true
+    description?: true
+    cycleLength?: true
+    weeks?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type RotationPatternAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which RotationPattern to aggregate.
+     */
+    where?: RotationPatternWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of RotationPatterns to fetch.
+     */
+    orderBy?: RotationPatternOrderByWithRelationInput | RotationPatternOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: RotationPatternWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` RotationPatterns from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` RotationPatterns.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned RotationPatterns
+    **/
+    _count?: true | RotationPatternCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: RotationPatternAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: RotationPatternSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: RotationPatternMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: RotationPatternMaxAggregateInputType
+  }
+
+  export type GetRotationPatternAggregateType<T extends RotationPatternAggregateArgs> = {
+        [P in keyof T & keyof AggregateRotationPattern]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateRotationPattern[P]>
+      : GetScalarType<T[P], AggregateRotationPattern[P]>
+  }
+
+
+
+
+  export type RotationPatternGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: RotationPatternWhereInput
+    orderBy?: RotationPatternOrderByWithAggregationInput | RotationPatternOrderByWithAggregationInput[]
+    by: RotationPatternScalarFieldEnum[] | RotationPatternScalarFieldEnum
+    having?: RotationPatternScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: RotationPatternCountAggregateInputType | true
+    _avg?: RotationPatternAvgAggregateInputType
+    _sum?: RotationPatternSumAggregateInputType
+    _min?: RotationPatternMinAggregateInputType
+    _max?: RotationPatternMaxAggregateInputType
+  }
+
+  export type RotationPatternGroupByOutputType = {
+    id: string
+    name: string
+    description: string | null
+    cycleLength: number
+    weeks: JsonValue
+    createdAt: Date
+    updatedAt: Date
+    _count: RotationPatternCountAggregateOutputType | null
+    _avg: RotationPatternAvgAggregateOutputType | null
+    _sum: RotationPatternSumAggregateOutputType | null
+    _min: RotationPatternMinAggregateOutputType | null
+    _max: RotationPatternMaxAggregateOutputType | null
+  }
+
+  type GetRotationPatternGroupByPayload<T extends RotationPatternGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<RotationPatternGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof RotationPatternGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], RotationPatternGroupByOutputType[P]>
+            : GetScalarType<T[P], RotationPatternGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type RotationPatternSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    description?: boolean
+    cycleLength?: boolean
+    weeks?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["rotationPattern"]>
+
+  export type RotationPatternSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    description?: boolean
+    cycleLength?: boolean
+    weeks?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["rotationPattern"]>
+
+  export type RotationPatternSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    description?: boolean
+    cycleLength?: boolean
+    weeks?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["rotationPattern"]>
+
+  export type RotationPatternSelectScalar = {
+    id?: boolean
+    name?: boolean
+    description?: boolean
+    cycleLength?: boolean
+    weeks?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type RotationPatternOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "description" | "cycleLength" | "weeks" | "createdAt" | "updatedAt", ExtArgs["result"]["rotationPattern"]>
+
+  export type $RotationPatternPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "RotationPattern"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      name: string
+      description: string | null
+      cycleLength: number
+      weeks: Prisma.JsonValue
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["rotationPattern"]>
+    composites: {}
+  }
+
+  type RotationPatternGetPayload<S extends boolean | null | undefined | RotationPatternDefaultArgs> = $Result.GetResult<Prisma.$RotationPatternPayload, S>
+
+  type RotationPatternCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<RotationPatternFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: RotationPatternCountAggregateInputType | true
+    }
+
+  export interface RotationPatternDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['RotationPattern'], meta: { name: 'RotationPattern' } }
+    /**
+     * Find zero or one RotationPattern that matches the filter.
+     * @param {RotationPatternFindUniqueArgs} args - Arguments to find a RotationPattern
+     * @example
+     * // Get one RotationPattern
+     * const rotationPattern = await prisma.rotationPattern.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends RotationPatternFindUniqueArgs>(args: SelectSubset<T, RotationPatternFindUniqueArgs<ExtArgs>>): Prisma__RotationPatternClient<$Result.GetResult<Prisma.$RotationPatternPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one RotationPattern that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {RotationPatternFindUniqueOrThrowArgs} args - Arguments to find a RotationPattern
+     * @example
+     * // Get one RotationPattern
+     * const rotationPattern = await prisma.rotationPattern.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends RotationPatternFindUniqueOrThrowArgs>(args: SelectSubset<T, RotationPatternFindUniqueOrThrowArgs<ExtArgs>>): Prisma__RotationPatternClient<$Result.GetResult<Prisma.$RotationPatternPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first RotationPattern that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RotationPatternFindFirstArgs} args - Arguments to find a RotationPattern
+     * @example
+     * // Get one RotationPattern
+     * const rotationPattern = await prisma.rotationPattern.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends RotationPatternFindFirstArgs>(args?: SelectSubset<T, RotationPatternFindFirstArgs<ExtArgs>>): Prisma__RotationPatternClient<$Result.GetResult<Prisma.$RotationPatternPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first RotationPattern that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RotationPatternFindFirstOrThrowArgs} args - Arguments to find a RotationPattern
+     * @example
+     * // Get one RotationPattern
+     * const rotationPattern = await prisma.rotationPattern.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends RotationPatternFindFirstOrThrowArgs>(args?: SelectSubset<T, RotationPatternFindFirstOrThrowArgs<ExtArgs>>): Prisma__RotationPatternClient<$Result.GetResult<Prisma.$RotationPatternPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more RotationPatterns that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RotationPatternFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all RotationPatterns
+     * const rotationPatterns = await prisma.rotationPattern.findMany()
+     * 
+     * // Get first 10 RotationPatterns
+     * const rotationPatterns = await prisma.rotationPattern.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const rotationPatternWithIdOnly = await prisma.rotationPattern.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends RotationPatternFindManyArgs>(args?: SelectSubset<T, RotationPatternFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RotationPatternPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a RotationPattern.
+     * @param {RotationPatternCreateArgs} args - Arguments to create a RotationPattern.
+     * @example
+     * // Create one RotationPattern
+     * const RotationPattern = await prisma.rotationPattern.create({
+     *   data: {
+     *     // ... data to create a RotationPattern
+     *   }
+     * })
+     * 
+     */
+    create<T extends RotationPatternCreateArgs>(args: SelectSubset<T, RotationPatternCreateArgs<ExtArgs>>): Prisma__RotationPatternClient<$Result.GetResult<Prisma.$RotationPatternPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many RotationPatterns.
+     * @param {RotationPatternCreateManyArgs} args - Arguments to create many RotationPatterns.
+     * @example
+     * // Create many RotationPatterns
+     * const rotationPattern = await prisma.rotationPattern.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends RotationPatternCreateManyArgs>(args?: SelectSubset<T, RotationPatternCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many RotationPatterns and returns the data saved in the database.
+     * @param {RotationPatternCreateManyAndReturnArgs} args - Arguments to create many RotationPatterns.
+     * @example
+     * // Create many RotationPatterns
+     * const rotationPattern = await prisma.rotationPattern.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many RotationPatterns and only return the `id`
+     * const rotationPatternWithIdOnly = await prisma.rotationPattern.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends RotationPatternCreateManyAndReturnArgs>(args?: SelectSubset<T, RotationPatternCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RotationPatternPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a RotationPattern.
+     * @param {RotationPatternDeleteArgs} args - Arguments to delete one RotationPattern.
+     * @example
+     * // Delete one RotationPattern
+     * const RotationPattern = await prisma.rotationPattern.delete({
+     *   where: {
+     *     // ... filter to delete one RotationPattern
+     *   }
+     * })
+     * 
+     */
+    delete<T extends RotationPatternDeleteArgs>(args: SelectSubset<T, RotationPatternDeleteArgs<ExtArgs>>): Prisma__RotationPatternClient<$Result.GetResult<Prisma.$RotationPatternPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one RotationPattern.
+     * @param {RotationPatternUpdateArgs} args - Arguments to update one RotationPattern.
+     * @example
+     * // Update one RotationPattern
+     * const rotationPattern = await prisma.rotationPattern.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends RotationPatternUpdateArgs>(args: SelectSubset<T, RotationPatternUpdateArgs<ExtArgs>>): Prisma__RotationPatternClient<$Result.GetResult<Prisma.$RotationPatternPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more RotationPatterns.
+     * @param {RotationPatternDeleteManyArgs} args - Arguments to filter RotationPatterns to delete.
+     * @example
+     * // Delete a few RotationPatterns
+     * const { count } = await prisma.rotationPattern.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends RotationPatternDeleteManyArgs>(args?: SelectSubset<T, RotationPatternDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more RotationPatterns.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RotationPatternUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many RotationPatterns
+     * const rotationPattern = await prisma.rotationPattern.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends RotationPatternUpdateManyArgs>(args: SelectSubset<T, RotationPatternUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more RotationPatterns and returns the data updated in the database.
+     * @param {RotationPatternUpdateManyAndReturnArgs} args - Arguments to update many RotationPatterns.
+     * @example
+     * // Update many RotationPatterns
+     * const rotationPattern = await prisma.rotationPattern.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more RotationPatterns and only return the `id`
+     * const rotationPatternWithIdOnly = await prisma.rotationPattern.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends RotationPatternUpdateManyAndReturnArgs>(args: SelectSubset<T, RotationPatternUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RotationPatternPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one RotationPattern.
+     * @param {RotationPatternUpsertArgs} args - Arguments to update or create a RotationPattern.
+     * @example
+     * // Update or create a RotationPattern
+     * const rotationPattern = await prisma.rotationPattern.upsert({
+     *   create: {
+     *     // ... data to create a RotationPattern
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the RotationPattern we want to update
+     *   }
+     * })
+     */
+    upsert<T extends RotationPatternUpsertArgs>(args: SelectSubset<T, RotationPatternUpsertArgs<ExtArgs>>): Prisma__RotationPatternClient<$Result.GetResult<Prisma.$RotationPatternPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of RotationPatterns.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RotationPatternCountArgs} args - Arguments to filter RotationPatterns to count.
+     * @example
+     * // Count the number of RotationPatterns
+     * const count = await prisma.rotationPattern.count({
+     *   where: {
+     *     // ... the filter for the RotationPatterns we want to count
+     *   }
+     * })
+    **/
+    count<T extends RotationPatternCountArgs>(
+      args?: Subset<T, RotationPatternCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], RotationPatternCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a RotationPattern.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RotationPatternAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends RotationPatternAggregateArgs>(args: Subset<T, RotationPatternAggregateArgs>): Prisma.PrismaPromise<GetRotationPatternAggregateType<T>>
+
+    /**
+     * Group by RotationPattern.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RotationPatternGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends RotationPatternGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: RotationPatternGroupByArgs['orderBy'] }
+        : { orderBy?: RotationPatternGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, RotationPatternGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetRotationPatternGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the RotationPattern model
+   */
+  readonly fields: RotationPatternFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for RotationPattern.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__RotationPatternClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the RotationPattern model
+   */
+  interface RotationPatternFieldRefs {
+    readonly id: FieldRef<"RotationPattern", 'String'>
+    readonly name: FieldRef<"RotationPattern", 'String'>
+    readonly description: FieldRef<"RotationPattern", 'String'>
+    readonly cycleLength: FieldRef<"RotationPattern", 'Int'>
+    readonly weeks: FieldRef<"RotationPattern", 'Json'>
+    readonly createdAt: FieldRef<"RotationPattern", 'DateTime'>
+    readonly updatedAt: FieldRef<"RotationPattern", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * RotationPattern findUnique
+   */
+  export type RotationPatternFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RotationPattern
+     */
+    select?: RotationPatternSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RotationPattern
+     */
+    omit?: RotationPatternOmit<ExtArgs> | null
+    /**
+     * Filter, which RotationPattern to fetch.
+     */
+    where: RotationPatternWhereUniqueInput
+  }
+
+  /**
+   * RotationPattern findUniqueOrThrow
+   */
+  export type RotationPatternFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RotationPattern
+     */
+    select?: RotationPatternSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RotationPattern
+     */
+    omit?: RotationPatternOmit<ExtArgs> | null
+    /**
+     * Filter, which RotationPattern to fetch.
+     */
+    where: RotationPatternWhereUniqueInput
+  }
+
+  /**
+   * RotationPattern findFirst
+   */
+  export type RotationPatternFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RotationPattern
+     */
+    select?: RotationPatternSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RotationPattern
+     */
+    omit?: RotationPatternOmit<ExtArgs> | null
+    /**
+     * Filter, which RotationPattern to fetch.
+     */
+    where?: RotationPatternWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of RotationPatterns to fetch.
+     */
+    orderBy?: RotationPatternOrderByWithRelationInput | RotationPatternOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for RotationPatterns.
+     */
+    cursor?: RotationPatternWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` RotationPatterns from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` RotationPatterns.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of RotationPatterns.
+     */
+    distinct?: RotationPatternScalarFieldEnum | RotationPatternScalarFieldEnum[]
+  }
+
+  /**
+   * RotationPattern findFirstOrThrow
+   */
+  export type RotationPatternFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RotationPattern
+     */
+    select?: RotationPatternSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RotationPattern
+     */
+    omit?: RotationPatternOmit<ExtArgs> | null
+    /**
+     * Filter, which RotationPattern to fetch.
+     */
+    where?: RotationPatternWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of RotationPatterns to fetch.
+     */
+    orderBy?: RotationPatternOrderByWithRelationInput | RotationPatternOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for RotationPatterns.
+     */
+    cursor?: RotationPatternWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` RotationPatterns from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` RotationPatterns.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of RotationPatterns.
+     */
+    distinct?: RotationPatternScalarFieldEnum | RotationPatternScalarFieldEnum[]
+  }
+
+  /**
+   * RotationPattern findMany
+   */
+  export type RotationPatternFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RotationPattern
+     */
+    select?: RotationPatternSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RotationPattern
+     */
+    omit?: RotationPatternOmit<ExtArgs> | null
+    /**
+     * Filter, which RotationPatterns to fetch.
+     */
+    where?: RotationPatternWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of RotationPatterns to fetch.
+     */
+    orderBy?: RotationPatternOrderByWithRelationInput | RotationPatternOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing RotationPatterns.
+     */
+    cursor?: RotationPatternWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` RotationPatterns from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` RotationPatterns.
+     */
+    skip?: number
+    distinct?: RotationPatternScalarFieldEnum | RotationPatternScalarFieldEnum[]
+  }
+
+  /**
+   * RotationPattern create
+   */
+  export type RotationPatternCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RotationPattern
+     */
+    select?: RotationPatternSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RotationPattern
+     */
+    omit?: RotationPatternOmit<ExtArgs> | null
+    /**
+     * The data needed to create a RotationPattern.
+     */
+    data: XOR<RotationPatternCreateInput, RotationPatternUncheckedCreateInput>
+  }
+
+  /**
+   * RotationPattern createMany
+   */
+  export type RotationPatternCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many RotationPatterns.
+     */
+    data: RotationPatternCreateManyInput | RotationPatternCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * RotationPattern createManyAndReturn
+   */
+  export type RotationPatternCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RotationPattern
+     */
+    select?: RotationPatternSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the RotationPattern
+     */
+    omit?: RotationPatternOmit<ExtArgs> | null
+    /**
+     * The data used to create many RotationPatterns.
+     */
+    data: RotationPatternCreateManyInput | RotationPatternCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * RotationPattern update
+   */
+  export type RotationPatternUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RotationPattern
+     */
+    select?: RotationPatternSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RotationPattern
+     */
+    omit?: RotationPatternOmit<ExtArgs> | null
+    /**
+     * The data needed to update a RotationPattern.
+     */
+    data: XOR<RotationPatternUpdateInput, RotationPatternUncheckedUpdateInput>
+    /**
+     * Choose, which RotationPattern to update.
+     */
+    where: RotationPatternWhereUniqueInput
+  }
+
+  /**
+   * RotationPattern updateMany
+   */
+  export type RotationPatternUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update RotationPatterns.
+     */
+    data: XOR<RotationPatternUpdateManyMutationInput, RotationPatternUncheckedUpdateManyInput>
+    /**
+     * Filter which RotationPatterns to update
+     */
+    where?: RotationPatternWhereInput
+    /**
+     * Limit how many RotationPatterns to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * RotationPattern updateManyAndReturn
+   */
+  export type RotationPatternUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RotationPattern
+     */
+    select?: RotationPatternSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the RotationPattern
+     */
+    omit?: RotationPatternOmit<ExtArgs> | null
+    /**
+     * The data used to update RotationPatterns.
+     */
+    data: XOR<RotationPatternUpdateManyMutationInput, RotationPatternUncheckedUpdateManyInput>
+    /**
+     * Filter which RotationPatterns to update
+     */
+    where?: RotationPatternWhereInput
+    /**
+     * Limit how many RotationPatterns to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * RotationPattern upsert
+   */
+  export type RotationPatternUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RotationPattern
+     */
+    select?: RotationPatternSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RotationPattern
+     */
+    omit?: RotationPatternOmit<ExtArgs> | null
+    /**
+     * The filter to search for the RotationPattern to update in case it exists.
+     */
+    where: RotationPatternWhereUniqueInput
+    /**
+     * In case the RotationPattern found by the `where` argument doesn't exist, create a new RotationPattern with this data.
+     */
+    create: XOR<RotationPatternCreateInput, RotationPatternUncheckedCreateInput>
+    /**
+     * In case the RotationPattern was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<RotationPatternUpdateInput, RotationPatternUncheckedUpdateInput>
+  }
+
+  /**
+   * RotationPattern delete
+   */
+  export type RotationPatternDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RotationPattern
+     */
+    select?: RotationPatternSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RotationPattern
+     */
+    omit?: RotationPatternOmit<ExtArgs> | null
+    /**
+     * Filter which RotationPattern to delete.
+     */
+    where: RotationPatternWhereUniqueInput
+  }
+
+  /**
+   * RotationPattern deleteMany
+   */
+  export type RotationPatternDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which RotationPatterns to delete
+     */
+    where?: RotationPatternWhereInput
+    /**
+     * Limit how many RotationPatterns to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * RotationPattern without action
+   */
+  export type RotationPatternDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RotationPattern
+     */
+    select?: RotationPatternSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RotationPattern
+     */
+    omit?: RotationPatternOmit<ExtArgs> | null
   }
 
 
@@ -2930,6 +4209,7 @@ export namespace Prisma {
     lead?: boolean | Team$leadArgs<ExtArgs>
     members?: boolean | Team$membersArgs<ExtArgs>
     shifts?: boolean | Team$shiftsArgs<ExtArgs>
+    piketts?: boolean | Team$pikettsArgs<ExtArgs>
     _count?: boolean | TeamCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["team"]>
 
@@ -2970,6 +4250,7 @@ export namespace Prisma {
     lead?: boolean | Team$leadArgs<ExtArgs>
     members?: boolean | Team$membersArgs<ExtArgs>
     shifts?: boolean | Team$shiftsArgs<ExtArgs>
+    piketts?: boolean | Team$pikettsArgs<ExtArgs>
     _count?: boolean | TeamCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type TeamIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -2985,6 +4266,7 @@ export namespace Prisma {
       lead: Prisma.$UserPayload<ExtArgs> | null
       members: Prisma.$UserPayload<ExtArgs>[]
       shifts: Prisma.$ShiftPayload<ExtArgs>[]
+      piketts: Prisma.$PikettPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -3391,6 +4673,7 @@ export namespace Prisma {
     lead<T extends Team$leadArgs<ExtArgs> = {}>(args?: Subset<T, Team$leadArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     members<T extends Team$membersArgs<ExtArgs> = {}>(args?: Subset<T, Team$membersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     shifts<T extends Team$shiftsArgs<ExtArgs> = {}>(args?: Subset<T, Team$shiftsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ShiftPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    piketts<T extends Team$pikettsArgs<ExtArgs> = {}>(args?: Subset<T, Team$pikettsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PikettPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -3890,6 +5173,30 @@ export namespace Prisma {
   }
 
   /**
+   * Team.piketts
+   */
+  export type Team$pikettsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Pikett
+     */
+    select?: PikettSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Pikett
+     */
+    omit?: PikettOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PikettInclude<ExtArgs> | null
+    where?: PikettWhereInput
+    orderBy?: PikettOrderByWithRelationInput | PikettOrderByWithRelationInput[]
+    cursor?: PikettWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: PikettScalarFieldEnum | PikettScalarFieldEnum[]
+  }
+
+  /**
    * Team without action
    */
   export type TeamDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -3909,6 +5216,1243 @@ export namespace Prisma {
 
 
   /**
+   * Model Pikett
+   */
+
+  export type AggregatePikett = {
+    _count: PikettCountAggregateOutputType | null
+    _avg: PikettAvgAggregateOutputType | null
+    _sum: PikettSumAggregateOutputType | null
+    _min: PikettMinAggregateOutputType | null
+    _max: PikettMaxAggregateOutputType | null
+  }
+
+  export type PikettAvgAggregateOutputType = {
+    daysOfWeek: number | null
+  }
+
+  export type PikettSumAggregateOutputType = {
+    daysOfWeek: number[]
+  }
+
+  export type PikettMinAggregateOutputType = {
+    id: string | null
+    name: string | null
+    description: string | null
+    startWeek: string | null
+    endWeek: string | null
+    color: string | null
+    status: $Enums.Status | null
+    is24_7: boolean | null
+    teamId: string | null
+    userId: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type PikettMaxAggregateOutputType = {
+    id: string | null
+    name: string | null
+    description: string | null
+    startWeek: string | null
+    endWeek: string | null
+    color: string | null
+    status: $Enums.Status | null
+    is24_7: boolean | null
+    teamId: string | null
+    userId: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type PikettCountAggregateOutputType = {
+    id: number
+    name: number
+    description: number
+    startWeek: number
+    daysOfWeek: number
+    endWeek: number
+    color: number
+    status: number
+    is24_7: number
+    teamId: number
+    userId: number
+    includedUserIds: number
+    excludedUserIds: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type PikettAvgAggregateInputType = {
+    daysOfWeek?: true
+  }
+
+  export type PikettSumAggregateInputType = {
+    daysOfWeek?: true
+  }
+
+  export type PikettMinAggregateInputType = {
+    id?: true
+    name?: true
+    description?: true
+    startWeek?: true
+    endWeek?: true
+    color?: true
+    status?: true
+    is24_7?: true
+    teamId?: true
+    userId?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type PikettMaxAggregateInputType = {
+    id?: true
+    name?: true
+    description?: true
+    startWeek?: true
+    endWeek?: true
+    color?: true
+    status?: true
+    is24_7?: true
+    teamId?: true
+    userId?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type PikettCountAggregateInputType = {
+    id?: true
+    name?: true
+    description?: true
+    startWeek?: true
+    daysOfWeek?: true
+    endWeek?: true
+    color?: true
+    status?: true
+    is24_7?: true
+    teamId?: true
+    userId?: true
+    includedUserIds?: true
+    excludedUserIds?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type PikettAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Pikett to aggregate.
+     */
+    where?: PikettWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Piketts to fetch.
+     */
+    orderBy?: PikettOrderByWithRelationInput | PikettOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: PikettWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Piketts from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Piketts.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Piketts
+    **/
+    _count?: true | PikettCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: PikettAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: PikettSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: PikettMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: PikettMaxAggregateInputType
+  }
+
+  export type GetPikettAggregateType<T extends PikettAggregateArgs> = {
+        [P in keyof T & keyof AggregatePikett]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregatePikett[P]>
+      : GetScalarType<T[P], AggregatePikett[P]>
+  }
+
+
+
+
+  export type PikettGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PikettWhereInput
+    orderBy?: PikettOrderByWithAggregationInput | PikettOrderByWithAggregationInput[]
+    by: PikettScalarFieldEnum[] | PikettScalarFieldEnum
+    having?: PikettScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: PikettCountAggregateInputType | true
+    _avg?: PikettAvgAggregateInputType
+    _sum?: PikettSumAggregateInputType
+    _min?: PikettMinAggregateInputType
+    _max?: PikettMaxAggregateInputType
+  }
+
+  export type PikettGroupByOutputType = {
+    id: string
+    name: string
+    description: string | null
+    startWeek: string
+    daysOfWeek: number[]
+    endWeek: string | null
+    color: string
+    status: $Enums.Status
+    is24_7: boolean
+    teamId: string
+    userId: string | null
+    includedUserIds: string[]
+    excludedUserIds: string[]
+    createdAt: Date
+    updatedAt: Date
+    _count: PikettCountAggregateOutputType | null
+    _avg: PikettAvgAggregateOutputType | null
+    _sum: PikettSumAggregateOutputType | null
+    _min: PikettMinAggregateOutputType | null
+    _max: PikettMaxAggregateOutputType | null
+  }
+
+  type GetPikettGroupByPayload<T extends PikettGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<PikettGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof PikettGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], PikettGroupByOutputType[P]>
+            : GetScalarType<T[P], PikettGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type PikettSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    description?: boolean
+    startWeek?: boolean
+    daysOfWeek?: boolean
+    endWeek?: boolean
+    color?: boolean
+    status?: boolean
+    is24_7?: boolean
+    teamId?: boolean
+    userId?: boolean
+    includedUserIds?: boolean
+    excludedUserIds?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    team?: boolean | TeamDefaultArgs<ExtArgs>
+    user?: boolean | Pikett$userArgs<ExtArgs>
+  }, ExtArgs["result"]["pikett"]>
+
+  export type PikettSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    description?: boolean
+    startWeek?: boolean
+    daysOfWeek?: boolean
+    endWeek?: boolean
+    color?: boolean
+    status?: boolean
+    is24_7?: boolean
+    teamId?: boolean
+    userId?: boolean
+    includedUserIds?: boolean
+    excludedUserIds?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    team?: boolean | TeamDefaultArgs<ExtArgs>
+    user?: boolean | Pikett$userArgs<ExtArgs>
+  }, ExtArgs["result"]["pikett"]>
+
+  export type PikettSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    description?: boolean
+    startWeek?: boolean
+    daysOfWeek?: boolean
+    endWeek?: boolean
+    color?: boolean
+    status?: boolean
+    is24_7?: boolean
+    teamId?: boolean
+    userId?: boolean
+    includedUserIds?: boolean
+    excludedUserIds?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    team?: boolean | TeamDefaultArgs<ExtArgs>
+    user?: boolean | Pikett$userArgs<ExtArgs>
+  }, ExtArgs["result"]["pikett"]>
+
+  export type PikettSelectScalar = {
+    id?: boolean
+    name?: boolean
+    description?: boolean
+    startWeek?: boolean
+    daysOfWeek?: boolean
+    endWeek?: boolean
+    color?: boolean
+    status?: boolean
+    is24_7?: boolean
+    teamId?: boolean
+    userId?: boolean
+    includedUserIds?: boolean
+    excludedUserIds?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type PikettOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "description" | "startWeek" | "daysOfWeek" | "endWeek" | "color" | "status" | "is24_7" | "teamId" | "userId" | "includedUserIds" | "excludedUserIds" | "createdAt" | "updatedAt", ExtArgs["result"]["pikett"]>
+  export type PikettInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    team?: boolean | TeamDefaultArgs<ExtArgs>
+    user?: boolean | Pikett$userArgs<ExtArgs>
+  }
+  export type PikettIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    team?: boolean | TeamDefaultArgs<ExtArgs>
+    user?: boolean | Pikett$userArgs<ExtArgs>
+  }
+  export type PikettIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    team?: boolean | TeamDefaultArgs<ExtArgs>
+    user?: boolean | Pikett$userArgs<ExtArgs>
+  }
+
+  export type $PikettPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Pikett"
+    objects: {
+      team: Prisma.$TeamPayload<ExtArgs>
+      user: Prisma.$UserPayload<ExtArgs> | null
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      name: string
+      description: string | null
+      startWeek: string
+      daysOfWeek: number[]
+      endWeek: string | null
+      color: string
+      status: $Enums.Status
+      is24_7: boolean
+      teamId: string
+      userId: string | null
+      includedUserIds: string[]
+      excludedUserIds: string[]
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["pikett"]>
+    composites: {}
+  }
+
+  type PikettGetPayload<S extends boolean | null | undefined | PikettDefaultArgs> = $Result.GetResult<Prisma.$PikettPayload, S>
+
+  type PikettCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<PikettFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: PikettCountAggregateInputType | true
+    }
+
+  export interface PikettDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Pikett'], meta: { name: 'Pikett' } }
+    /**
+     * Find zero or one Pikett that matches the filter.
+     * @param {PikettFindUniqueArgs} args - Arguments to find a Pikett
+     * @example
+     * // Get one Pikett
+     * const pikett = await prisma.pikett.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends PikettFindUniqueArgs>(args: SelectSubset<T, PikettFindUniqueArgs<ExtArgs>>): Prisma__PikettClient<$Result.GetResult<Prisma.$PikettPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Pikett that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {PikettFindUniqueOrThrowArgs} args - Arguments to find a Pikett
+     * @example
+     * // Get one Pikett
+     * const pikett = await prisma.pikett.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends PikettFindUniqueOrThrowArgs>(args: SelectSubset<T, PikettFindUniqueOrThrowArgs<ExtArgs>>): Prisma__PikettClient<$Result.GetResult<Prisma.$PikettPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Pikett that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PikettFindFirstArgs} args - Arguments to find a Pikett
+     * @example
+     * // Get one Pikett
+     * const pikett = await prisma.pikett.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends PikettFindFirstArgs>(args?: SelectSubset<T, PikettFindFirstArgs<ExtArgs>>): Prisma__PikettClient<$Result.GetResult<Prisma.$PikettPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Pikett that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PikettFindFirstOrThrowArgs} args - Arguments to find a Pikett
+     * @example
+     * // Get one Pikett
+     * const pikett = await prisma.pikett.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends PikettFindFirstOrThrowArgs>(args?: SelectSubset<T, PikettFindFirstOrThrowArgs<ExtArgs>>): Prisma__PikettClient<$Result.GetResult<Prisma.$PikettPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Piketts that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PikettFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Piketts
+     * const piketts = await prisma.pikett.findMany()
+     * 
+     * // Get first 10 Piketts
+     * const piketts = await prisma.pikett.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const pikettWithIdOnly = await prisma.pikett.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends PikettFindManyArgs>(args?: SelectSubset<T, PikettFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PikettPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Pikett.
+     * @param {PikettCreateArgs} args - Arguments to create a Pikett.
+     * @example
+     * // Create one Pikett
+     * const Pikett = await prisma.pikett.create({
+     *   data: {
+     *     // ... data to create a Pikett
+     *   }
+     * })
+     * 
+     */
+    create<T extends PikettCreateArgs>(args: SelectSubset<T, PikettCreateArgs<ExtArgs>>): Prisma__PikettClient<$Result.GetResult<Prisma.$PikettPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Piketts.
+     * @param {PikettCreateManyArgs} args - Arguments to create many Piketts.
+     * @example
+     * // Create many Piketts
+     * const pikett = await prisma.pikett.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends PikettCreateManyArgs>(args?: SelectSubset<T, PikettCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Piketts and returns the data saved in the database.
+     * @param {PikettCreateManyAndReturnArgs} args - Arguments to create many Piketts.
+     * @example
+     * // Create many Piketts
+     * const pikett = await prisma.pikett.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Piketts and only return the `id`
+     * const pikettWithIdOnly = await prisma.pikett.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends PikettCreateManyAndReturnArgs>(args?: SelectSubset<T, PikettCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PikettPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a Pikett.
+     * @param {PikettDeleteArgs} args - Arguments to delete one Pikett.
+     * @example
+     * // Delete one Pikett
+     * const Pikett = await prisma.pikett.delete({
+     *   where: {
+     *     // ... filter to delete one Pikett
+     *   }
+     * })
+     * 
+     */
+    delete<T extends PikettDeleteArgs>(args: SelectSubset<T, PikettDeleteArgs<ExtArgs>>): Prisma__PikettClient<$Result.GetResult<Prisma.$PikettPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Pikett.
+     * @param {PikettUpdateArgs} args - Arguments to update one Pikett.
+     * @example
+     * // Update one Pikett
+     * const pikett = await prisma.pikett.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends PikettUpdateArgs>(args: SelectSubset<T, PikettUpdateArgs<ExtArgs>>): Prisma__PikettClient<$Result.GetResult<Prisma.$PikettPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Piketts.
+     * @param {PikettDeleteManyArgs} args - Arguments to filter Piketts to delete.
+     * @example
+     * // Delete a few Piketts
+     * const { count } = await prisma.pikett.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends PikettDeleteManyArgs>(args?: SelectSubset<T, PikettDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Piketts.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PikettUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Piketts
+     * const pikett = await prisma.pikett.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends PikettUpdateManyArgs>(args: SelectSubset<T, PikettUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Piketts and returns the data updated in the database.
+     * @param {PikettUpdateManyAndReturnArgs} args - Arguments to update many Piketts.
+     * @example
+     * // Update many Piketts
+     * const pikett = await prisma.pikett.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more Piketts and only return the `id`
+     * const pikettWithIdOnly = await prisma.pikett.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends PikettUpdateManyAndReturnArgs>(args: SelectSubset<T, PikettUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PikettPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one Pikett.
+     * @param {PikettUpsertArgs} args - Arguments to update or create a Pikett.
+     * @example
+     * // Update or create a Pikett
+     * const pikett = await prisma.pikett.upsert({
+     *   create: {
+     *     // ... data to create a Pikett
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Pikett we want to update
+     *   }
+     * })
+     */
+    upsert<T extends PikettUpsertArgs>(args: SelectSubset<T, PikettUpsertArgs<ExtArgs>>): Prisma__PikettClient<$Result.GetResult<Prisma.$PikettPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Piketts.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PikettCountArgs} args - Arguments to filter Piketts to count.
+     * @example
+     * // Count the number of Piketts
+     * const count = await prisma.pikett.count({
+     *   where: {
+     *     // ... the filter for the Piketts we want to count
+     *   }
+     * })
+    **/
+    count<T extends PikettCountArgs>(
+      args?: Subset<T, PikettCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], PikettCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Pikett.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PikettAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends PikettAggregateArgs>(args: Subset<T, PikettAggregateArgs>): Prisma.PrismaPromise<GetPikettAggregateType<T>>
+
+    /**
+     * Group by Pikett.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PikettGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends PikettGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: PikettGroupByArgs['orderBy'] }
+        : { orderBy?: PikettGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, PikettGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetPikettGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the Pikett model
+   */
+  readonly fields: PikettFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Pikett.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__PikettClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    team<T extends TeamDefaultArgs<ExtArgs> = {}>(args?: Subset<T, TeamDefaultArgs<ExtArgs>>): Prisma__TeamClient<$Result.GetResult<Prisma.$TeamPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    user<T extends Pikett$userArgs<ExtArgs> = {}>(args?: Subset<T, Pikett$userArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the Pikett model
+   */
+  interface PikettFieldRefs {
+    readonly id: FieldRef<"Pikett", 'String'>
+    readonly name: FieldRef<"Pikett", 'String'>
+    readonly description: FieldRef<"Pikett", 'String'>
+    readonly startWeek: FieldRef<"Pikett", 'String'>
+    readonly daysOfWeek: FieldRef<"Pikett", 'Int[]'>
+    readonly endWeek: FieldRef<"Pikett", 'String'>
+    readonly color: FieldRef<"Pikett", 'String'>
+    readonly status: FieldRef<"Pikett", 'Status'>
+    readonly is24_7: FieldRef<"Pikett", 'Boolean'>
+    readonly teamId: FieldRef<"Pikett", 'String'>
+    readonly userId: FieldRef<"Pikett", 'String'>
+    readonly includedUserIds: FieldRef<"Pikett", 'String[]'>
+    readonly excludedUserIds: FieldRef<"Pikett", 'String[]'>
+    readonly createdAt: FieldRef<"Pikett", 'DateTime'>
+    readonly updatedAt: FieldRef<"Pikett", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * Pikett findUnique
+   */
+  export type PikettFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Pikett
+     */
+    select?: PikettSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Pikett
+     */
+    omit?: PikettOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PikettInclude<ExtArgs> | null
+    /**
+     * Filter, which Pikett to fetch.
+     */
+    where: PikettWhereUniqueInput
+  }
+
+  /**
+   * Pikett findUniqueOrThrow
+   */
+  export type PikettFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Pikett
+     */
+    select?: PikettSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Pikett
+     */
+    omit?: PikettOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PikettInclude<ExtArgs> | null
+    /**
+     * Filter, which Pikett to fetch.
+     */
+    where: PikettWhereUniqueInput
+  }
+
+  /**
+   * Pikett findFirst
+   */
+  export type PikettFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Pikett
+     */
+    select?: PikettSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Pikett
+     */
+    omit?: PikettOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PikettInclude<ExtArgs> | null
+    /**
+     * Filter, which Pikett to fetch.
+     */
+    where?: PikettWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Piketts to fetch.
+     */
+    orderBy?: PikettOrderByWithRelationInput | PikettOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Piketts.
+     */
+    cursor?: PikettWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Piketts from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Piketts.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Piketts.
+     */
+    distinct?: PikettScalarFieldEnum | PikettScalarFieldEnum[]
+  }
+
+  /**
+   * Pikett findFirstOrThrow
+   */
+  export type PikettFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Pikett
+     */
+    select?: PikettSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Pikett
+     */
+    omit?: PikettOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PikettInclude<ExtArgs> | null
+    /**
+     * Filter, which Pikett to fetch.
+     */
+    where?: PikettWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Piketts to fetch.
+     */
+    orderBy?: PikettOrderByWithRelationInput | PikettOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Piketts.
+     */
+    cursor?: PikettWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Piketts from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Piketts.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Piketts.
+     */
+    distinct?: PikettScalarFieldEnum | PikettScalarFieldEnum[]
+  }
+
+  /**
+   * Pikett findMany
+   */
+  export type PikettFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Pikett
+     */
+    select?: PikettSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Pikett
+     */
+    omit?: PikettOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PikettInclude<ExtArgs> | null
+    /**
+     * Filter, which Piketts to fetch.
+     */
+    where?: PikettWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Piketts to fetch.
+     */
+    orderBy?: PikettOrderByWithRelationInput | PikettOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Piketts.
+     */
+    cursor?: PikettWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Piketts from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Piketts.
+     */
+    skip?: number
+    distinct?: PikettScalarFieldEnum | PikettScalarFieldEnum[]
+  }
+
+  /**
+   * Pikett create
+   */
+  export type PikettCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Pikett
+     */
+    select?: PikettSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Pikett
+     */
+    omit?: PikettOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PikettInclude<ExtArgs> | null
+    /**
+     * The data needed to create a Pikett.
+     */
+    data: XOR<PikettCreateInput, PikettUncheckedCreateInput>
+  }
+
+  /**
+   * Pikett createMany
+   */
+  export type PikettCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Piketts.
+     */
+    data: PikettCreateManyInput | PikettCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Pikett createManyAndReturn
+   */
+  export type PikettCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Pikett
+     */
+    select?: PikettSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Pikett
+     */
+    omit?: PikettOmit<ExtArgs> | null
+    /**
+     * The data used to create many Piketts.
+     */
+    data: PikettCreateManyInput | PikettCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PikettIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Pikett update
+   */
+  export type PikettUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Pikett
+     */
+    select?: PikettSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Pikett
+     */
+    omit?: PikettOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PikettInclude<ExtArgs> | null
+    /**
+     * The data needed to update a Pikett.
+     */
+    data: XOR<PikettUpdateInput, PikettUncheckedUpdateInput>
+    /**
+     * Choose, which Pikett to update.
+     */
+    where: PikettWhereUniqueInput
+  }
+
+  /**
+   * Pikett updateMany
+   */
+  export type PikettUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Piketts.
+     */
+    data: XOR<PikettUpdateManyMutationInput, PikettUncheckedUpdateManyInput>
+    /**
+     * Filter which Piketts to update
+     */
+    where?: PikettWhereInput
+    /**
+     * Limit how many Piketts to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Pikett updateManyAndReturn
+   */
+  export type PikettUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Pikett
+     */
+    select?: PikettSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Pikett
+     */
+    omit?: PikettOmit<ExtArgs> | null
+    /**
+     * The data used to update Piketts.
+     */
+    data: XOR<PikettUpdateManyMutationInput, PikettUncheckedUpdateManyInput>
+    /**
+     * Filter which Piketts to update
+     */
+    where?: PikettWhereInput
+    /**
+     * Limit how many Piketts to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PikettIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Pikett upsert
+   */
+  export type PikettUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Pikett
+     */
+    select?: PikettSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Pikett
+     */
+    omit?: PikettOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PikettInclude<ExtArgs> | null
+    /**
+     * The filter to search for the Pikett to update in case it exists.
+     */
+    where: PikettWhereUniqueInput
+    /**
+     * In case the Pikett found by the `where` argument doesn't exist, create a new Pikett with this data.
+     */
+    create: XOR<PikettCreateInput, PikettUncheckedCreateInput>
+    /**
+     * In case the Pikett was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<PikettUpdateInput, PikettUncheckedUpdateInput>
+  }
+
+  /**
+   * Pikett delete
+   */
+  export type PikettDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Pikett
+     */
+    select?: PikettSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Pikett
+     */
+    omit?: PikettOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PikettInclude<ExtArgs> | null
+    /**
+     * Filter which Pikett to delete.
+     */
+    where: PikettWhereUniqueInput
+  }
+
+  /**
+   * Pikett deleteMany
+   */
+  export type PikettDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Piketts to delete
+     */
+    where?: PikettWhereInput
+    /**
+     * Limit how many Piketts to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * Pikett.user
+   */
+  export type Pikett$userArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the User
+     */
+    select?: UserSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the User
+     */
+    omit?: UserOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    where?: UserWhereInput
+  }
+
+  /**
+   * Pikett without action
+   */
+  export type PikettDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Pikett
+     */
+    select?: PikettSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Pikett
+     */
+    omit?: PikettOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PikettInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Model Shift
    */
 
@@ -3921,11 +6465,13 @@ export namespace Prisma {
   }
 
   export type ShiftAvgAggregateOutputType = {
+    daysOfWeek: number | null
     membersRequired: number | null
     usageCount: number | null
   }
 
   export type ShiftSumAggregateOutputType = {
+    daysOfWeek: number[]
     membersRequired: number | null
     usageCount: number | null
   }
@@ -3970,6 +6516,7 @@ export namespace Prisma {
     description: number
     startTime: number
     endTime: number
+    daysOfWeek: number
     membersRequired: number
     priority: number
     status: number
@@ -3986,11 +6533,13 @@ export namespace Prisma {
 
 
   export type ShiftAvgAggregateInputType = {
+    daysOfWeek?: true
     membersRequired?: true
     usageCount?: true
   }
 
   export type ShiftSumAggregateInputType = {
+    daysOfWeek?: true
     membersRequired?: true
     usageCount?: true
   }
@@ -4035,6 +6584,7 @@ export namespace Prisma {
     description?: true
     startTime?: true
     endTime?: true
+    daysOfWeek?: true
     membersRequired?: true
     priority?: true
     status?: true
@@ -4141,6 +6691,7 @@ export namespace Prisma {
     description: string | null
     startTime: string
     endTime: string
+    daysOfWeek: number[]
     membersRequired: number
     priority: $Enums.Priority
     status: $Enums.Status
@@ -4179,6 +6730,7 @@ export namespace Prisma {
     description?: boolean
     startTime?: boolean
     endTime?: boolean
+    daysOfWeek?: boolean
     membersRequired?: boolean
     priority?: boolean
     status?: boolean
@@ -4201,6 +6753,7 @@ export namespace Prisma {
     description?: boolean
     startTime?: boolean
     endTime?: boolean
+    daysOfWeek?: boolean
     membersRequired?: boolean
     priority?: boolean
     status?: boolean
@@ -4221,6 +6774,7 @@ export namespace Prisma {
     description?: boolean
     startTime?: boolean
     endTime?: boolean
+    daysOfWeek?: boolean
     membersRequired?: boolean
     priority?: boolean
     status?: boolean
@@ -4241,6 +6795,7 @@ export namespace Prisma {
     description?: boolean
     startTime?: boolean
     endTime?: boolean
+    daysOfWeek?: boolean
     membersRequired?: boolean
     priority?: boolean
     status?: boolean
@@ -4254,7 +6809,7 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type ShiftOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "description" | "startTime" | "endTime" | "membersRequired" | "priority" | "status" | "color" | "includedUserIds" | "excludedUserIds" | "teamId" | "usageCount" | "lastUsedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["shift"]>
+  export type ShiftOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "description" | "startTime" | "endTime" | "daysOfWeek" | "membersRequired" | "priority" | "status" | "color" | "includedUserIds" | "excludedUserIds" | "teamId" | "usageCount" | "lastUsedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["shift"]>
   export type ShiftInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     team?: boolean | TeamDefaultArgs<ExtArgs>
     assignments?: boolean | Shift$assignmentsArgs<ExtArgs>
@@ -4279,6 +6834,7 @@ export namespace Prisma {
       description: string | null
       startTime: string
       endTime: string
+      daysOfWeek: number[]
       membersRequired: number
       priority: $Enums.Priority
       status: $Enums.Status
@@ -4720,6 +7276,7 @@ export namespace Prisma {
     readonly description: FieldRef<"Shift", 'String'>
     readonly startTime: FieldRef<"Shift", 'String'>
     readonly endTime: FieldRef<"Shift", 'String'>
+    readonly daysOfWeek: FieldRef<"Shift", 'Int[]'>
     readonly membersRequired: FieldRef<"Shift", 'Int'>
     readonly priority: FieldRef<"Shift", 'Priority'>
     readonly status: FieldRef<"Shift", 'Status'>
@@ -8411,6 +10968,19 @@ export namespace Prisma {
   export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
 
 
+  export const RotationPatternScalarFieldEnum: {
+    id: 'id',
+    name: 'name',
+    description: 'description',
+    cycleLength: 'cycleLength',
+    weeks: 'weeks',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type RotationPatternScalarFieldEnum = (typeof RotationPatternScalarFieldEnum)[keyof typeof RotationPatternScalarFieldEnum]
+
+
   export const TeamScalarFieldEnum: {
     id: 'id',
     name: 'name',
@@ -8424,12 +10994,34 @@ export namespace Prisma {
   export type TeamScalarFieldEnum = (typeof TeamScalarFieldEnum)[keyof typeof TeamScalarFieldEnum]
 
 
+  export const PikettScalarFieldEnum: {
+    id: 'id',
+    name: 'name',
+    description: 'description',
+    startWeek: 'startWeek',
+    daysOfWeek: 'daysOfWeek',
+    endWeek: 'endWeek',
+    color: 'color',
+    status: 'status',
+    is24_7: 'is24_7',
+    teamId: 'teamId',
+    userId: 'userId',
+    includedUserIds: 'includedUserIds',
+    excludedUserIds: 'excludedUserIds',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type PikettScalarFieldEnum = (typeof PikettScalarFieldEnum)[keyof typeof PikettScalarFieldEnum]
+
+
   export const ShiftScalarFieldEnum: {
     id: 'id',
     name: 'name',
     description: 'description',
     startTime: 'startTime',
     endTime: 'endTime',
+    daysOfWeek: 'daysOfWeek',
     membersRequired: 'membersRequired',
     priority: 'priority',
     status: 'status',
@@ -8505,6 +11097,13 @@ export namespace Prisma {
   };
 
   export type NullableJsonNullValueInput = (typeof NullableJsonNullValueInput)[keyof typeof NullableJsonNullValueInput]
+
+
+  export const JsonNullValueInput: {
+    JsonNull: typeof JsonNull
+  };
+
+  export type JsonNullValueInput = (typeof JsonNullValueInput)[keyof typeof JsonNullValueInput]
 
 
   export const QueryMode: {
@@ -8608,20 +11207,6 @@ export namespace Prisma {
 
 
   /**
-   * Reference to a field of type 'Priority'
-   */
-  export type EnumPriorityFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Priority'>
-    
-
-
-  /**
-   * Reference to a field of type 'Priority[]'
-   */
-  export type ListEnumPriorityFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Priority[]'>
-    
-
-
-  /**
    * Reference to a field of type 'Status'
    */
   export type EnumStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Status'>
@@ -8636,6 +11221,27 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'Boolean'
+   */
+  export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
+    
+
+
+  /**
+   * Reference to a field of type 'Priority'
+   */
+  export type EnumPriorityFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Priority'>
+    
+
+
+  /**
+   * Reference to a field of type 'Priority[]'
+   */
+  export type ListEnumPriorityFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Priority[]'>
+    
+
+
+  /**
    * Reference to a field of type 'AssignmentStatus'
    */
   export type EnumAssignmentStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AssignmentStatus'>
@@ -8646,13 +11252,6 @@ export namespace Prisma {
    * Reference to a field of type 'AssignmentStatus[]'
    */
   export type ListEnumAssignmentStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AssignmentStatus[]'>
-    
-
-
-  /**
-   * Reference to a field of type 'Boolean'
-   */
-  export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
     
 
 
@@ -8691,6 +11290,7 @@ export namespace Prisma {
     teamId?: StringNullableFilter<"User"> | string | null
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
+    piketts?: PikettListRelationFilter
     team?: XOR<TeamNullableScalarRelationFilter, TeamWhereInput> | null
     leadingTeam?: XOR<TeamNullableScalarRelationFilter, TeamWhereInput> | null
     assignments?: ShiftAssignmentListRelationFilter
@@ -8711,6 +11311,7 @@ export namespace Prisma {
     teamId?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    piketts?: PikettOrderByRelationAggregateInput
     team?: TeamOrderByWithRelationInput
     leadingTeam?: TeamOrderByWithRelationInput
     assignments?: ShiftAssignmentOrderByRelationAggregateInput
@@ -8734,6 +11335,7 @@ export namespace Prisma {
     teamId?: StringNullableFilter<"User"> | string | null
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
+    piketts?: PikettListRelationFilter
     team?: XOR<TeamNullableScalarRelationFilter, TeamWhereInput> | null
     leadingTeam?: XOR<TeamNullableScalarRelationFilter, TeamWhereInput> | null
     assignments?: ShiftAssignmentListRelationFilter
@@ -8781,6 +11383,70 @@ export namespace Prisma {
     updatedAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
   }
 
+  export type RotationPatternWhereInput = {
+    AND?: RotationPatternWhereInput | RotationPatternWhereInput[]
+    OR?: RotationPatternWhereInput[]
+    NOT?: RotationPatternWhereInput | RotationPatternWhereInput[]
+    id?: StringFilter<"RotationPattern"> | string
+    name?: StringFilter<"RotationPattern"> | string
+    description?: StringNullableFilter<"RotationPattern"> | string | null
+    cycleLength?: IntFilter<"RotationPattern"> | number
+    weeks?: JsonFilter<"RotationPattern">
+    createdAt?: DateTimeFilter<"RotationPattern"> | Date | string
+    updatedAt?: DateTimeFilter<"RotationPattern"> | Date | string
+  }
+
+  export type RotationPatternOrderByWithRelationInput = {
+    id?: SortOrder
+    name?: SortOrder
+    description?: SortOrderInput | SortOrder
+    cycleLength?: SortOrder
+    weeks?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type RotationPatternWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: RotationPatternWhereInput | RotationPatternWhereInput[]
+    OR?: RotationPatternWhereInput[]
+    NOT?: RotationPatternWhereInput | RotationPatternWhereInput[]
+    name?: StringFilter<"RotationPattern"> | string
+    description?: StringNullableFilter<"RotationPattern"> | string | null
+    cycleLength?: IntFilter<"RotationPattern"> | number
+    weeks?: JsonFilter<"RotationPattern">
+    createdAt?: DateTimeFilter<"RotationPattern"> | Date | string
+    updatedAt?: DateTimeFilter<"RotationPattern"> | Date | string
+  }, "id">
+
+  export type RotationPatternOrderByWithAggregationInput = {
+    id?: SortOrder
+    name?: SortOrder
+    description?: SortOrderInput | SortOrder
+    cycleLength?: SortOrder
+    weeks?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: RotationPatternCountOrderByAggregateInput
+    _avg?: RotationPatternAvgOrderByAggregateInput
+    _max?: RotationPatternMaxOrderByAggregateInput
+    _min?: RotationPatternMinOrderByAggregateInput
+    _sum?: RotationPatternSumOrderByAggregateInput
+  }
+
+  export type RotationPatternScalarWhereWithAggregatesInput = {
+    AND?: RotationPatternScalarWhereWithAggregatesInput | RotationPatternScalarWhereWithAggregatesInput[]
+    OR?: RotationPatternScalarWhereWithAggregatesInput[]
+    NOT?: RotationPatternScalarWhereWithAggregatesInput | RotationPatternScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"RotationPattern"> | string
+    name?: StringWithAggregatesFilter<"RotationPattern"> | string
+    description?: StringNullableWithAggregatesFilter<"RotationPattern"> | string | null
+    cycleLength?: IntWithAggregatesFilter<"RotationPattern"> | number
+    weeks?: JsonWithAggregatesFilter<"RotationPattern">
+    createdAt?: DateTimeWithAggregatesFilter<"RotationPattern"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"RotationPattern"> | Date | string
+  }
+
   export type TeamWhereInput = {
     AND?: TeamWhereInput | TeamWhereInput[]
     OR?: TeamWhereInput[]
@@ -8795,6 +11461,7 @@ export namespace Prisma {
     lead?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
     members?: UserListRelationFilter
     shifts?: ShiftListRelationFilter
+    piketts?: PikettListRelationFilter
   }
 
   export type TeamOrderByWithRelationInput = {
@@ -8808,6 +11475,7 @@ export namespace Prisma {
     lead?: UserOrderByWithRelationInput
     members?: UserOrderByRelationAggregateInput
     shifts?: ShiftOrderByRelationAggregateInput
+    piketts?: PikettOrderByRelationAggregateInput
   }
 
   export type TeamWhereUniqueInput = Prisma.AtLeast<{
@@ -8824,6 +11492,7 @@ export namespace Prisma {
     lead?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
     members?: UserListRelationFilter
     shifts?: ShiftListRelationFilter
+    piketts?: PikettListRelationFilter
   }, "id" | "leadId">
 
   export type TeamOrderByWithAggregationInput = {
@@ -8852,6 +11521,116 @@ export namespace Prisma {
     updatedAt?: DateTimeWithAggregatesFilter<"Team"> | Date | string
   }
 
+  export type PikettWhereInput = {
+    AND?: PikettWhereInput | PikettWhereInput[]
+    OR?: PikettWhereInput[]
+    NOT?: PikettWhereInput | PikettWhereInput[]
+    id?: StringFilter<"Pikett"> | string
+    name?: StringFilter<"Pikett"> | string
+    description?: StringNullableFilter<"Pikett"> | string | null
+    startWeek?: StringFilter<"Pikett"> | string
+    daysOfWeek?: IntNullableListFilter<"Pikett">
+    endWeek?: StringNullableFilter<"Pikett"> | string | null
+    color?: StringFilter<"Pikett"> | string
+    status?: EnumStatusFilter<"Pikett"> | $Enums.Status
+    is24_7?: BoolFilter<"Pikett"> | boolean
+    teamId?: StringFilter<"Pikett"> | string
+    userId?: StringNullableFilter<"Pikett"> | string | null
+    includedUserIds?: StringNullableListFilter<"Pikett">
+    excludedUserIds?: StringNullableListFilter<"Pikett">
+    createdAt?: DateTimeFilter<"Pikett"> | Date | string
+    updatedAt?: DateTimeFilter<"Pikett"> | Date | string
+    team?: XOR<TeamScalarRelationFilter, TeamWhereInput>
+    user?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
+  }
+
+  export type PikettOrderByWithRelationInput = {
+    id?: SortOrder
+    name?: SortOrder
+    description?: SortOrderInput | SortOrder
+    startWeek?: SortOrder
+    daysOfWeek?: SortOrder
+    endWeek?: SortOrderInput | SortOrder
+    color?: SortOrder
+    status?: SortOrder
+    is24_7?: SortOrder
+    teamId?: SortOrder
+    userId?: SortOrderInput | SortOrder
+    includedUserIds?: SortOrder
+    excludedUserIds?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    team?: TeamOrderByWithRelationInput
+    user?: UserOrderByWithRelationInput
+  }
+
+  export type PikettWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: PikettWhereInput | PikettWhereInput[]
+    OR?: PikettWhereInput[]
+    NOT?: PikettWhereInput | PikettWhereInput[]
+    name?: StringFilter<"Pikett"> | string
+    description?: StringNullableFilter<"Pikett"> | string | null
+    startWeek?: StringFilter<"Pikett"> | string
+    daysOfWeek?: IntNullableListFilter<"Pikett">
+    endWeek?: StringNullableFilter<"Pikett"> | string | null
+    color?: StringFilter<"Pikett"> | string
+    status?: EnumStatusFilter<"Pikett"> | $Enums.Status
+    is24_7?: BoolFilter<"Pikett"> | boolean
+    teamId?: StringFilter<"Pikett"> | string
+    userId?: StringNullableFilter<"Pikett"> | string | null
+    includedUserIds?: StringNullableListFilter<"Pikett">
+    excludedUserIds?: StringNullableListFilter<"Pikett">
+    createdAt?: DateTimeFilter<"Pikett"> | Date | string
+    updatedAt?: DateTimeFilter<"Pikett"> | Date | string
+    team?: XOR<TeamScalarRelationFilter, TeamWhereInput>
+    user?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
+  }, "id">
+
+  export type PikettOrderByWithAggregationInput = {
+    id?: SortOrder
+    name?: SortOrder
+    description?: SortOrderInput | SortOrder
+    startWeek?: SortOrder
+    daysOfWeek?: SortOrder
+    endWeek?: SortOrderInput | SortOrder
+    color?: SortOrder
+    status?: SortOrder
+    is24_7?: SortOrder
+    teamId?: SortOrder
+    userId?: SortOrderInput | SortOrder
+    includedUserIds?: SortOrder
+    excludedUserIds?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: PikettCountOrderByAggregateInput
+    _avg?: PikettAvgOrderByAggregateInput
+    _max?: PikettMaxOrderByAggregateInput
+    _min?: PikettMinOrderByAggregateInput
+    _sum?: PikettSumOrderByAggregateInput
+  }
+
+  export type PikettScalarWhereWithAggregatesInput = {
+    AND?: PikettScalarWhereWithAggregatesInput | PikettScalarWhereWithAggregatesInput[]
+    OR?: PikettScalarWhereWithAggregatesInput[]
+    NOT?: PikettScalarWhereWithAggregatesInput | PikettScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"Pikett"> | string
+    name?: StringWithAggregatesFilter<"Pikett"> | string
+    description?: StringNullableWithAggregatesFilter<"Pikett"> | string | null
+    startWeek?: StringWithAggregatesFilter<"Pikett"> | string
+    daysOfWeek?: IntNullableListFilter<"Pikett">
+    endWeek?: StringNullableWithAggregatesFilter<"Pikett"> | string | null
+    color?: StringWithAggregatesFilter<"Pikett"> | string
+    status?: EnumStatusWithAggregatesFilter<"Pikett"> | $Enums.Status
+    is24_7?: BoolWithAggregatesFilter<"Pikett"> | boolean
+    teamId?: StringWithAggregatesFilter<"Pikett"> | string
+    userId?: StringNullableWithAggregatesFilter<"Pikett"> | string | null
+    includedUserIds?: StringNullableListFilter<"Pikett">
+    excludedUserIds?: StringNullableListFilter<"Pikett">
+    createdAt?: DateTimeWithAggregatesFilter<"Pikett"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"Pikett"> | Date | string
+  }
+
   export type ShiftWhereInput = {
     AND?: ShiftWhereInput | ShiftWhereInput[]
     OR?: ShiftWhereInput[]
@@ -8861,6 +11640,7 @@ export namespace Prisma {
     description?: StringNullableFilter<"Shift"> | string | null
     startTime?: StringFilter<"Shift"> | string
     endTime?: StringFilter<"Shift"> | string
+    daysOfWeek?: IntNullableListFilter<"Shift">
     membersRequired?: IntFilter<"Shift"> | number
     priority?: EnumPriorityFilter<"Shift"> | $Enums.Priority
     status?: EnumStatusFilter<"Shift"> | $Enums.Status
@@ -8882,6 +11662,7 @@ export namespace Prisma {
     description?: SortOrderInput | SortOrder
     startTime?: SortOrder
     endTime?: SortOrder
+    daysOfWeek?: SortOrder
     membersRequired?: SortOrder
     priority?: SortOrder
     status?: SortOrder
@@ -8906,6 +11687,7 @@ export namespace Prisma {
     description?: StringNullableFilter<"Shift"> | string | null
     startTime?: StringFilter<"Shift"> | string
     endTime?: StringFilter<"Shift"> | string
+    daysOfWeek?: IntNullableListFilter<"Shift">
     membersRequired?: IntFilter<"Shift"> | number
     priority?: EnumPriorityFilter<"Shift"> | $Enums.Priority
     status?: EnumStatusFilter<"Shift"> | $Enums.Status
@@ -8927,6 +11709,7 @@ export namespace Prisma {
     description?: SortOrderInput | SortOrder
     startTime?: SortOrder
     endTime?: SortOrder
+    daysOfWeek?: SortOrder
     membersRequired?: SortOrder
     priority?: SortOrder
     status?: SortOrder
@@ -8954,6 +11737,7 @@ export namespace Prisma {
     description?: StringNullableWithAggregatesFilter<"Shift"> | string | null
     startTime?: StringWithAggregatesFilter<"Shift"> | string
     endTime?: StringWithAggregatesFilter<"Shift"> | string
+    daysOfWeek?: IntNullableListFilter<"Shift">
     membersRequired?: IntWithAggregatesFilter<"Shift"> | number
     priority?: EnumPriorityWithAggregatesFilter<"Shift"> | $Enums.Priority
     status?: EnumStatusWithAggregatesFilter<"Shift"> | $Enums.Status
@@ -9204,6 +11988,7 @@ export namespace Prisma {
     availability?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
+    piketts?: PikettCreateNestedManyWithoutUserInput
     team?: TeamCreateNestedOneWithoutMembersInput
     leadingTeam?: TeamCreateNestedOneWithoutLeadInput
     assignments?: ShiftAssignmentCreateNestedManyWithoutUserInput
@@ -9224,6 +12009,7 @@ export namespace Prisma {
     teamId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    piketts?: PikettUncheckedCreateNestedManyWithoutUserInput
     leadingTeam?: TeamUncheckedCreateNestedOneWithoutLeadInput
     assignments?: ShiftAssignmentUncheckedCreateNestedManyWithoutUserInput
   }
@@ -9242,6 +12028,7 @@ export namespace Prisma {
     availability?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    piketts?: PikettUpdateManyWithoutUserNestedInput
     team?: TeamUpdateOneWithoutMembersNestedInput
     leadingTeam?: TeamUpdateOneWithoutLeadNestedInput
     assignments?: ShiftAssignmentUpdateManyWithoutUserNestedInput
@@ -9262,6 +12049,7 @@ export namespace Prisma {
     teamId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    piketts?: PikettUncheckedUpdateManyWithoutUserNestedInput
     leadingTeam?: TeamUncheckedUpdateOneWithoutLeadNestedInput
     assignments?: ShiftAssignmentUncheckedUpdateManyWithoutUserNestedInput
   }
@@ -9316,6 +12104,76 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type RotationPatternCreateInput = {
+    id?: string
+    name: string
+    description?: string | null
+    cycleLength: number
+    weeks: JsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type RotationPatternUncheckedCreateInput = {
+    id?: string
+    name: string
+    description?: string | null
+    cycleLength: number
+    weeks: JsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type RotationPatternUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    cycleLength?: IntFieldUpdateOperationsInput | number
+    weeks?: JsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type RotationPatternUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    cycleLength?: IntFieldUpdateOperationsInput | number
+    weeks?: JsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type RotationPatternCreateManyInput = {
+    id?: string
+    name: string
+    description?: string | null
+    cycleLength: number
+    weeks: JsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type RotationPatternUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    cycleLength?: IntFieldUpdateOperationsInput | number
+    weeks?: JsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type RotationPatternUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    cycleLength?: IntFieldUpdateOperationsInput | number
+    weeks?: JsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type TeamCreateInput = {
     id?: string
     name: string
@@ -9326,6 +12184,7 @@ export namespace Prisma {
     lead?: UserCreateNestedOneWithoutLeadingTeamInput
     members?: UserCreateNestedManyWithoutTeamInput
     shifts?: ShiftCreateNestedManyWithoutTeamInput
+    piketts?: PikettCreateNestedManyWithoutTeamInput
   }
 
   export type TeamUncheckedCreateInput = {
@@ -9338,6 +12197,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     members?: UserUncheckedCreateNestedManyWithoutTeamInput
     shifts?: ShiftUncheckedCreateNestedManyWithoutTeamInput
+    piketts?: PikettUncheckedCreateNestedManyWithoutTeamInput
   }
 
   export type TeamUpdateInput = {
@@ -9350,6 +12210,7 @@ export namespace Prisma {
     lead?: UserUpdateOneWithoutLeadingTeamNestedInput
     members?: UserUpdateManyWithoutTeamNestedInput
     shifts?: ShiftUpdateManyWithoutTeamNestedInput
+    piketts?: PikettUpdateManyWithoutTeamNestedInput
   }
 
   export type TeamUncheckedUpdateInput = {
@@ -9362,6 +12223,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     members?: UserUncheckedUpdateManyWithoutTeamNestedInput
     shifts?: ShiftUncheckedUpdateManyWithoutTeamNestedInput
+    piketts?: PikettUncheckedUpdateManyWithoutTeamNestedInput
   }
 
   export type TeamCreateManyInput = {
@@ -9393,12 +12255,137 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type PikettCreateInput = {
+    id?: string
+    name: string
+    description?: string | null
+    startWeek: string
+    daysOfWeek?: PikettCreatedaysOfWeekInput | number[]
+    endWeek?: string | null
+    color?: string
+    status?: $Enums.Status
+    is24_7?: boolean
+    includedUserIds?: PikettCreateincludedUserIdsInput | string[]
+    excludedUserIds?: PikettCreateexcludedUserIdsInput | string[]
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    team: TeamCreateNestedOneWithoutPikettsInput
+    user?: UserCreateNestedOneWithoutPikettsInput
+  }
+
+  export type PikettUncheckedCreateInput = {
+    id?: string
+    name: string
+    description?: string | null
+    startWeek: string
+    daysOfWeek?: PikettCreatedaysOfWeekInput | number[]
+    endWeek?: string | null
+    color?: string
+    status?: $Enums.Status
+    is24_7?: boolean
+    teamId: string
+    userId?: string | null
+    includedUserIds?: PikettCreateincludedUserIdsInput | string[]
+    excludedUserIds?: PikettCreateexcludedUserIdsInput | string[]
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type PikettUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    startWeek?: StringFieldUpdateOperationsInput | string
+    daysOfWeek?: PikettUpdatedaysOfWeekInput | number[]
+    endWeek?: NullableStringFieldUpdateOperationsInput | string | null
+    color?: StringFieldUpdateOperationsInput | string
+    status?: EnumStatusFieldUpdateOperationsInput | $Enums.Status
+    is24_7?: BoolFieldUpdateOperationsInput | boolean
+    includedUserIds?: PikettUpdateincludedUserIdsInput | string[]
+    excludedUserIds?: PikettUpdateexcludedUserIdsInput | string[]
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    team?: TeamUpdateOneRequiredWithoutPikettsNestedInput
+    user?: UserUpdateOneWithoutPikettsNestedInput
+  }
+
+  export type PikettUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    startWeek?: StringFieldUpdateOperationsInput | string
+    daysOfWeek?: PikettUpdatedaysOfWeekInput | number[]
+    endWeek?: NullableStringFieldUpdateOperationsInput | string | null
+    color?: StringFieldUpdateOperationsInput | string
+    status?: EnumStatusFieldUpdateOperationsInput | $Enums.Status
+    is24_7?: BoolFieldUpdateOperationsInput | boolean
+    teamId?: StringFieldUpdateOperationsInput | string
+    userId?: NullableStringFieldUpdateOperationsInput | string | null
+    includedUserIds?: PikettUpdateincludedUserIdsInput | string[]
+    excludedUserIds?: PikettUpdateexcludedUserIdsInput | string[]
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PikettCreateManyInput = {
+    id?: string
+    name: string
+    description?: string | null
+    startWeek: string
+    daysOfWeek?: PikettCreatedaysOfWeekInput | number[]
+    endWeek?: string | null
+    color?: string
+    status?: $Enums.Status
+    is24_7?: boolean
+    teamId: string
+    userId?: string | null
+    includedUserIds?: PikettCreateincludedUserIdsInput | string[]
+    excludedUserIds?: PikettCreateexcludedUserIdsInput | string[]
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type PikettUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    startWeek?: StringFieldUpdateOperationsInput | string
+    daysOfWeek?: PikettUpdatedaysOfWeekInput | number[]
+    endWeek?: NullableStringFieldUpdateOperationsInput | string | null
+    color?: StringFieldUpdateOperationsInput | string
+    status?: EnumStatusFieldUpdateOperationsInput | $Enums.Status
+    is24_7?: BoolFieldUpdateOperationsInput | boolean
+    includedUserIds?: PikettUpdateincludedUserIdsInput | string[]
+    excludedUserIds?: PikettUpdateexcludedUserIdsInput | string[]
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PikettUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    startWeek?: StringFieldUpdateOperationsInput | string
+    daysOfWeek?: PikettUpdatedaysOfWeekInput | number[]
+    endWeek?: NullableStringFieldUpdateOperationsInput | string | null
+    color?: StringFieldUpdateOperationsInput | string
+    status?: EnumStatusFieldUpdateOperationsInput | $Enums.Status
+    is24_7?: BoolFieldUpdateOperationsInput | boolean
+    teamId?: StringFieldUpdateOperationsInput | string
+    userId?: NullableStringFieldUpdateOperationsInput | string | null
+    includedUserIds?: PikettUpdateincludedUserIdsInput | string[]
+    excludedUserIds?: PikettUpdateexcludedUserIdsInput | string[]
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type ShiftCreateInput = {
     id?: string
     name: string
     description?: string | null
     startTime: string
     endTime: string
+    daysOfWeek?: ShiftCreatedaysOfWeekInput | number[]
     membersRequired?: number
     priority?: $Enums.Priority
     status?: $Enums.Status
@@ -9419,6 +12406,7 @@ export namespace Prisma {
     description?: string | null
     startTime: string
     endTime: string
+    daysOfWeek?: ShiftCreatedaysOfWeekInput | number[]
     membersRequired?: number
     priority?: $Enums.Priority
     status?: $Enums.Status
@@ -9439,6 +12427,7 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     startTime?: StringFieldUpdateOperationsInput | string
     endTime?: StringFieldUpdateOperationsInput | string
+    daysOfWeek?: ShiftUpdatedaysOfWeekInput | number[]
     membersRequired?: IntFieldUpdateOperationsInput | number
     priority?: EnumPriorityFieldUpdateOperationsInput | $Enums.Priority
     status?: EnumStatusFieldUpdateOperationsInput | $Enums.Status
@@ -9459,6 +12448,7 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     startTime?: StringFieldUpdateOperationsInput | string
     endTime?: StringFieldUpdateOperationsInput | string
+    daysOfWeek?: ShiftUpdatedaysOfWeekInput | number[]
     membersRequired?: IntFieldUpdateOperationsInput | number
     priority?: EnumPriorityFieldUpdateOperationsInput | $Enums.Priority
     status?: EnumStatusFieldUpdateOperationsInput | $Enums.Status
@@ -9479,6 +12469,7 @@ export namespace Prisma {
     description?: string | null
     startTime: string
     endTime: string
+    daysOfWeek?: ShiftCreatedaysOfWeekInput | number[]
     membersRequired?: number
     priority?: $Enums.Priority
     status?: $Enums.Status
@@ -9498,6 +12489,7 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     startTime?: StringFieldUpdateOperationsInput | string
     endTime?: StringFieldUpdateOperationsInput | string
+    daysOfWeek?: ShiftUpdatedaysOfWeekInput | number[]
     membersRequired?: IntFieldUpdateOperationsInput | number
     priority?: EnumPriorityFieldUpdateOperationsInput | $Enums.Priority
     status?: EnumStatusFieldUpdateOperationsInput | $Enums.Status
@@ -9516,6 +12508,7 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     startTime?: StringFieldUpdateOperationsInput | string
     endTime?: StringFieldUpdateOperationsInput | string
+    daysOfWeek?: ShiftUpdatedaysOfWeekInput | number[]
     membersRequired?: IntFieldUpdateOperationsInput | number
     priority?: EnumPriorityFieldUpdateOperationsInput | $Enums.Priority
     status?: EnumStatusFieldUpdateOperationsInput | $Enums.Status
@@ -9861,6 +12854,12 @@ export namespace Prisma {
     not?: NestedDateTimeFilter<$PrismaModel> | Date | string
   }
 
+  export type PikettListRelationFilter = {
+    every?: PikettWhereInput
+    some?: PikettWhereInput
+    none?: PikettWhereInput
+  }
+
   export type TeamNullableScalarRelationFilter = {
     is?: TeamWhereInput | null
     isNot?: TeamWhereInput | null
@@ -9875,6 +12874,10 @@ export namespace Prisma {
   export type SortOrderInput = {
     sort: SortOrder
     nulls?: NullsOrder
+  }
+
+  export type PikettOrderByRelationAggregateInput = {
+    _count?: SortOrder
   }
 
   export type ShiftAssignmentOrderByRelationAggregateInput = {
@@ -10037,6 +13040,91 @@ export namespace Prisma {
     _min?: NestedDateTimeFilter<$PrismaModel>
     _max?: NestedDateTimeFilter<$PrismaModel>
   }
+  export type JsonFilter<$PrismaModel = never> =
+    | PatchUndefined<
+        Either<Required<JsonFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonFilterBase<$PrismaModel>>, 'path'>>,
+        Required<JsonFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<JsonFilterBase<$PrismaModel>>, 'path'>>
+
+  export type JsonFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string[]
+    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+  }
+
+  export type RotationPatternCountOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    description?: SortOrder
+    cycleLength?: SortOrder
+    weeks?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type RotationPatternAvgOrderByAggregateInput = {
+    cycleLength?: SortOrder
+  }
+
+  export type RotationPatternMaxOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    description?: SortOrder
+    cycleLength?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type RotationPatternMinOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    description?: SortOrder
+    cycleLength?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type RotationPatternSumOrderByAggregateInput = {
+    cycleLength?: SortOrder
+  }
+  export type JsonWithAggregatesFilter<$PrismaModel = never> =
+    | PatchUndefined<
+        Either<Required<JsonWithAggregatesFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonWithAggregatesFilterBase<$PrismaModel>>, 'path'>>,
+        Required<JsonWithAggregatesFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<JsonWithAggregatesFilterBase<$PrismaModel>>, 'path'>>
+
+  export type JsonWithAggregatesFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string[]
+    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedJsonFilter<$PrismaModel>
+    _max?: NestedJsonFilter<$PrismaModel>
+  }
 
   export type UserNullableScalarRelationFilter = {
     is?: UserWhereInput | null
@@ -10093,11 +13181,12 @@ export namespace Prisma {
     updatedAt?: SortOrder
   }
 
-  export type EnumPriorityFilter<$PrismaModel = never> = {
-    equals?: $Enums.Priority | EnumPriorityFieldRefInput<$PrismaModel>
-    in?: $Enums.Priority[] | ListEnumPriorityFieldRefInput<$PrismaModel>
-    notIn?: $Enums.Priority[] | ListEnumPriorityFieldRefInput<$PrismaModel>
-    not?: NestedEnumPriorityFilter<$PrismaModel> | $Enums.Priority
+  export type IntNullableListFilter<$PrismaModel = never> = {
+    equals?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    has?: number | IntFieldRefInput<$PrismaModel> | null
+    hasEvery?: number[] | ListIntFieldRefInput<$PrismaModel>
+    hasSome?: number[] | ListIntFieldRefInput<$PrismaModel>
+    isEmpty?: boolean
   }
 
   export type EnumStatusFilter<$PrismaModel = never> = {
@@ -10107,12 +13196,103 @@ export namespace Prisma {
     not?: NestedEnumStatusFilter<$PrismaModel> | $Enums.Status
   }
 
+  export type BoolFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolFilter<$PrismaModel> | boolean
+  }
+
   export type StringNullableListFilter<$PrismaModel = never> = {
     equals?: string[] | ListStringFieldRefInput<$PrismaModel> | null
     has?: string | StringFieldRefInput<$PrismaModel> | null
     hasEvery?: string[] | ListStringFieldRefInput<$PrismaModel>
     hasSome?: string[] | ListStringFieldRefInput<$PrismaModel>
     isEmpty?: boolean
+  }
+
+  export type TeamScalarRelationFilter = {
+    is?: TeamWhereInput
+    isNot?: TeamWhereInput
+  }
+
+  export type PikettCountOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    description?: SortOrder
+    startWeek?: SortOrder
+    daysOfWeek?: SortOrder
+    endWeek?: SortOrder
+    color?: SortOrder
+    status?: SortOrder
+    is24_7?: SortOrder
+    teamId?: SortOrder
+    userId?: SortOrder
+    includedUserIds?: SortOrder
+    excludedUserIds?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type PikettAvgOrderByAggregateInput = {
+    daysOfWeek?: SortOrder
+  }
+
+  export type PikettMaxOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    description?: SortOrder
+    startWeek?: SortOrder
+    endWeek?: SortOrder
+    color?: SortOrder
+    status?: SortOrder
+    is24_7?: SortOrder
+    teamId?: SortOrder
+    userId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type PikettMinOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    description?: SortOrder
+    startWeek?: SortOrder
+    endWeek?: SortOrder
+    color?: SortOrder
+    status?: SortOrder
+    is24_7?: SortOrder
+    teamId?: SortOrder
+    userId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type PikettSumOrderByAggregateInput = {
+    daysOfWeek?: SortOrder
+  }
+
+  export type EnumStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.Status | EnumStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.Status[] | ListEnumStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.Status[] | ListEnumStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumStatusWithAggregatesFilter<$PrismaModel> | $Enums.Status
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumStatusFilter<$PrismaModel>
+    _max?: NestedEnumStatusFilter<$PrismaModel>
+  }
+
+  export type BoolWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedBoolFilter<$PrismaModel>
+    _max?: NestedBoolFilter<$PrismaModel>
+  }
+
+  export type EnumPriorityFilter<$PrismaModel = never> = {
+    equals?: $Enums.Priority | EnumPriorityFieldRefInput<$PrismaModel>
+    in?: $Enums.Priority[] | ListEnumPriorityFieldRefInput<$PrismaModel>
+    notIn?: $Enums.Priority[] | ListEnumPriorityFieldRefInput<$PrismaModel>
+    not?: NestedEnumPriorityFilter<$PrismaModel> | $Enums.Priority
   }
 
   export type DateTimeNullableFilter<$PrismaModel = never> = {
@@ -10126,17 +13306,13 @@ export namespace Prisma {
     not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
   }
 
-  export type TeamScalarRelationFilter = {
-    is?: TeamWhereInput
-    isNot?: TeamWhereInput
-  }
-
   export type ShiftCountOrderByAggregateInput = {
     id?: SortOrder
     name?: SortOrder
     description?: SortOrder
     startTime?: SortOrder
     endTime?: SortOrder
+    daysOfWeek?: SortOrder
     membersRequired?: SortOrder
     priority?: SortOrder
     status?: SortOrder
@@ -10151,6 +13327,7 @@ export namespace Prisma {
   }
 
   export type ShiftAvgOrderByAggregateInput = {
+    daysOfWeek?: SortOrder
     membersRequired?: SortOrder
     usageCount?: SortOrder
   }
@@ -10190,6 +13367,7 @@ export namespace Prisma {
   }
 
   export type ShiftSumOrderByAggregateInput = {
+    daysOfWeek?: SortOrder
     membersRequired?: SortOrder
     usageCount?: SortOrder
   }
@@ -10202,16 +13380,6 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumPriorityFilter<$PrismaModel>
     _max?: NestedEnumPriorityFilter<$PrismaModel>
-  }
-
-  export type EnumStatusWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.Status | EnumStatusFieldRefInput<$PrismaModel>
-    in?: $Enums.Status[] | ListEnumStatusFieldRefInput<$PrismaModel>
-    notIn?: $Enums.Status[] | ListEnumStatusFieldRefInput<$PrismaModel>
-    not?: NestedEnumStatusWithAggregatesFilter<$PrismaModel> | $Enums.Status
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumStatusFilter<$PrismaModel>
-    _max?: NestedEnumStatusFilter<$PrismaModel>
   }
 
   export type DateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -10297,11 +13465,6 @@ export namespace Prisma {
     _max?: NestedEnumAssignmentStatusFilter<$PrismaModel>
   }
 
-  export type BoolFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolFilter<$PrismaModel> | boolean
-  }
-
   export type OutOfOfficeEventCountOrderByAggregateInput = {
     id?: SortOrder
     userEmail?: SortOrder
@@ -10344,14 +13507,6 @@ export namespace Prisma {
     updatedAt?: SortOrder
   }
 
-  export type BoolWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedBoolFilter<$PrismaModel>
-    _max?: NestedBoolFilter<$PrismaModel>
-  }
-
   export type AuditLogCountOrderByAggregateInput = {
     id?: SortOrder
     action?: SortOrder
@@ -10380,6 +13535,13 @@ export namespace Prisma {
     createdAt?: SortOrder
   }
 
+  export type PikettCreateNestedManyWithoutUserInput = {
+    create?: XOR<PikettCreateWithoutUserInput, PikettUncheckedCreateWithoutUserInput> | PikettCreateWithoutUserInput[] | PikettUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: PikettCreateOrConnectWithoutUserInput | PikettCreateOrConnectWithoutUserInput[]
+    createMany?: PikettCreateManyUserInputEnvelope
+    connect?: PikettWhereUniqueInput | PikettWhereUniqueInput[]
+  }
+
   export type TeamCreateNestedOneWithoutMembersInput = {
     create?: XOR<TeamCreateWithoutMembersInput, TeamUncheckedCreateWithoutMembersInput>
     connectOrCreate?: TeamCreateOrConnectWithoutMembersInput
@@ -10397,6 +13559,13 @@ export namespace Prisma {
     connectOrCreate?: ShiftAssignmentCreateOrConnectWithoutUserInput | ShiftAssignmentCreateOrConnectWithoutUserInput[]
     createMany?: ShiftAssignmentCreateManyUserInputEnvelope
     connect?: ShiftAssignmentWhereUniqueInput | ShiftAssignmentWhereUniqueInput[]
+  }
+
+  export type PikettUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<PikettCreateWithoutUserInput, PikettUncheckedCreateWithoutUserInput> | PikettCreateWithoutUserInput[] | PikettUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: PikettCreateOrConnectWithoutUserInput | PikettCreateOrConnectWithoutUserInput[]
+    createMany?: PikettCreateManyUserInputEnvelope
+    connect?: PikettWhereUniqueInput | PikettWhereUniqueInput[]
   }
 
   export type TeamUncheckedCreateNestedOneWithoutLeadInput = {
@@ -10436,6 +13605,20 @@ export namespace Prisma {
     set?: Date | string
   }
 
+  export type PikettUpdateManyWithoutUserNestedInput = {
+    create?: XOR<PikettCreateWithoutUserInput, PikettUncheckedCreateWithoutUserInput> | PikettCreateWithoutUserInput[] | PikettUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: PikettCreateOrConnectWithoutUserInput | PikettCreateOrConnectWithoutUserInput[]
+    upsert?: PikettUpsertWithWhereUniqueWithoutUserInput | PikettUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: PikettCreateManyUserInputEnvelope
+    set?: PikettWhereUniqueInput | PikettWhereUniqueInput[]
+    disconnect?: PikettWhereUniqueInput | PikettWhereUniqueInput[]
+    delete?: PikettWhereUniqueInput | PikettWhereUniqueInput[]
+    connect?: PikettWhereUniqueInput | PikettWhereUniqueInput[]
+    update?: PikettUpdateWithWhereUniqueWithoutUserInput | PikettUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: PikettUpdateManyWithWhereWithoutUserInput | PikettUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: PikettScalarWhereInput | PikettScalarWhereInput[]
+  }
+
   export type TeamUpdateOneWithoutMembersNestedInput = {
     create?: XOR<TeamCreateWithoutMembersInput, TeamUncheckedCreateWithoutMembersInput>
     connectOrCreate?: TeamCreateOrConnectWithoutMembersInput
@@ -10468,6 +13651,20 @@ export namespace Prisma {
     update?: ShiftAssignmentUpdateWithWhereUniqueWithoutUserInput | ShiftAssignmentUpdateWithWhereUniqueWithoutUserInput[]
     updateMany?: ShiftAssignmentUpdateManyWithWhereWithoutUserInput | ShiftAssignmentUpdateManyWithWhereWithoutUserInput[]
     deleteMany?: ShiftAssignmentScalarWhereInput | ShiftAssignmentScalarWhereInput[]
+  }
+
+  export type PikettUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<PikettCreateWithoutUserInput, PikettUncheckedCreateWithoutUserInput> | PikettCreateWithoutUserInput[] | PikettUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: PikettCreateOrConnectWithoutUserInput | PikettCreateOrConnectWithoutUserInput[]
+    upsert?: PikettUpsertWithWhereUniqueWithoutUserInput | PikettUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: PikettCreateManyUserInputEnvelope
+    set?: PikettWhereUniqueInput | PikettWhereUniqueInput[]
+    disconnect?: PikettWhereUniqueInput | PikettWhereUniqueInput[]
+    delete?: PikettWhereUniqueInput | PikettWhereUniqueInput[]
+    connect?: PikettWhereUniqueInput | PikettWhereUniqueInput[]
+    update?: PikettUpdateWithWhereUniqueWithoutUserInput | PikettUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: PikettUpdateManyWithWhereWithoutUserInput | PikettUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: PikettScalarWhereInput | PikettScalarWhereInput[]
   }
 
   export type TeamUncheckedUpdateOneWithoutLeadNestedInput = {
@@ -10514,6 +13711,13 @@ export namespace Prisma {
     connect?: ShiftWhereUniqueInput | ShiftWhereUniqueInput[]
   }
 
+  export type PikettCreateNestedManyWithoutTeamInput = {
+    create?: XOR<PikettCreateWithoutTeamInput, PikettUncheckedCreateWithoutTeamInput> | PikettCreateWithoutTeamInput[] | PikettUncheckedCreateWithoutTeamInput[]
+    connectOrCreate?: PikettCreateOrConnectWithoutTeamInput | PikettCreateOrConnectWithoutTeamInput[]
+    createMany?: PikettCreateManyTeamInputEnvelope
+    connect?: PikettWhereUniqueInput | PikettWhereUniqueInput[]
+  }
+
   export type UserUncheckedCreateNestedManyWithoutTeamInput = {
     create?: XOR<UserCreateWithoutTeamInput, UserUncheckedCreateWithoutTeamInput> | UserCreateWithoutTeamInput[] | UserUncheckedCreateWithoutTeamInput[]
     connectOrCreate?: UserCreateOrConnectWithoutTeamInput | UserCreateOrConnectWithoutTeamInput[]
@@ -10526,6 +13730,13 @@ export namespace Prisma {
     connectOrCreate?: ShiftCreateOrConnectWithoutTeamInput | ShiftCreateOrConnectWithoutTeamInput[]
     createMany?: ShiftCreateManyTeamInputEnvelope
     connect?: ShiftWhereUniqueInput | ShiftWhereUniqueInput[]
+  }
+
+  export type PikettUncheckedCreateNestedManyWithoutTeamInput = {
+    create?: XOR<PikettCreateWithoutTeamInput, PikettUncheckedCreateWithoutTeamInput> | PikettCreateWithoutTeamInput[] | PikettUncheckedCreateWithoutTeamInput[]
+    connectOrCreate?: PikettCreateOrConnectWithoutTeamInput | PikettCreateOrConnectWithoutTeamInput[]
+    createMany?: PikettCreateManyTeamInputEnvelope
+    connect?: PikettWhereUniqueInput | PikettWhereUniqueInput[]
   }
 
   export type UserUpdateOneWithoutLeadingTeamNestedInput = {
@@ -10566,6 +13777,20 @@ export namespace Prisma {
     deleteMany?: ShiftScalarWhereInput | ShiftScalarWhereInput[]
   }
 
+  export type PikettUpdateManyWithoutTeamNestedInput = {
+    create?: XOR<PikettCreateWithoutTeamInput, PikettUncheckedCreateWithoutTeamInput> | PikettCreateWithoutTeamInput[] | PikettUncheckedCreateWithoutTeamInput[]
+    connectOrCreate?: PikettCreateOrConnectWithoutTeamInput | PikettCreateOrConnectWithoutTeamInput[]
+    upsert?: PikettUpsertWithWhereUniqueWithoutTeamInput | PikettUpsertWithWhereUniqueWithoutTeamInput[]
+    createMany?: PikettCreateManyTeamInputEnvelope
+    set?: PikettWhereUniqueInput | PikettWhereUniqueInput[]
+    disconnect?: PikettWhereUniqueInput | PikettWhereUniqueInput[]
+    delete?: PikettWhereUniqueInput | PikettWhereUniqueInput[]
+    connect?: PikettWhereUniqueInput | PikettWhereUniqueInput[]
+    update?: PikettUpdateWithWhereUniqueWithoutTeamInput | PikettUpdateWithWhereUniqueWithoutTeamInput[]
+    updateMany?: PikettUpdateManyWithWhereWithoutTeamInput | PikettUpdateManyWithWhereWithoutTeamInput[]
+    deleteMany?: PikettScalarWhereInput | PikettScalarWhereInput[]
+  }
+
   export type UserUncheckedUpdateManyWithoutTeamNestedInput = {
     create?: XOR<UserCreateWithoutTeamInput, UserUncheckedCreateWithoutTeamInput> | UserCreateWithoutTeamInput[] | UserUncheckedCreateWithoutTeamInput[]
     connectOrCreate?: UserCreateOrConnectWithoutTeamInput | UserCreateOrConnectWithoutTeamInput[]
@@ -10592,6 +13817,89 @@ export namespace Prisma {
     update?: ShiftUpdateWithWhereUniqueWithoutTeamInput | ShiftUpdateWithWhereUniqueWithoutTeamInput[]
     updateMany?: ShiftUpdateManyWithWhereWithoutTeamInput | ShiftUpdateManyWithWhereWithoutTeamInput[]
     deleteMany?: ShiftScalarWhereInput | ShiftScalarWhereInput[]
+  }
+
+  export type PikettUncheckedUpdateManyWithoutTeamNestedInput = {
+    create?: XOR<PikettCreateWithoutTeamInput, PikettUncheckedCreateWithoutTeamInput> | PikettCreateWithoutTeamInput[] | PikettUncheckedCreateWithoutTeamInput[]
+    connectOrCreate?: PikettCreateOrConnectWithoutTeamInput | PikettCreateOrConnectWithoutTeamInput[]
+    upsert?: PikettUpsertWithWhereUniqueWithoutTeamInput | PikettUpsertWithWhereUniqueWithoutTeamInput[]
+    createMany?: PikettCreateManyTeamInputEnvelope
+    set?: PikettWhereUniqueInput | PikettWhereUniqueInput[]
+    disconnect?: PikettWhereUniqueInput | PikettWhereUniqueInput[]
+    delete?: PikettWhereUniqueInput | PikettWhereUniqueInput[]
+    connect?: PikettWhereUniqueInput | PikettWhereUniqueInput[]
+    update?: PikettUpdateWithWhereUniqueWithoutTeamInput | PikettUpdateWithWhereUniqueWithoutTeamInput[]
+    updateMany?: PikettUpdateManyWithWhereWithoutTeamInput | PikettUpdateManyWithWhereWithoutTeamInput[]
+    deleteMany?: PikettScalarWhereInput | PikettScalarWhereInput[]
+  }
+
+  export type PikettCreatedaysOfWeekInput = {
+    set: number[]
+  }
+
+  export type PikettCreateincludedUserIdsInput = {
+    set: string[]
+  }
+
+  export type PikettCreateexcludedUserIdsInput = {
+    set: string[]
+  }
+
+  export type TeamCreateNestedOneWithoutPikettsInput = {
+    create?: XOR<TeamCreateWithoutPikettsInput, TeamUncheckedCreateWithoutPikettsInput>
+    connectOrCreate?: TeamCreateOrConnectWithoutPikettsInput
+    connect?: TeamWhereUniqueInput
+  }
+
+  export type UserCreateNestedOneWithoutPikettsInput = {
+    create?: XOR<UserCreateWithoutPikettsInput, UserUncheckedCreateWithoutPikettsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutPikettsInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type PikettUpdatedaysOfWeekInput = {
+    set?: number[]
+    push?: number | number[]
+  }
+
+  export type EnumStatusFieldUpdateOperationsInput = {
+    set?: $Enums.Status
+  }
+
+  export type BoolFieldUpdateOperationsInput = {
+    set?: boolean
+  }
+
+  export type PikettUpdateincludedUserIdsInput = {
+    set?: string[]
+    push?: string | string[]
+  }
+
+  export type PikettUpdateexcludedUserIdsInput = {
+    set?: string[]
+    push?: string | string[]
+  }
+
+  export type TeamUpdateOneRequiredWithoutPikettsNestedInput = {
+    create?: XOR<TeamCreateWithoutPikettsInput, TeamUncheckedCreateWithoutPikettsInput>
+    connectOrCreate?: TeamCreateOrConnectWithoutPikettsInput
+    upsert?: TeamUpsertWithoutPikettsInput
+    connect?: TeamWhereUniqueInput
+    update?: XOR<XOR<TeamUpdateToOneWithWhereWithoutPikettsInput, TeamUpdateWithoutPikettsInput>, TeamUncheckedUpdateWithoutPikettsInput>
+  }
+
+  export type UserUpdateOneWithoutPikettsNestedInput = {
+    create?: XOR<UserCreateWithoutPikettsInput, UserUncheckedCreateWithoutPikettsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutPikettsInput
+    upsert?: UserUpsertWithoutPikettsInput
+    disconnect?: UserWhereInput | boolean
+    delete?: UserWhereInput | boolean
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutPikettsInput, UserUpdateWithoutPikettsInput>, UserUncheckedUpdateWithoutPikettsInput>
+  }
+
+  export type ShiftCreatedaysOfWeekInput = {
+    set: number[]
   }
 
   export type ShiftCreateincludedUserIdsInput = {
@@ -10622,12 +13930,13 @@ export namespace Prisma {
     connect?: ShiftAssignmentWhereUniqueInput | ShiftAssignmentWhereUniqueInput[]
   }
 
-  export type EnumPriorityFieldUpdateOperationsInput = {
-    set?: $Enums.Priority
+  export type ShiftUpdatedaysOfWeekInput = {
+    set?: number[]
+    push?: number | number[]
   }
 
-  export type EnumStatusFieldUpdateOperationsInput = {
-    set?: $Enums.Status
+  export type EnumPriorityFieldUpdateOperationsInput = {
+    set?: $Enums.Priority
   }
 
   export type ShiftUpdateincludedUserIdsInput = {
@@ -10710,10 +14019,6 @@ export namespace Prisma {
     upsert?: UserUpsertWithoutAssignmentsInput
     connect?: UserWhereUniqueInput
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutAssignmentsInput, UserUpdateWithoutAssignmentsInput>, UserUncheckedUpdateWithoutAssignmentsInput>
-  }
-
-  export type BoolFieldUpdateOperationsInput = {
-    set?: boolean
   }
 
   export type NestedStringFilter<$PrismaModel = never> = {
@@ -10891,12 +14196,28 @@ export namespace Prisma {
     _min?: NestedDateTimeFilter<$PrismaModel>
     _max?: NestedDateTimeFilter<$PrismaModel>
   }
+  export type NestedJsonFilter<$PrismaModel = never> =
+    | PatchUndefined<
+        Either<Required<NestedJsonFilterBase<$PrismaModel>>, Exclude<keyof Required<NestedJsonFilterBase<$PrismaModel>>, 'path'>>,
+        Required<NestedJsonFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<NestedJsonFilterBase<$PrismaModel>>, 'path'>>
 
-  export type NestedEnumPriorityFilter<$PrismaModel = never> = {
-    equals?: $Enums.Priority | EnumPriorityFieldRefInput<$PrismaModel>
-    in?: $Enums.Priority[] | ListEnumPriorityFieldRefInput<$PrismaModel>
-    notIn?: $Enums.Priority[] | ListEnumPriorityFieldRefInput<$PrismaModel>
-    not?: NestedEnumPriorityFilter<$PrismaModel> | $Enums.Priority
+  export type NestedJsonFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string[]
+    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
   }
 
   export type NestedEnumStatusFilter<$PrismaModel = never> = {
@@ -10904,6 +14225,36 @@ export namespace Prisma {
     in?: $Enums.Status[] | ListEnumStatusFieldRefInput<$PrismaModel>
     notIn?: $Enums.Status[] | ListEnumStatusFieldRefInput<$PrismaModel>
     not?: NestedEnumStatusFilter<$PrismaModel> | $Enums.Status
+  }
+
+  export type NestedBoolFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolFilter<$PrismaModel> | boolean
+  }
+
+  export type NestedEnumStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.Status | EnumStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.Status[] | ListEnumStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.Status[] | ListEnumStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumStatusWithAggregatesFilter<$PrismaModel> | $Enums.Status
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumStatusFilter<$PrismaModel>
+    _max?: NestedEnumStatusFilter<$PrismaModel>
+  }
+
+  export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedBoolFilter<$PrismaModel>
+    _max?: NestedBoolFilter<$PrismaModel>
+  }
+
+  export type NestedEnumPriorityFilter<$PrismaModel = never> = {
+    equals?: $Enums.Priority | EnumPriorityFieldRefInput<$PrismaModel>
+    in?: $Enums.Priority[] | ListEnumPriorityFieldRefInput<$PrismaModel>
+    notIn?: $Enums.Priority[] | ListEnumPriorityFieldRefInput<$PrismaModel>
+    not?: NestedEnumPriorityFilter<$PrismaModel> | $Enums.Priority
   }
 
   export type NestedDateTimeNullableFilter<$PrismaModel = never> = {
@@ -10925,16 +14276,6 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumPriorityFilter<$PrismaModel>
     _max?: NestedEnumPriorityFilter<$PrismaModel>
-  }
-
-  export type NestedEnumStatusWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.Status | EnumStatusFieldRefInput<$PrismaModel>
-    in?: $Enums.Status[] | ListEnumStatusFieldRefInput<$PrismaModel>
-    notIn?: $Enums.Status[] | ListEnumStatusFieldRefInput<$PrismaModel>
-    not?: NestedEnumStatusWithAggregatesFilter<$PrismaModel> | $Enums.Status
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumStatusFilter<$PrismaModel>
-    _max?: NestedEnumStatusFilter<$PrismaModel>
   }
 
   export type NestedDateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -10968,17 +14309,48 @@ export namespace Prisma {
     _max?: NestedEnumAssignmentStatusFilter<$PrismaModel>
   }
 
-  export type NestedBoolFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolFilter<$PrismaModel> | boolean
+  export type PikettCreateWithoutUserInput = {
+    id?: string
+    name: string
+    description?: string | null
+    startWeek: string
+    daysOfWeek?: PikettCreatedaysOfWeekInput | number[]
+    endWeek?: string | null
+    color?: string
+    status?: $Enums.Status
+    is24_7?: boolean
+    includedUserIds?: PikettCreateincludedUserIdsInput | string[]
+    excludedUserIds?: PikettCreateexcludedUserIdsInput | string[]
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    team: TeamCreateNestedOneWithoutPikettsInput
   }
 
-  export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedBoolFilter<$PrismaModel>
-    _max?: NestedBoolFilter<$PrismaModel>
+  export type PikettUncheckedCreateWithoutUserInput = {
+    id?: string
+    name: string
+    description?: string | null
+    startWeek: string
+    daysOfWeek?: PikettCreatedaysOfWeekInput | number[]
+    endWeek?: string | null
+    color?: string
+    status?: $Enums.Status
+    is24_7?: boolean
+    teamId: string
+    includedUserIds?: PikettCreateincludedUserIdsInput | string[]
+    excludedUserIds?: PikettCreateexcludedUserIdsInput | string[]
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type PikettCreateOrConnectWithoutUserInput = {
+    where: PikettWhereUniqueInput
+    create: XOR<PikettCreateWithoutUserInput, PikettUncheckedCreateWithoutUserInput>
+  }
+
+  export type PikettCreateManyUserInputEnvelope = {
+    data: PikettCreateManyUserInput | PikettCreateManyUserInput[]
+    skipDuplicates?: boolean
   }
 
   export type TeamCreateWithoutMembersInput = {
@@ -10990,6 +14362,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     lead?: UserCreateNestedOneWithoutLeadingTeamInput
     shifts?: ShiftCreateNestedManyWithoutTeamInput
+    piketts?: PikettCreateNestedManyWithoutTeamInput
   }
 
   export type TeamUncheckedCreateWithoutMembersInput = {
@@ -11001,6 +14374,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     shifts?: ShiftUncheckedCreateNestedManyWithoutTeamInput
+    piketts?: PikettUncheckedCreateNestedManyWithoutTeamInput
   }
 
   export type TeamCreateOrConnectWithoutMembersInput = {
@@ -11017,6 +14391,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     members?: UserCreateNestedManyWithoutTeamInput
     shifts?: ShiftCreateNestedManyWithoutTeamInput
+    piketts?: PikettCreateNestedManyWithoutTeamInput
   }
 
   export type TeamUncheckedCreateWithoutLeadInput = {
@@ -11028,6 +14403,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     members?: UserUncheckedCreateNestedManyWithoutTeamInput
     shifts?: ShiftUncheckedCreateNestedManyWithoutTeamInput
+    piketts?: PikettUncheckedCreateNestedManyWithoutTeamInput
   }
 
   export type TeamCreateOrConnectWithoutLeadInput = {
@@ -11067,6 +14443,43 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type PikettUpsertWithWhereUniqueWithoutUserInput = {
+    where: PikettWhereUniqueInput
+    update: XOR<PikettUpdateWithoutUserInput, PikettUncheckedUpdateWithoutUserInput>
+    create: XOR<PikettCreateWithoutUserInput, PikettUncheckedCreateWithoutUserInput>
+  }
+
+  export type PikettUpdateWithWhereUniqueWithoutUserInput = {
+    where: PikettWhereUniqueInput
+    data: XOR<PikettUpdateWithoutUserInput, PikettUncheckedUpdateWithoutUserInput>
+  }
+
+  export type PikettUpdateManyWithWhereWithoutUserInput = {
+    where: PikettScalarWhereInput
+    data: XOR<PikettUpdateManyMutationInput, PikettUncheckedUpdateManyWithoutUserInput>
+  }
+
+  export type PikettScalarWhereInput = {
+    AND?: PikettScalarWhereInput | PikettScalarWhereInput[]
+    OR?: PikettScalarWhereInput[]
+    NOT?: PikettScalarWhereInput | PikettScalarWhereInput[]
+    id?: StringFilter<"Pikett"> | string
+    name?: StringFilter<"Pikett"> | string
+    description?: StringNullableFilter<"Pikett"> | string | null
+    startWeek?: StringFilter<"Pikett"> | string
+    daysOfWeek?: IntNullableListFilter<"Pikett">
+    endWeek?: StringNullableFilter<"Pikett"> | string | null
+    color?: StringFilter<"Pikett"> | string
+    status?: EnumStatusFilter<"Pikett"> | $Enums.Status
+    is24_7?: BoolFilter<"Pikett"> | boolean
+    teamId?: StringFilter<"Pikett"> | string
+    userId?: StringNullableFilter<"Pikett"> | string | null
+    includedUserIds?: StringNullableListFilter<"Pikett">
+    excludedUserIds?: StringNullableListFilter<"Pikett">
+    createdAt?: DateTimeFilter<"Pikett"> | Date | string
+    updatedAt?: DateTimeFilter<"Pikett"> | Date | string
+  }
+
   export type TeamUpsertWithoutMembersInput = {
     update: XOR<TeamUpdateWithoutMembersInput, TeamUncheckedUpdateWithoutMembersInput>
     create: XOR<TeamCreateWithoutMembersInput, TeamUncheckedCreateWithoutMembersInput>
@@ -11087,6 +14500,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     lead?: UserUpdateOneWithoutLeadingTeamNestedInput
     shifts?: ShiftUpdateManyWithoutTeamNestedInput
+    piketts?: PikettUpdateManyWithoutTeamNestedInput
   }
 
   export type TeamUncheckedUpdateWithoutMembersInput = {
@@ -11098,6 +14512,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     shifts?: ShiftUncheckedUpdateManyWithoutTeamNestedInput
+    piketts?: PikettUncheckedUpdateManyWithoutTeamNestedInput
   }
 
   export type TeamUpsertWithoutLeadInput = {
@@ -11120,6 +14535,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     members?: UserUpdateManyWithoutTeamNestedInput
     shifts?: ShiftUpdateManyWithoutTeamNestedInput
+    piketts?: PikettUpdateManyWithoutTeamNestedInput
   }
 
   export type TeamUncheckedUpdateWithoutLeadInput = {
@@ -11131,6 +14547,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     members?: UserUncheckedUpdateManyWithoutTeamNestedInput
     shifts?: ShiftUncheckedUpdateManyWithoutTeamNestedInput
+    piketts?: PikettUncheckedUpdateManyWithoutTeamNestedInput
   }
 
   export type ShiftAssignmentUpsertWithWhereUniqueWithoutUserInput = {
@@ -11178,6 +14595,7 @@ export namespace Prisma {
     availability?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
+    piketts?: PikettCreateNestedManyWithoutUserInput
     team?: TeamCreateNestedOneWithoutMembersInput
     assignments?: ShiftAssignmentCreateNestedManyWithoutUserInput
   }
@@ -11197,6 +14615,7 @@ export namespace Prisma {
     teamId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    piketts?: PikettUncheckedCreateNestedManyWithoutUserInput
     assignments?: ShiftAssignmentUncheckedCreateNestedManyWithoutUserInput
   }
 
@@ -11219,6 +14638,7 @@ export namespace Prisma {
     availability?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
+    piketts?: PikettCreateNestedManyWithoutUserInput
     leadingTeam?: TeamCreateNestedOneWithoutLeadInput
     assignments?: ShiftAssignmentCreateNestedManyWithoutUserInput
   }
@@ -11237,6 +14657,7 @@ export namespace Prisma {
     availability?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
+    piketts?: PikettUncheckedCreateNestedManyWithoutUserInput
     leadingTeam?: TeamUncheckedCreateNestedOneWithoutLeadInput
     assignments?: ShiftAssignmentUncheckedCreateNestedManyWithoutUserInput
   }
@@ -11257,6 +14678,7 @@ export namespace Prisma {
     description?: string | null
     startTime: string
     endTime: string
+    daysOfWeek?: ShiftCreatedaysOfWeekInput | number[]
     membersRequired?: number
     priority?: $Enums.Priority
     status?: $Enums.Status
@@ -11276,6 +14698,7 @@ export namespace Prisma {
     description?: string | null
     startTime: string
     endTime: string
+    daysOfWeek?: ShiftCreatedaysOfWeekInput | number[]
     membersRequired?: number
     priority?: $Enums.Priority
     status?: $Enums.Status
@@ -11296,6 +14719,50 @@ export namespace Prisma {
 
   export type ShiftCreateManyTeamInputEnvelope = {
     data: ShiftCreateManyTeamInput | ShiftCreateManyTeamInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type PikettCreateWithoutTeamInput = {
+    id?: string
+    name: string
+    description?: string | null
+    startWeek: string
+    daysOfWeek?: PikettCreatedaysOfWeekInput | number[]
+    endWeek?: string | null
+    color?: string
+    status?: $Enums.Status
+    is24_7?: boolean
+    includedUserIds?: PikettCreateincludedUserIdsInput | string[]
+    excludedUserIds?: PikettCreateexcludedUserIdsInput | string[]
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    user?: UserCreateNestedOneWithoutPikettsInput
+  }
+
+  export type PikettUncheckedCreateWithoutTeamInput = {
+    id?: string
+    name: string
+    description?: string | null
+    startWeek: string
+    daysOfWeek?: PikettCreatedaysOfWeekInput | number[]
+    endWeek?: string | null
+    color?: string
+    status?: $Enums.Status
+    is24_7?: boolean
+    userId?: string | null
+    includedUserIds?: PikettCreateincludedUserIdsInput | string[]
+    excludedUserIds?: PikettCreateexcludedUserIdsInput | string[]
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type PikettCreateOrConnectWithoutTeamInput = {
+    where: PikettWhereUniqueInput
+    create: XOR<PikettCreateWithoutTeamInput, PikettUncheckedCreateWithoutTeamInput>
+  }
+
+  export type PikettCreateManyTeamInputEnvelope = {
+    data: PikettCreateManyTeamInput | PikettCreateManyTeamInput[]
     skipDuplicates?: boolean
   }
 
@@ -11324,6 +14791,7 @@ export namespace Prisma {
     availability?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    piketts?: PikettUpdateManyWithoutUserNestedInput
     team?: TeamUpdateOneWithoutMembersNestedInput
     assignments?: ShiftAssignmentUpdateManyWithoutUserNestedInput
   }
@@ -11343,6 +14811,7 @@ export namespace Prisma {
     teamId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    piketts?: PikettUncheckedUpdateManyWithoutUserNestedInput
     assignments?: ShiftAssignmentUncheckedUpdateManyWithoutUserNestedInput
   }
 
@@ -11407,6 +14876,7 @@ export namespace Prisma {
     description?: StringNullableFilter<"Shift"> | string | null
     startTime?: StringFilter<"Shift"> | string
     endTime?: StringFilter<"Shift"> | string
+    daysOfWeek?: IntNullableListFilter<"Shift">
     membersRequired?: IntFilter<"Shift"> | number
     priority?: EnumPriorityFilter<"Shift"> | $Enums.Priority
     status?: EnumStatusFilter<"Shift"> | $Enums.Status
@@ -11420,6 +14890,178 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"Shift"> | Date | string
   }
 
+  export type PikettUpsertWithWhereUniqueWithoutTeamInput = {
+    where: PikettWhereUniqueInput
+    update: XOR<PikettUpdateWithoutTeamInput, PikettUncheckedUpdateWithoutTeamInput>
+    create: XOR<PikettCreateWithoutTeamInput, PikettUncheckedCreateWithoutTeamInput>
+  }
+
+  export type PikettUpdateWithWhereUniqueWithoutTeamInput = {
+    where: PikettWhereUniqueInput
+    data: XOR<PikettUpdateWithoutTeamInput, PikettUncheckedUpdateWithoutTeamInput>
+  }
+
+  export type PikettUpdateManyWithWhereWithoutTeamInput = {
+    where: PikettScalarWhereInput
+    data: XOR<PikettUpdateManyMutationInput, PikettUncheckedUpdateManyWithoutTeamInput>
+  }
+
+  export type TeamCreateWithoutPikettsInput = {
+    id?: string
+    name: string
+    description?: string | null
+    color?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    lead?: UserCreateNestedOneWithoutLeadingTeamInput
+    members?: UserCreateNestedManyWithoutTeamInput
+    shifts?: ShiftCreateNestedManyWithoutTeamInput
+  }
+
+  export type TeamUncheckedCreateWithoutPikettsInput = {
+    id?: string
+    name: string
+    description?: string | null
+    color?: string
+    leadId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    members?: UserUncheckedCreateNestedManyWithoutTeamInput
+    shifts?: ShiftUncheckedCreateNestedManyWithoutTeamInput
+  }
+
+  export type TeamCreateOrConnectWithoutPikettsInput = {
+    where: TeamWhereUniqueInput
+    create: XOR<TeamCreateWithoutPikettsInput, TeamUncheckedCreateWithoutPikettsInput>
+  }
+
+  export type UserCreateWithoutPikettsInput = {
+    id?: string
+    email: string
+    firstName: string
+    lastName: string
+    phone?: string | null
+    role?: string | null
+    workPercent?: number
+    status?: $Enums.UserStatus
+    notes?: string | null
+    rotationConfig?: NullableJsonNullValueInput | InputJsonValue
+    availability?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    team?: TeamCreateNestedOneWithoutMembersInput
+    leadingTeam?: TeamCreateNestedOneWithoutLeadInput
+    assignments?: ShiftAssignmentCreateNestedManyWithoutUserInput
+  }
+
+  export type UserUncheckedCreateWithoutPikettsInput = {
+    id?: string
+    email: string
+    firstName: string
+    lastName: string
+    phone?: string | null
+    role?: string | null
+    workPercent?: number
+    status?: $Enums.UserStatus
+    notes?: string | null
+    rotationConfig?: NullableJsonNullValueInput | InputJsonValue
+    availability?: NullableJsonNullValueInput | InputJsonValue
+    teamId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    leadingTeam?: TeamUncheckedCreateNestedOneWithoutLeadInput
+    assignments?: ShiftAssignmentUncheckedCreateNestedManyWithoutUserInput
+  }
+
+  export type UserCreateOrConnectWithoutPikettsInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutPikettsInput, UserUncheckedCreateWithoutPikettsInput>
+  }
+
+  export type TeamUpsertWithoutPikettsInput = {
+    update: XOR<TeamUpdateWithoutPikettsInput, TeamUncheckedUpdateWithoutPikettsInput>
+    create: XOR<TeamCreateWithoutPikettsInput, TeamUncheckedCreateWithoutPikettsInput>
+    where?: TeamWhereInput
+  }
+
+  export type TeamUpdateToOneWithWhereWithoutPikettsInput = {
+    where?: TeamWhereInput
+    data: XOR<TeamUpdateWithoutPikettsInput, TeamUncheckedUpdateWithoutPikettsInput>
+  }
+
+  export type TeamUpdateWithoutPikettsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    color?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    lead?: UserUpdateOneWithoutLeadingTeamNestedInput
+    members?: UserUpdateManyWithoutTeamNestedInput
+    shifts?: ShiftUpdateManyWithoutTeamNestedInput
+  }
+
+  export type TeamUncheckedUpdateWithoutPikettsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    color?: StringFieldUpdateOperationsInput | string
+    leadId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    members?: UserUncheckedUpdateManyWithoutTeamNestedInput
+    shifts?: ShiftUncheckedUpdateManyWithoutTeamNestedInput
+  }
+
+  export type UserUpsertWithoutPikettsInput = {
+    update: XOR<UserUpdateWithoutPikettsInput, UserUncheckedUpdateWithoutPikettsInput>
+    create: XOR<UserCreateWithoutPikettsInput, UserUncheckedCreateWithoutPikettsInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutPikettsInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutPikettsInput, UserUncheckedUpdateWithoutPikettsInput>
+  }
+
+  export type UserUpdateWithoutPikettsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    firstName?: StringFieldUpdateOperationsInput | string
+    lastName?: StringFieldUpdateOperationsInput | string
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: NullableStringFieldUpdateOperationsInput | string | null
+    workPercent?: IntFieldUpdateOperationsInput | number
+    status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    rotationConfig?: NullableJsonNullValueInput | InputJsonValue
+    availability?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    team?: TeamUpdateOneWithoutMembersNestedInput
+    leadingTeam?: TeamUpdateOneWithoutLeadNestedInput
+    assignments?: ShiftAssignmentUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutPikettsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    firstName?: StringFieldUpdateOperationsInput | string
+    lastName?: StringFieldUpdateOperationsInput | string
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: NullableStringFieldUpdateOperationsInput | string | null
+    workPercent?: IntFieldUpdateOperationsInput | number
+    status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    rotationConfig?: NullableJsonNullValueInput | InputJsonValue
+    availability?: NullableJsonNullValueInput | InputJsonValue
+    teamId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    leadingTeam?: TeamUncheckedUpdateOneWithoutLeadNestedInput
+    assignments?: ShiftAssignmentUncheckedUpdateManyWithoutUserNestedInput
+  }
+
   export type TeamCreateWithoutShiftsInput = {
     id?: string
     name: string
@@ -11429,6 +15071,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     lead?: UserCreateNestedOneWithoutLeadingTeamInput
     members?: UserCreateNestedManyWithoutTeamInput
+    piketts?: PikettCreateNestedManyWithoutTeamInput
   }
 
   export type TeamUncheckedCreateWithoutShiftsInput = {
@@ -11440,6 +15083,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     members?: UserUncheckedCreateNestedManyWithoutTeamInput
+    piketts?: PikettUncheckedCreateNestedManyWithoutTeamInput
   }
 
   export type TeamCreateOrConnectWithoutShiftsInput = {
@@ -11499,6 +15143,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     lead?: UserUpdateOneWithoutLeadingTeamNestedInput
     members?: UserUpdateManyWithoutTeamNestedInput
+    piketts?: PikettUpdateManyWithoutTeamNestedInput
   }
 
   export type TeamUncheckedUpdateWithoutShiftsInput = {
@@ -11510,6 +15155,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     members?: UserUncheckedUpdateManyWithoutTeamNestedInput
+    piketts?: PikettUncheckedUpdateManyWithoutTeamNestedInput
   }
 
   export type ShiftAssignmentUpsertWithWhereUniqueWithoutShiftInput = {
@@ -11534,6 +15180,7 @@ export namespace Prisma {
     description?: string | null
     startTime: string
     endTime: string
+    daysOfWeek?: ShiftCreatedaysOfWeekInput | number[]
     membersRequired?: number
     priority?: $Enums.Priority
     status?: $Enums.Status
@@ -11553,6 +15200,7 @@ export namespace Prisma {
     description?: string | null
     startTime: string
     endTime: string
+    daysOfWeek?: ShiftCreatedaysOfWeekInput | number[]
     membersRequired?: number
     priority?: $Enums.Priority
     status?: $Enums.Status
@@ -11585,6 +15233,7 @@ export namespace Prisma {
     availability?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
+    piketts?: PikettCreateNestedManyWithoutUserInput
     team?: TeamCreateNestedOneWithoutMembersInput
     leadingTeam?: TeamCreateNestedOneWithoutLeadInput
   }
@@ -11604,6 +15253,7 @@ export namespace Prisma {
     teamId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    piketts?: PikettUncheckedCreateNestedManyWithoutUserInput
     leadingTeam?: TeamUncheckedCreateNestedOneWithoutLeadInput
   }
 
@@ -11629,6 +15279,7 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     startTime?: StringFieldUpdateOperationsInput | string
     endTime?: StringFieldUpdateOperationsInput | string
+    daysOfWeek?: ShiftUpdatedaysOfWeekInput | number[]
     membersRequired?: IntFieldUpdateOperationsInput | number
     priority?: EnumPriorityFieldUpdateOperationsInput | $Enums.Priority
     status?: EnumStatusFieldUpdateOperationsInput | $Enums.Status
@@ -11648,6 +15299,7 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     startTime?: StringFieldUpdateOperationsInput | string
     endTime?: StringFieldUpdateOperationsInput | string
+    daysOfWeek?: ShiftUpdatedaysOfWeekInput | number[]
     membersRequired?: IntFieldUpdateOperationsInput | number
     priority?: EnumPriorityFieldUpdateOperationsInput | $Enums.Priority
     status?: EnumStatusFieldUpdateOperationsInput | $Enums.Status
@@ -11686,6 +15338,7 @@ export namespace Prisma {
     availability?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    piketts?: PikettUpdateManyWithoutUserNestedInput
     team?: TeamUpdateOneWithoutMembersNestedInput
     leadingTeam?: TeamUpdateOneWithoutLeadNestedInput
   }
@@ -11705,7 +15358,25 @@ export namespace Prisma {
     teamId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    piketts?: PikettUncheckedUpdateManyWithoutUserNestedInput
     leadingTeam?: TeamUncheckedUpdateOneWithoutLeadNestedInput
+  }
+
+  export type PikettCreateManyUserInput = {
+    id?: string
+    name: string
+    description?: string | null
+    startWeek: string
+    daysOfWeek?: PikettCreatedaysOfWeekInput | number[]
+    endWeek?: string | null
+    color?: string
+    status?: $Enums.Status
+    is24_7?: boolean
+    teamId: string
+    includedUserIds?: PikettCreateincludedUserIdsInput | string[]
+    excludedUserIds?: PikettCreateexcludedUserIdsInput | string[]
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type ShiftAssignmentCreateManyUserInput = {
@@ -11717,6 +15388,57 @@ export namespace Prisma {
     shiftId: string
     createdAt?: Date | string
     updatedAt?: Date | string
+  }
+
+  export type PikettUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    startWeek?: StringFieldUpdateOperationsInput | string
+    daysOfWeek?: PikettUpdatedaysOfWeekInput | number[]
+    endWeek?: NullableStringFieldUpdateOperationsInput | string | null
+    color?: StringFieldUpdateOperationsInput | string
+    status?: EnumStatusFieldUpdateOperationsInput | $Enums.Status
+    is24_7?: BoolFieldUpdateOperationsInput | boolean
+    includedUserIds?: PikettUpdateincludedUserIdsInput | string[]
+    excludedUserIds?: PikettUpdateexcludedUserIdsInput | string[]
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    team?: TeamUpdateOneRequiredWithoutPikettsNestedInput
+  }
+
+  export type PikettUncheckedUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    startWeek?: StringFieldUpdateOperationsInput | string
+    daysOfWeek?: PikettUpdatedaysOfWeekInput | number[]
+    endWeek?: NullableStringFieldUpdateOperationsInput | string | null
+    color?: StringFieldUpdateOperationsInput | string
+    status?: EnumStatusFieldUpdateOperationsInput | $Enums.Status
+    is24_7?: BoolFieldUpdateOperationsInput | boolean
+    teamId?: StringFieldUpdateOperationsInput | string
+    includedUserIds?: PikettUpdateincludedUserIdsInput | string[]
+    excludedUserIds?: PikettUpdateexcludedUserIdsInput | string[]
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PikettUncheckedUpdateManyWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    startWeek?: StringFieldUpdateOperationsInput | string
+    daysOfWeek?: PikettUpdatedaysOfWeekInput | number[]
+    endWeek?: NullableStringFieldUpdateOperationsInput | string | null
+    color?: StringFieldUpdateOperationsInput | string
+    status?: EnumStatusFieldUpdateOperationsInput | $Enums.Status
+    is24_7?: BoolFieldUpdateOperationsInput | boolean
+    teamId?: StringFieldUpdateOperationsInput | string
+    includedUserIds?: PikettUpdateincludedUserIdsInput | string[]
+    excludedUserIds?: PikettUpdateexcludedUserIdsInput | string[]
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type ShiftAssignmentUpdateWithoutUserInput = {
@@ -11774,6 +15496,7 @@ export namespace Prisma {
     description?: string | null
     startTime: string
     endTime: string
+    daysOfWeek?: ShiftCreatedaysOfWeekInput | number[]
     membersRequired?: number
     priority?: $Enums.Priority
     status?: $Enums.Status
@@ -11782,6 +15505,23 @@ export namespace Prisma {
     excludedUserIds?: ShiftCreateexcludedUserIdsInput | string[]
     usageCount?: number
     lastUsedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type PikettCreateManyTeamInput = {
+    id?: string
+    name: string
+    description?: string | null
+    startWeek: string
+    daysOfWeek?: PikettCreatedaysOfWeekInput | number[]
+    endWeek?: string | null
+    color?: string
+    status?: $Enums.Status
+    is24_7?: boolean
+    userId?: string | null
+    includedUserIds?: PikettCreateincludedUserIdsInput | string[]
+    excludedUserIds?: PikettCreateexcludedUserIdsInput | string[]
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -11800,6 +15540,7 @@ export namespace Prisma {
     availability?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    piketts?: PikettUpdateManyWithoutUserNestedInput
     leadingTeam?: TeamUpdateOneWithoutLeadNestedInput
     assignments?: ShiftAssignmentUpdateManyWithoutUserNestedInput
   }
@@ -11818,6 +15559,7 @@ export namespace Prisma {
     availability?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    piketts?: PikettUncheckedUpdateManyWithoutUserNestedInput
     leadingTeam?: TeamUncheckedUpdateOneWithoutLeadNestedInput
     assignments?: ShiftAssignmentUncheckedUpdateManyWithoutUserNestedInput
   }
@@ -11844,6 +15586,7 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     startTime?: StringFieldUpdateOperationsInput | string
     endTime?: StringFieldUpdateOperationsInput | string
+    daysOfWeek?: ShiftUpdatedaysOfWeekInput | number[]
     membersRequired?: IntFieldUpdateOperationsInput | number
     priority?: EnumPriorityFieldUpdateOperationsInput | $Enums.Priority
     status?: EnumStatusFieldUpdateOperationsInput | $Enums.Status
@@ -11863,6 +15606,7 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     startTime?: StringFieldUpdateOperationsInput | string
     endTime?: StringFieldUpdateOperationsInput | string
+    daysOfWeek?: ShiftUpdatedaysOfWeekInput | number[]
     membersRequired?: IntFieldUpdateOperationsInput | number
     priority?: EnumPriorityFieldUpdateOperationsInput | $Enums.Priority
     status?: EnumStatusFieldUpdateOperationsInput | $Enums.Status
@@ -11882,6 +15626,7 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     startTime?: StringFieldUpdateOperationsInput | string
     endTime?: StringFieldUpdateOperationsInput | string
+    daysOfWeek?: ShiftUpdatedaysOfWeekInput | number[]
     membersRequired?: IntFieldUpdateOperationsInput | number
     priority?: EnumPriorityFieldUpdateOperationsInput | $Enums.Priority
     status?: EnumStatusFieldUpdateOperationsInput | $Enums.Status
@@ -11890,6 +15635,57 @@ export namespace Prisma {
     excludedUserIds?: ShiftUpdateexcludedUserIdsInput | string[]
     usageCount?: IntFieldUpdateOperationsInput | number
     lastUsedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PikettUpdateWithoutTeamInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    startWeek?: StringFieldUpdateOperationsInput | string
+    daysOfWeek?: PikettUpdatedaysOfWeekInput | number[]
+    endWeek?: NullableStringFieldUpdateOperationsInput | string | null
+    color?: StringFieldUpdateOperationsInput | string
+    status?: EnumStatusFieldUpdateOperationsInput | $Enums.Status
+    is24_7?: BoolFieldUpdateOperationsInput | boolean
+    includedUserIds?: PikettUpdateincludedUserIdsInput | string[]
+    excludedUserIds?: PikettUpdateexcludedUserIdsInput | string[]
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneWithoutPikettsNestedInput
+  }
+
+  export type PikettUncheckedUpdateWithoutTeamInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    startWeek?: StringFieldUpdateOperationsInput | string
+    daysOfWeek?: PikettUpdatedaysOfWeekInput | number[]
+    endWeek?: NullableStringFieldUpdateOperationsInput | string | null
+    color?: StringFieldUpdateOperationsInput | string
+    status?: EnumStatusFieldUpdateOperationsInput | $Enums.Status
+    is24_7?: BoolFieldUpdateOperationsInput | boolean
+    userId?: NullableStringFieldUpdateOperationsInput | string | null
+    includedUserIds?: PikettUpdateincludedUserIdsInput | string[]
+    excludedUserIds?: PikettUpdateexcludedUserIdsInput | string[]
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PikettUncheckedUpdateManyWithoutTeamInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    startWeek?: StringFieldUpdateOperationsInput | string
+    daysOfWeek?: PikettUpdatedaysOfWeekInput | number[]
+    endWeek?: NullableStringFieldUpdateOperationsInput | string | null
+    color?: StringFieldUpdateOperationsInput | string
+    status?: EnumStatusFieldUpdateOperationsInput | $Enums.Status
+    is24_7?: BoolFieldUpdateOperationsInput | boolean
+    userId?: NullableStringFieldUpdateOperationsInput | string | null
+    includedUserIds?: PikettUpdateincludedUserIdsInput | string[]
+    excludedUserIds?: PikettUpdateexcludedUserIdsInput | string[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
